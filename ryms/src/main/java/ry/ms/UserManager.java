@@ -1,4 +1,5 @@
 package ry.ms;
+import ry.ms.DAO.UserDAO;
 
 public class UserManager {
     private UserDAO userDAO;
