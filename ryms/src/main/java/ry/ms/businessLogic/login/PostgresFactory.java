@@ -1,11 +1,11 @@
-package ry.ms;
+package ry.ms.businessLogic.login;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import ry.ms.DAO.UserDAO;
-import ry.ms.POSTGRES.UserPostgres;
 
+import ry.ms.persistLogic.login.dao.UserDAO;
+import ry.ms.persistLogic.login.postgres.UserPostgres;
 /**
  * A concrete factory that creates instances of DAOs.
  * This implementation of {@link AbsFactory} is responsible for instantiating
@@ -27,7 +27,7 @@ public class PostgresFactory extends AbsFactory {
     public UserDAO createUserDAO() {
         try {
             return new UserPostgres(
-                DriverManager.getConnection(URL, USER, PASSWORD);
+                DriverManager.getConnection(URL, USER, PASSWORD)
             );
         } catch (SQLException e) {
             // If the DAO cannot be created (e.g., database connection failure),
