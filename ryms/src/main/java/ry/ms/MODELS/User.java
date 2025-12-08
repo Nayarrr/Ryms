@@ -25,6 +25,9 @@ public class User {
     public byte[] getAvatar() { return avatar; }
     public void setAvatar(byte[] avatar) { this.avatar = avatar; }
     
+    /** 
+     * @return String
+     */
     @Override
     public String toString() {
         return "User{username='" + username + "', email='" + email + "'}";

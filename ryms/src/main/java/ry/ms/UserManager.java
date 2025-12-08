@@ -6,9 +6,24 @@ import ry.ms.Exceptions.IncorrectPasswordException;
 import ry.ms.Exceptions.UserDoesntExistException;
 import ry.ms.MODELS.User;
 
+/**
+ * Manages user-related business logic, such as authentication.
+ * This class acts as a service layer between the presentation/facade layer and the data access layer.
+ */
 public class UserManager {
+    /** The Data Access Object for handling user persistence. */
     private UserDAO userDAO;
     
+    /**
+     * Authenticates a user based on their email and password.
+     *
+     * @param mail The email of the user trying to log in.
+     * @param password The password provided by the user.
+     * @return The {@link User} object if authentication is successful.
+     * @throws UserDoesntExistException if the user with the specified email does not exist.
+     * @throws IncorrectPasswordException if the provided password is not correct.
+     * @throws SQLException if a database access error occurs.
+     */
     public User login(String mail, String password) throws UserDoesntExistException, SQLException, IncorrectPasswordException{
         try {
             User user = userDAO.getUserById(mail);
