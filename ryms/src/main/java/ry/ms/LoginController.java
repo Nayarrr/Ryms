@@ -1,20 +1,14 @@
-package ry.ms; // Assurez-vous que ce package correspond à celui de votre projet
+package ry.ms;
 
-import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class LoginController {
-
-    // 1. Déclaration des variables liées aux fx:id dans le FXML
-
-
-
     /**
      * Méthode appelée lorsque l'utilisateur clique sur le bouton "Se connecter".
-     * L'annotation @FXML est nécessaire car elle est appelée par le FXML Loader.
+     * A CHANGER
      */
     public boolean handleLoginButtonAction(TextField loginField, PasswordField passField, Label messageLabel) {
         String username = loginField.getText();
