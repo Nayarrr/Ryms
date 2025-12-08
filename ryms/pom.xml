@@ -20,10 +20,10 @@
 
   <dependencies>
     <dependency>
-      <!-- JUnit dependency for testing -->
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <!-- JUnit 5 dependency for testing -->
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.0</version>
       <scope>test</scope>
     </dependency>
         <!-- PostgreSQL JDBC Driver -->
@@ -36,6 +36,16 @@
 
     <build>
     <plugins>
+        <!-- Plugin to generate Javadoc -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>3.6.3</version>
+            <configuration>
+                <!-- Output directory for the Javadoc -->
+                <reportOutputDirectory>${project.basedir}/../docs</reportOutputDirectory>
+            </configuration>
+        </plugin>
         <!-- Plugin to create an executable JAR with dependencies (Shaded) -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
