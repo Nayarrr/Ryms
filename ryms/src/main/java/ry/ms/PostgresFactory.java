@@ -2,14 +2,14 @@ package ry.ms;
 
 import java.sql.SQLException;
 import ry.ms.DAO.UserDAO;
-import ry.ms.DAO.UserDAOImpl;
+import ry.ms.POSTGRES.UserPostgres;
 
 /**
  * A concrete factory that creates instances of DAOs.
  * This implementation of {@link AbsFactory} is responsible for instantiating
  * the specific DAO implementations for the application.
  */
-public class Factory extends AbsFactory {
+public class PostgresFactory extends AbsFactory {
     /**
      * Creates an instance of {@link UserDAOImpl}.
      * It handles the potential {@link SQLException} during DAO instantiation
@@ -19,7 +19,9 @@ public class Factory extends AbsFactory {
     @Override
     public UserDAO createUserDAO() {
         try {
-            return new UserDAOImpl();
+            return new UserPostgres(
+                DatabaseManager.getConnection()
+            );
         } catch (SQLException e) {
             // If the DAO cannot be created (e.g., database connection failure),
             // it's a critical error, so we throw a RuntimeException.
