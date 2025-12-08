@@ -1,4 +1,4 @@
-package ry.ms.MODELS;
+package ry.ms.businessLogic.login.models;
 
 public class User {
     private String email;

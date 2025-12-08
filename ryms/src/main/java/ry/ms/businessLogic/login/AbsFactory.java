@@ -1,5 +1,5 @@
-package ry.ms;
-import ry.ms.DAO.UserDAO;
+package ry.ms.businessLogic.login;
+import ry.ms.persistLogic.login.dao.UserDAO;
 
 /**
  * Abstract Factory for creating Data Access Object DAO instances.

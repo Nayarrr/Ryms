@@ -1,10 +1,10 @@
-package ry.ms;
+package ry.ms.businessLogic.login;
 import java.sql.SQLException;
 
-import ry.ms.DAO.UserDAO;
-import ry.ms.Exceptions.IncorrectPasswordException;
-import ry.ms.Exceptions.UserDoesntExistException;
-import ry.ms.MODELS.User;
+import ry.ms.businessLogic.login.exceptions.IncorrectPasswordException;
+import ry.ms.businessLogic.login.exceptions.UserDoesntExistException;
+import ry.ms.businessLogic.login.models.User;
+import ry.ms.persistLogic.login.dao.UserDAO;
 
 /**
  * Manages user-related business logic, such as authentication.
