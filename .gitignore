@@ -1,4 +1,5 @@
 /ryms/target/
+/.vscode
 
 *.log
 *.jar
