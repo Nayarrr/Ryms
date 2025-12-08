@@ -1,5 +1,6 @@
 ry.ms
-ry.ms.DAO
-ry.ms.Exceptions
-ry.ms.MODELS
-ry.ms.POSTGRES
+ry.ms.businessLogic.login
+ry.ms.businessLogic.login.exceptions
+ry.ms.businessLogic.login.models
+ry.ms.persistLogic.login.dao
+ry.ms.persistLogic.login.postgres
