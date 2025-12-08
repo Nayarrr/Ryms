@@ -1,9 +1,9 @@
-package ry.ms.DAO;
+package ry.ms.persistLogic.login.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import ry.ms.MODELS.User;
+import ry.ms.businessLogic.login.models.User;
 
 public abstract class UserDAO {
     

@@ -1,4 +1,4 @@
-package ry.ms;
+package ry.ms.persistLogic.login;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
