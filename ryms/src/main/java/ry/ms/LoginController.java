@@ -16,22 +16,21 @@ public class LoginController {
      * Méthode appelée lorsque l'utilisateur clique sur le bouton "Se connecter".
      * L'annotation @FXML est nécessaire car elle est appelée par le FXML Loader.
      */
-    public void handleLoginButtonAction(TextField loginField, PasswordField passField, Label messageLabel) {
+    public boolean handleLoginButtonAction(TextField loginField, PasswordField passField, Label messageLabel) {
         String username = loginField.getText();
         String password = passField.getText();
 
         // 2. Logique de validation
         if (username.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Veuillez saisir le nom et le mot de passe.");
-            return;
         }
 
         // Exemple simple de vérification (à remplacer par une vérification en base de données)
         if (username.equals("admin") && password.equals("password")) {
             messageLabel.setText("Connexion réussie ! Bienvenue, " + username + ".");
             messageLabel.setTextFill(javafx.scene.paint.Color.GREEN); // Texte vert pour le succès
+            return true;
 
-            // Logique de navigation (ex: fermer la fenêtre de connexion et ouvrir la fenêtre principale)
 
         } else {
             messageLabel.setText("Nom d'utilisateur ou mot de passe incorrect.");
@@ -40,5 +39,6 @@ public class LoginController {
 
         // Optionnel : effacer le champ de mot de passe après l'essai
         passField.setText("");
+        return false;
     }
 }
