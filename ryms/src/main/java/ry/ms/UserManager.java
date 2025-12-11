@@ -8,6 +8,10 @@ import ry.ms.MODELS.User;
 
 public class UserManager {
     private UserDAO userDAO;
+
+    public UserManager(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
     
     public User login(String mail, String password) throws UserDoesntExistException, SQLException, IncorrectPasswordException{
         try {
