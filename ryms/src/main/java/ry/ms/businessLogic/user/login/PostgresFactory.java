@@ -1,9 +1,9 @@
-package ry.ms.businessLogic.login;
+package ry.ms.businessLogic.user.login;
 
 import java.sql.SQLException;
 
-import ry.ms.persistLogic.login.dao.UserDAO;
-import ry.ms.persistLogic.login.postgres.UserPostgres;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
+import ry.ms.persistLogic.user.login.postgres.UserPostgres;
 /**
  * A concrete factory that creates instances of DAOs.
  * This implementation of {@link AbsFactory} is responsible for instantiating

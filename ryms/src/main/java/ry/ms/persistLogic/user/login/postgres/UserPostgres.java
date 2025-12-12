@@ -1,7 +1,7 @@
-package ry.ms.persistLogic.login.postgres;
+package ry.ms.persistLogic.user.login.postgres;
 
-import ry.ms.businessLogic.login.models.User;
-import ry.ms.persistLogic.login.dao.UserDAO;
+import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
