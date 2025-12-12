@@ -1,6 +1,7 @@
 package ry.ms;
 
 import javafx.application.Application;
+
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -19,6 +20,8 @@ import javafx.stage.Stage;
 import ry.ms.businessLogic.login.SessionFacade;
 import ry.ms.businessLogic.login.models.User;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 /**
  * Hello world!
@@ -26,7 +29,6 @@ import javafx.scene.control.Button;
  */
 public class App extends Application
 {
-
     private TextField loginField;
     private PasswordField passField;
     private Label messageLabel;
@@ -37,7 +39,10 @@ public class App extends Application
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-
+        Image image = new Image(getClass().getResourceAsStream("/images/logo.png"));
+        Image r = new Image(getClass().getResourceAsStream("/images/R.png"));
+        ImageView imageView = new ImageView(image);
+        primaryStage.getIcons().add(r);
         VBox root = new VBox(10); // 10 est l'espacement vertical entre les éléments
         root.setPadding(new Insets(20)); // Marge intérieure
 
@@ -55,16 +60,18 @@ public class App extends Application
         Button loginButton = new Button("Se connecter");
         loginButton.setOnAction(e -> handeLoginAttempt());
 
-        root.getChildren().addAll(nomLabel, loginField, passLabel, passField, loginButton, messageLabel);
+        root.getChildren().addAll(imageView, nomLabel, loginField, passLabel, passField, loginButton, messageLabel);
 
         Scene scene = new Scene(root, 800, 600);
 
         primaryStage.setTitle("Login Prototype");
         primaryStage.setScene(scene);
+
         primaryStage.show();
     }
 
     public void handeLoginAttempt() {
+        // Le reste de votre logique reste inchangé
         boolean res = lg.handleLoginButtonAction(loginField, passField, messageLabel);
         if (res) {
             showMainPage();

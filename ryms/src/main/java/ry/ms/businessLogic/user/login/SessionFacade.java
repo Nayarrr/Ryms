@@ -8,7 +8,6 @@ import ry.ms.businessLogic.login.exceptions.UserDoesntExistException;
 import ry.ms.businessLogic.login.models.User;
 import ry.ms.persistLogic.login.dao.UserDAO;
 import ry.ms.persistLogic.login.postgres.UserPostgres;
-import ry.ms.persistLogic.DatabaseManager; 
 /**
  * A Facade for managing user sessions, including login.
  * This class provides a simplified interface to the session management subsystem.

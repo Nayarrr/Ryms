@@ -1,3 +1,11 @@
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/Test.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/LoginController.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/models/User.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/SessionFacade.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/postgres/UserPostgres.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/user/login/LoginController.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/dao/UserDAO.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/UserManager.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/PostgresFactory.java
 /mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/App.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/AbsFactory.java
+/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/UserDoesntExistException.java
