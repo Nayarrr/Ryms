@@ -26,7 +26,7 @@ public class LoginController {
 
         // Exemple simple de vérification (à remplacer par une vérification en base de données)
             if (isLoggingTrue) {
-                messageLabel.setText("Connexion réussie ! Bienvenue, " + username + ".");
+                messageLabel.setText("Connexion réussie ! Bienvenue, " + username + "");
                 messageLabel.setTextFill(javafx.scene.paint.Color.GREEN); // Texte vert pour le succès
                 return true;
 
