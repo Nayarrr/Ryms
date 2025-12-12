@@ -4,6 +4,7 @@ import ry.ms.businessLogic.login.models.User;
 import ry.ms.persistLogic.login.dao.UserDAO;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,12 +16,28 @@ import java.sql.SQLException;
  */
 public class UserPostgres extends UserDAO {
 
+    private static final String URL = "jdbc:postgresql://localhost:5432/ryms_database";
+    private static final String USER = "ryms";
+    private static final String PASSWORD = "ryms";
+
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
+    }
+
     /**
      * Constructs a UserPostgres DAO with the given database connection.
      * @param conn The database connection to be used for queries.
      */
-    public UserPostgres(Connection conn) {
-        super(conn);
+    public UserPostgres() {
+        super(initConnection());
+    }
+
+    private static Connection initConnection() {
+        try {
+            return getConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException("Can't connect to database", e);
+        }
     }
 
     /**

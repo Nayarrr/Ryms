@@ -11,6 +11,11 @@ import ry.ms.persistLogic.login.dao.UserDAO;
  * This class acts as a service layer between the presentation/facade layer and the data access layer.
  */
 public class UserManager {
+
+    public UserManager(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+    
     /** The Data Access Object for handling user persistence. */
     private UserDAO userDAO;
     

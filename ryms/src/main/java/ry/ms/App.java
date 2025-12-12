@@ -16,6 +16,8 @@ import javafx.scene.shape.Box;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import ry.ms.businessLogic.login.SessionFacade;
+import ry.ms.businessLogic.login.models.User;
 import javafx.scene.control.Button;
 
 /**
@@ -94,6 +96,21 @@ public class App extends Application
 
 
     public static void main(String[] args) {
+        System.out.println( "--- Login Test ---" );
+        try {
+            SessionFacade facade = SessionFacade.getSessionFactory();
+
+            System.out.println("Trying to connect with admin@ryms.com...");
+                boolean loginSuccess = facade.login("admin@ryms.com", "password_123");
+    
+                if (loginSuccess) {
+                    System.out.println("Succes : Login successful");
+                }
+            
+        } catch (Exception e) {
+            System.err.println("Error : " + e.getMessage());
+            e.printStackTrace();
+        }
         launch(args);
     }
 }
