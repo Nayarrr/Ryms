@@ -22,6 +22,7 @@ import ry.ms.businessLogic.user.login.models.User;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import ry.ms.view.user.login.LoginController;
 
 /**
  * Hello world!
