@@ -1,9 +1,7 @@
 /ryms/target/
-<<<<<<< HEAD
 /.vscode
-=======
->>>>>>> d6c43d6 (Enlever le target)
-
+.idea
+/.idea
 *.log
 *.jar
 *.war

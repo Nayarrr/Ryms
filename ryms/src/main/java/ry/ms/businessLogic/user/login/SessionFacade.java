@@ -1,13 +1,13 @@
-package ry.ms.businessLogic.login;
+package ry.ms.businessLogic.user.login;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import ry.ms.businessLogic.login.exceptions.IncorrectPasswordException;
-import ry.ms.businessLogic.login.exceptions.UserDoesntExistException;
-import ry.ms.businessLogic.login.models.User;
-import ry.ms.persistLogic.login.dao.UserDAO;
-import ry.ms.persistLogic.login.postgres.UserPostgres;
+import ry.ms.businessLogic.user.login.exceptions.IncorrectPasswordException;
+import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
+import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
+import ry.ms.persistLogic.user.login.postgres.UserPostgres;
 /**
  * A Facade for managing user sessions, including login.
  * This class provides a simplified interface to the session management subsystem.

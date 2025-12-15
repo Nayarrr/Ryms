@@ -17,11 +17,12 @@ import javafx.scene.shape.Box;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import ry.ms.businessLogic.login.SessionFacade;
-import ry.ms.businessLogic.login.models.User;
+import ry.ms.businessLogic.user.login.SessionFacade;
+import ry.ms.businessLogic.user.login.models.User;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import ry.ms.view.user.login.LoginController;
 
 /**
  * Hello world!
