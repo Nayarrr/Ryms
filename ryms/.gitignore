@@ -1,9 +1,9 @@
 /ryms/target/
 /.vscode
-.idea
-/.idea
 *.log
 *.jar
 *.war
 *.zip
 *.class
+.idea
+/target
