@@ -1,9 +1,9 @@
-package ry.ms.businessLogic.user.login;
+package ry.ms;
 
 import java.sql.SQLException;
 
 import ry.ms.persistLogic.user.login.dao.UserDAO;
-import ry.ms.persistLogic.user.login.postgres.UserPostgres;
+import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 /**
  * A concrete factory that creates instances of DAOs.
  * This implementation of {@link AbsFactory} is responsible for instantiating
@@ -11,13 +11,13 @@ import ry.ms.persistLogic.user.login.postgres.UserPostgres;
  */
 public class PostgresFactory extends AbsFactory {
     /**
-     * Creates an instance of {@link UserPostgres}.
+     * Creates an instance of {@link UserDAOPostgres}.
      * It handles the potential {@link SQLException} during DAO instantiation
      * by wrapping it in a {@link RuntimeException}.
      * @return A new instance of UserDAO.
      */
     @Override
     public UserDAO createUserDAO() {
-            return new UserPostgres();
+            return new UserDAOPostgres();
     }
 }

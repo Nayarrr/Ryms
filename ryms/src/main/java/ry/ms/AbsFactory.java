@@ -1,4 +1,4 @@
-package ry.ms.businessLogic.user.login;
+package ry.ms;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
