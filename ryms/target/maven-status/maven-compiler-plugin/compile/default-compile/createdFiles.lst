@@ -1,7 +1,7 @@
 ry/ms/businessLogic/user/login/UserManager.class
 ry/ms/persistLogic/user/login/postgres/UserPostgres.class
-ry/ms/businessLogic/user/login/AbsFactory.class
 ry/ms/persistLogic/user/login/dao/UserDAO.class
+ry/ms/businessLogic/user/login/AbsFactory.class
 ry/ms/view/user/login/LoginController.class
 ry/ms/businessLogic/user/login/SessionFacade.class
 ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.class

@@ -1,20 +1,20 @@
 package ry.ms.persistLogic.user.login.postgres;
 
-import ry.ms.businessLogic.user.login.models.User;
-import ry.ms.persistLogic.user.login.dao.UserDAO;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
+
 /**
  * PostgreSQL implementation of the UserDAO.
  * This class handles all database operations related to the {@link User} entity
  * for a PostgreSQL database.
  */
-public class UserPostgres extends UserDAO {
+public class UserDAOPostgres extends UserDAO {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/ryms_database";
     private static final String USER = "ryms";
@@ -28,7 +28,7 @@ public class UserPostgres extends UserDAO {
      * Constructs a UserPostgres DAO with the given database connection.
      * @param conn The database connection to be used for queries.
      */
-    public UserPostgres() {
+    public UserDAOPostgres() {
         super(initConnection());
     }
 

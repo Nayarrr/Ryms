@@ -1,4 +1,4 @@
-package ry.ms.businessLogic.user.login;
+package ry.ms;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
@@ -6,6 +6,17 @@ import ry.ms.persistLogic.user.login.dao.UserDAO;
  * This pattern allows for creating families of related objects without specifying their concrete classes.
  */
 public abstract class AbsFactory {
+
+    private AbsFactory absFactory;
+
+    public AbsFactory getAbsFactory(){
+        if(absFactory != null){
+            return new PostgresFactory();
+        }
+        else{
+            return absFactory;
+        }
+    }
     
     /**
      * Abstract method to create a UserDAO instance.
@@ -13,4 +24,6 @@ public abstract class AbsFactory {
      * @return An implementation of UserDAO.
      */
     public abstract UserDAO createUserDAO();
+
+
 }
