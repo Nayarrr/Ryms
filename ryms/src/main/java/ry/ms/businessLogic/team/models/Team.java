@@ -1,5 +1,8 @@
 package ry.ms.businessLogic.team.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Team {
 
     private Long teamId;
@@ -7,6 +10,7 @@ public class Team {
     private String tag;
     private String avatar;
     private String captainEmail;
+    private List<String> membersEmails = new ArrayList<>();
 
     public Team() {
     }
@@ -17,6 +21,10 @@ public class Team {
         this.tag = tag;
         this.avatar = avatar;
         this.captainEmail = captainEmail;
+        // On ajoute le capitaine à la liste locale par défaut
+        if (captainEmail != null) {
+            this.membersEmails.add(captainEmail);
+        }
     }
 
     public Long getTeamId() {
