@@ -6,23 +6,23 @@ import java.util.Objects;
 
 import ry.ms.AbsFactory;
 import ry.ms.businessLogic.team.models.Invitation;
+import ry.ms.businessLogic.team.models.InvitationStatus;
 import ry.ms.businessLogic.team.models.Team;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 public class TeamManager {
 
-    private static final String STATUS_PENDING = "PENDING";
-    private static final String STATUS_ACCEPTED = "ACCEPTED";
-    private static final String STATUS_REJECTED = "REJECTED";
-
     private final TeamDAO teamDAO;
     private final InvitationDAO invitationDAO;
+    private final UserDAO userDAO;
 
     public TeamManager(AbsFactory factory) {
         Objects.requireNonNull(factory, "Factory must not be null.");
         this.teamDAO = factory.createTeamDAO();
         this.invitationDAO = factory.createInvitationDAO();
+        this.userDAO = factory.createUserDAO();
     }
 
     public Team createTeam(String name, String tag, String avatar, String captainEmail) throws SQLException {
@@ -43,11 +43,15 @@ public class TeamManager {
         Team team = loadTeamOrThrow(teamId);
         ensureCaptain(team, senderEmail);
 
+        if (userDAO.getUserById(targetEmail) == null) {
+            throw new IllegalArgumentException("User does not exist.");
+        }
+
         if (teamDAO.isMember(teamId, targetEmail)) {
             throw new IllegalStateException("Target user is already a member of the team.");
         }
 
-        Invitation invitation = new Invitation(null, teamId, senderEmail, targetEmail, STATUS_PENDING, new Date());
+        Invitation invitation = new Invitation(null, teamId, senderEmail, targetEmail, InvitationStatus.PENDING, new Date());
         invitationDAO.save(invitation);
     }
 
@@ -56,13 +60,13 @@ public class TeamManager {
         ensurePending(invitation);
 
         teamDAO.addMember(invitation.getTeamId(), invitation.getReceiver());
-        invitationDAO.updateStatus(invitationId, STATUS_ACCEPTED);
+        invitationDAO.updateStatus(invitationId, InvitationStatus.ACCEPTED);
     }
 
     public void rejectInvitation(Long invitationId) throws SQLException {
         Invitation invitation = requireInvitation(invitationId);
         ensurePending(invitation);
-        invitationDAO.updateStatus(invitationId, STATUS_REJECTED);
+        invitationDAO.updateStatus(invitationId, InvitationStatus.REJECTED);
     }
 
     public void removeMember(Long teamId, String captainEmail, String targetMemberEmail) throws SQLException {
@@ -134,7 +138,7 @@ public class TeamManager {
     }
 
     private void ensurePending(Invitation invitation) {
-        if (!STATUS_PENDING.equalsIgnoreCase(invitation.getStatus())) {
+        if (invitation.getStatus() != InvitationStatus.PENDING) {
             throw new IllegalStateException("Invitation is no longer pending.");
         }
     }

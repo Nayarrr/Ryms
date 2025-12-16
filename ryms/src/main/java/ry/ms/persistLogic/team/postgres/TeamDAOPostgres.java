@@ -1,7 +1,6 @@
 package ry.ms.persistLogic.team.postgres;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,12 +10,9 @@ import java.util.List;
 
 import ry.ms.businessLogic.team.models.Team;
 import ry.ms.persistLogic.team.dao.TeamDAO;
+import ry.ms.persistLogic.DBConfig;
 
 public class TeamDAOPostgres implements TeamDAO {
-
-    private static final String URL = "jdbc:postgresql://localhost:5432/ryms_database";
-    private static final String USER = "ryms";
-    private static final String PASSWORD = "ryms";
 
     private static final String INSERT_TEAM_SQL =
             "INSERT INTO teams (name, tag, avatar, captain_email) VALUES (?, ?, ?, ?)";
@@ -41,7 +37,7 @@ public class TeamDAOPostgres implements TeamDAO {
 
     @Override
     public Team saveTeam(Team team) throws SQLException {
-        try (Connection conn = getConnection()) {
+        try (Connection conn = DBConfig.getConnection()) {
             boolean initialAutoCommit = conn.getAutoCommit();
             try {
                 conn.setAutoCommit(false);
@@ -49,7 +45,7 @@ public class TeamDAOPostgres implements TeamDAO {
                 insertCaptain(conn, teamId, team.getCaptainEmail());
                 conn.commit();
                 team.setTeamId(teamId);
-                team.setMemberEmails(loadMembers(conn, teamId));
+                team.setMemberEmails(getMembers(conn, teamId));
                 return team;
             } catch (SQLException ex) {
                 conn.rollback();
@@ -66,7 +62,19 @@ public class TeamDAOPostgres implements TeamDAO {
         if (name == null) {
             return null;
         }
-        return fetchTeam(SELECT_TEAM_BY_NAME_SQL, stmt -> stmt.setString(1, name.trim()));
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_TEAM_BY_NAME_SQL)) {
+
+            stmt.setString(1, name.trim());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Team team = mapTeam(rs);
+                    team.setMemberEmails(getMembers(conn, team.getTeamId()));
+                    return team;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
@@ -74,12 +82,24 @@ public class TeamDAOPostgres implements TeamDAO {
         if (id == null) {
             return null;
         }
-        return fetchTeam(SELECT_TEAM_BY_ID_SQL, stmt -> stmt.setLong(1, id));
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_TEAM_BY_ID_SQL)) {
+
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Team team = mapTeam(rs);
+                    team.setMemberEmails(getMembers(conn, team.getTeamId()));
+                    return team;
+                }
+            }
+        }
+        return null;
     }
 
     @Override
     public void addMember(Long teamId, String userEmail) throws SQLException {
-        try (Connection conn = getConnection();
+        try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_MEMBER_SQL)) {
 
             stmt.setLong(1, teamId);
@@ -90,7 +110,7 @@ public class TeamDAOPostgres implements TeamDAO {
 
     @Override
     public void removeMember(Long teamId, String userEmail) throws SQLException {
-        try (Connection conn = getConnection();
+        try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_MEMBER_SQL)) {
 
             stmt.setLong(1, teamId);
@@ -101,7 +121,7 @@ public class TeamDAOPostgres implements TeamDAO {
 
     @Override
     public boolean isMember(Long teamId, String userEmail) throws SQLException {
-        try (Connection conn = getConnection();
+        try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(CHECK_MEMBER_SQL)) {
 
             stmt.setLong(1, teamId);
@@ -114,7 +134,7 @@ public class TeamDAOPostgres implements TeamDAO {
 
     @Override
     public void updateCaptain(Long teamId, String newCaptainEmail) throws SQLException {
-        try (Connection conn = getConnection();
+        try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_CAPTAIN_SQL)) {
 
             stmt.setString(1, newCaptainEmail);
@@ -125,28 +145,12 @@ public class TeamDAOPostgres implements TeamDAO {
 
     @Override
     public void deleteTeam(Long teamId) throws SQLException {
-        try (Connection conn = getConnection();
+        try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(DELETE_TEAM_SQL)) {
 
             stmt.setLong(1, teamId);
             stmt.executeUpdate();
         }
-    }
-
-    private Team fetchTeam(String sql, SqlBinder binder) throws SQLException {
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            binder.bind(stmt);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Long teamId = rs.getLong("team_id");
-                    List<String> members = loadMembers(conn, teamId);
-                    return mapTeam(rs, members);
-                }
-            }
-        }
-        return null;
     }
 
     private Long insertTeam(Connection conn, Team team) throws SQLException {
@@ -173,7 +177,7 @@ public class TeamDAOPostgres implements TeamDAO {
         }
     }
 
-    private List<String> loadMembers(Connection conn, Long teamId) throws SQLException {
+    private List<String> getMembers(Connection conn, Long teamId) throws SQLException {
         List<String> members = new ArrayList<>();
         try (PreparedStatement stmt = conn.prepareStatement(SELECT_TEAM_MEMBERS_SQL)) {
             stmt.setLong(1, teamId);
@@ -186,24 +190,13 @@ public class TeamDAOPostgres implements TeamDAO {
         return members;
     }
 
-    private Team mapTeam(ResultSet rs, List<String> members) throws SQLException {
-        Team team = new Team(
+    private Team mapTeam(ResultSet rs) throws SQLException {
+        return new Team(
                 rs.getLong("team_id"),
                 rs.getString("name"),
                 rs.getString("tag"),
                 rs.getString("avatar"),
                 rs.getString("captain_email")
         );
-        team.setMemberEmails(members);
-        return team;
-    }
-
-    @FunctionalInterface
-    private interface SqlBinder {
-        void bind(PreparedStatement stmt) throws SQLException;
-    }
-
-    private static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 }

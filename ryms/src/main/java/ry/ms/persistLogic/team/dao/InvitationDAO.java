@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ry.ms.businessLogic.team.models.Invitation;
+import ry.ms.businessLogic.team.models.InvitationStatus;
 
 public interface InvitationDAO {
 
@@ -11,7 +12,7 @@ public interface InvitationDAO {
 
     Invitation findById(Long id) throws SQLException;
 
-    void updateStatus(Long id, String status) throws SQLException;
+    void updateStatus(Long id, InvitationStatus status) throws SQLException;
 
     List<Invitation> findPendingByReceiver(String email) throws SQLException;
 }

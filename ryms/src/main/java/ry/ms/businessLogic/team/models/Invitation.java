@@ -8,13 +8,13 @@ public class Invitation {
     private Long teamId;
     private String sender;
     private String receiver;
-    private String status;
+    private InvitationStatus status;
     private Date sentAt;
 
     public Invitation() {
     }
 
-    public Invitation(Long id, Long teamId, String sender, String receiver, String status, Date sentAt) {
+    public Invitation(Long id, Long teamId, String sender, String receiver, InvitationStatus status, Date sentAt) {
         this.id = id;
         this.teamId = teamId;
         this.sender = sender;
@@ -55,11 +55,11 @@ public class Invitation {
         this.receiver = receiver;
     }
 
-    public String getStatus() {
+    public InvitationStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(InvitationStatus status) {
         this.status = status;
     }
 
