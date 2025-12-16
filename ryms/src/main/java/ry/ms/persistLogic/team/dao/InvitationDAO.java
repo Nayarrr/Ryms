@@ -7,9 +7,11 @@ import ry.ms.businessLogic.team.models.Invitation;
 
 public interface InvitationDAO {
 
-    void createInvitation(Invitation invitation) throws SQLException;
+    void save(Invitation invitation) throws SQLException;
 
-    void updateInvitationStatus(Long invitationId, String newStatus) throws SQLException;
+    Invitation findById(Long id) throws SQLException;
 
-    List<Invitation> getPendingInvitationsForUser(String userEmail) throws SQLException;
+    void updateStatus(Long id, String status) throws SQLException;
+
+    List<Invitation> findPendingByReceiver(String email) throws SQLException;
 }

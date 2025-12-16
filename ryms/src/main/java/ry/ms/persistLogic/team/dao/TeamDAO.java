@@ -18,4 +18,16 @@ public interface TeamDAO {
      * Retrieves a team by its unique name.
      */
     Team getTeamByName(String name) throws SQLException;
+
+    Team getTeamById(Long id) throws SQLException;
+
+    void addMember(Long teamId, String userEmail) throws SQLException;
+
+    void removeMember(Long teamId, String userEmail) throws SQLException;
+
+    boolean isMember(Long teamId, String userEmail) throws SQLException;
+
+    void updateCaptain(Long teamId, String newCaptainEmail) throws SQLException;
+
+    void deleteTeam(Long teamId) throws SQLException;
 }
