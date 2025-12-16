@@ -14,7 +14,7 @@ import java.util.List;
 import ry.ms.businessLogic.team.models.Invitation;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 
-public class InvitationPostgres implements InvitationDAO {
+public class InvitationDAOPostgres implements InvitationDAO {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/ryms_database";
     private static final String USER = "ryms";

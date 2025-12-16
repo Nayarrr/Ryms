@@ -12,7 +12,7 @@ import java.util.List;
 import ry.ms.businessLogic.team.models.Team;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 
-public class TeamPostgres implements TeamDAO {
+public class TeamDAOPostgres implements TeamDAO {
 
     private static final String URL = "jdbc:postgresql://localhost:5432/ryms_database";
     private static final String USER = "ryms";
