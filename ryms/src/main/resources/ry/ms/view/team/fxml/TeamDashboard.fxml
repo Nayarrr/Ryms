@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ry.ms.view.team.TeamDashboardController"
+      spacing="10" style="-fx-padding: 20;">
+
+    <HBox spacing="15" alignment="CENTER_LEFT">
+        <Label fx:id="teamNameLabel" text="Nom Équipe" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <Label fx:id="teamTagLabel" text="[TAG]" style="-fx-font-size: 18px; -fx-text-fill: grey;"/>
+    </HBox>
+
+    <Separator/>
+    
+    <HBox spacing="10">
+        <TextField fx:id="inviteEmailField" promptText="Email du joueur à inviter"/>
+        <Button text="Inviter" onAction="#handleInvite"/>
+    </HBox>
+
+    <Label text="Membres :" style="-fx-font-weight: bold;"/>
+    <ListView fx:id="membersList" VBox.vgrow="ALWAYS"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Quitter l'équipe" onAction="#handleLeave" style="-fx-text-fill: orange;"/>
+        <Button text="Dissoudre l'équipe (Capitaine)" onAction="#handleDissolve" style="-fx-background-color: darkred; -fx-text-fill: white;"/>
+    </HBox>
+    
+    <Label fx:id="msgLabel"/>
+</VBox>

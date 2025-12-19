@@ -1,11 +1,27 @@
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/models/User.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/SessionFacade.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/postgres/UserPostgres.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/user/login/LoginController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/dao/UserDAO.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/UserManager.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/PostgresFactory.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/App.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/AbsFactory.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/UserDoesntExistException.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/Team.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/view/user/login/LoginController.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/App.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/persistLogic/team/dao/InvitationDAO.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/view/team/TeamDashboardController.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/AbsFactory.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/view/team/TeamController.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/models/User.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/persistLogic/DBConfig.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/team/TeamManager.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/persistLogic/team/postgres/InvitationDAOPostgres.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/Invitation.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/InvitationStatus.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/persistLogic/team/dao/TeamDAO.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/persistLogic/team/postgres/TeamDAOPostgres.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/view/team/MainLayoutController.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/dao/UserDAO.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/view/team/InvitationsController.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/PostgresFactory.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/view/team/CreateTeamController.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/view/team/UserSession.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/team/SessionFacade.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/SessionFacade.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/UserManager.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.java
+/home/marius/ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/UserDoesntExistException.java

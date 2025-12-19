@@ -34,6 +34,8 @@ public class TeamDAOPostgres implements TeamDAO {
             "UPDATE teams SET captain_email = ? WHERE team_id = ?";
     private static final String DELETE_TEAM_SQL =
             "DELETE FROM teams WHERE team_id = ?";
+    private static final String SELECT_TEAM_BY_MEMBER_SQL =
+    "SELECT t.* FROM teams t JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_email = ?";
 
     @Override
     public Team saveTeam(Team team) throws SQLException {
@@ -151,6 +153,23 @@ public class TeamDAOPostgres implements TeamDAO {
             stmt.setLong(1, teamId);
             stmt.executeUpdate();
         }
+    }
+
+    @Override
+    public Team getTeamByMemberEmail(String userEmail) throws SQLException {
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SELECT_TEAM_BY_MEMBER_SQL)) {
+            stmt.setString(1, userEmail);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Team team = mapTeam(rs); // Utilise ta méthode mapTeam existante
+                    // Charge les membres (utilise ta méthode getMembers existante)
+                    team.setMemberEmails(getMembers(conn, team.getTeamId())); 
+                    return team;
+                }
+            }
+        }
+        return null;
     }
 
     private Long insertTeam(Connection conn, Team team) throws SQLException {

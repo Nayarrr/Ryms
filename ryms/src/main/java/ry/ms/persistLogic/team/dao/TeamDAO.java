@@ -21,6 +21,8 @@ public interface TeamDAO {
 
     Team getTeamById(Long id) throws SQLException;
 
+    Team getTeamByMemberEmail(String userEmail) throws SQLException;
+
     void addMember(Long teamId, String userEmail) throws SQLException;
 
     void removeMember(Long teamId, String userEmail) throws SQLException;
