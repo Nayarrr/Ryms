@@ -1,9 +1,11 @@
 package ry.ms.view.team;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
-import ry.ms.view.team.MainLayoutController;
-import ry.ms.view.team.UserSession;
 
 public class CreateTeamController {
 
@@ -23,25 +25,18 @@ public class CreateTeamController {
 
         try {
             teamController.createTeam(name, tag, avatar, userEmail);
-            // On force le rechargement du Layout pour afficher le Dashboard
-            // Astuce simple : On retrouve le controlleur parent via la Scene
-            // (Note: Dans une vraie app complexe, on utiliserait un Observer pattern)
-            errorLabel.getScene().getRoot().fireEvent(new javafx.event.Event(javafx.event.Event.ANY)); 
-            // Pour simplifier ici : le bouton notification du MainLayout rafraichit la vue quand fermé.
-            // Mieux : On relance la vérification :
-             MainLayoutController main = findMainController();
-             if(main != null) main.checkUserTeamStatus();
+            var scene = nameField.getScene();
+            if (scene != null) {
+                try {
+                    Parent root = FXMLLoader.load(getClass().getResource("/ry/ms/view/team/fxml/MainLayout.fxml"));
+                    scene.setRoot(root);
+                } catch (IOException ioEx) {
+                    errorLabel.setText("Erreur : " + ioEx.getMessage());
+                }
+            }
 
         } catch (Exception e) {
             errorLabel.setText("Erreur : " + e.getMessage());
         }
-    }
-    
-    // Helper simple pour retrouver le parent
-    private MainLayoutController findMainController() {
-         // Ceci est une simplification. Idéalement on passe le parent au child.
-         // Pour l'instant, on assume que ça marche ou on demande à l'utilisateur de cliquer sur un bouton refresh.
-         // Une meilleure façon est d'injecter le MainLayoutController lors du chargement du FXML.
-         return null; // TODO: Relancer checkUserTeamStatus via injection
     }
 }

@@ -61,6 +61,14 @@ public class TeamController {
                 "Failed to dissolve team");
     }
 
+    public Team getTeamByMemberEmail(String userEmail) {
+        try {
+            return sessionFacade.getTeamByMemberEmail(userEmail);
+        } catch (SQLException ex) {
+            return handleSqlException("Failed to load team by member email", ex);
+        }
+    }
+
     private void runWithHandling(SqlRunnable runnable, String message) {
         try {
             runnable.run();

@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ry.ms.persistLogic.team.postgres.TeamDAOPostgres; // Ou via Factory si tu préfères
 import ry.ms.businessLogic.team.models.Team;
 
 import java.io.IOException;
@@ -15,6 +14,7 @@ import java.io.IOException;
 public class MainLayoutController {
 
     @FXML private StackPane contentArea;
+    private final TeamController controller = new TeamController();
 
     public void initialize() {
         checkUserTeamStatus();
@@ -24,8 +24,7 @@ public class MainLayoutController {
     public void checkUserTeamStatus() {
         String email = UserSession.getInstance().getUserEmail();
         try {
-            // Appel direct au DAO pour vérifier le statut (Pour simplifier la vue)
-            Team team = new TeamDAOPostgres().getTeamByMemberEmail(email);
+            Team team = controller.getTeamByMemberEmail(email);
             
             if (team != null) {
                 loadView("/ry/ms/view/team/fxml/TeamDashboard.fxml");

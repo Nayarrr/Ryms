@@ -115,6 +115,10 @@ public class TeamManager {
         teamDAO.deleteTeam(teamId);
     }
 
+    public Team getTeamByMemberEmail(String userEmail) throws SQLException {
+        return teamDAO.getTeamByMemberEmail(userEmail);
+    }
+
     private Team loadTeamOrThrow(Long teamId) throws SQLException {
         Team team = teamDAO.getTeamById(teamId);
         if (team == null) {

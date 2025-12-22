@@ -55,4 +55,8 @@ public final class SessionFacade {
     public void dissolveTeam(Long teamId, String captainEmail) throws SQLException {
         teamManager.dissolveTeam(teamId, captainEmail);
     }
+
+    public Team getTeamByMemberEmail(String userEmail) throws SQLException {
+        return teamManager.getTeamByMemberEmail(userEmail);
+    }
 }

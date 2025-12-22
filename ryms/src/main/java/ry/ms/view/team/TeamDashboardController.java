@@ -3,7 +3,6 @@ package ry.ms.view.team;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import ry.ms.businessLogic.team.models.Team;
-import ry.ms.persistLogic.team.postgres.TeamDAOPostgres;
 
 public class TeamDashboardController {
 
@@ -23,8 +22,7 @@ public class TeamDashboardController {
 
     private void loadTeamData() {
         try {
-            // Recharger l'équipe depuis la BDD
-            this.currentTeam = new TeamDAOPostgres().getTeamByMemberEmail(myEmail);
+            this.currentTeam = controller.getTeamByMemberEmail(myEmail);
             if (currentTeam != null) {
                 teamNameLabel.setText(currentTeam.getName());
                 teamTagLabel.setText("[" + currentTeam.getTag() + "]");
