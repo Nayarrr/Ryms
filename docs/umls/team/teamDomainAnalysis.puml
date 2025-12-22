@@ -1,0 +1,142 @@
+@startuml
+
+package "View / Controller" {
+    class TeamController {
+        ' Creation
+        + createTeam(name: String, tag: String, avatar: Image, userEmail: String): void
+        
+        ' Invitation Flow
+        + invitePlayer(teamId: Long, targetEmail: String): void
+        + acceptInvitation(invitationId: Long): void
+        + rejectInvitation(invitationId: Long): void
+        
+        ' Roster Management
+        + removeMember(teamId: Long, memberEmail: String): void
+        + leaveTeam(teamId: Long, userEmail: String): void
+        
+        ' Captain Actions
+        + transferCaptaincy(teamId: Long, currentCaptain: String, newCaptain: String): void
+        + dissolveTeam(teamId: Long, captainEmail: String): void
+    }
+}
+
+package "Business Logic" {
+    class SessionFacade {
+        + createTeam(name: String, tag: String, avatar: Image, userEmail: String): Team
+        + invitePlayer(teamId: Long, targetEmail: String): void
+        + acceptInvitation(invitationId: Long): void
+        + rejectInvitation(invitationId: Long): void
+        + removeMember(teamId: Long, memberEmail: String): void
+        + leaveTeam(teamId: Long, userEmail: String): void
+        + transferCaptaincy(teamId: Long, newCaptain: String): void
+        + dissolveTeam(teamId: Long): void
+    }
+
+    class TeamManager {
+        ' Logic & Validation
+        + createTeam(name: String, tag: String, avatar: Image, userEmail: String): Team
+        + validateTeamName(name: String): boolean
+        
+        + invitePlayer(teamId: Long, targetEmail: String): void
+        + acceptInvitation(invitationId: Long): void
+        
+        + removeMember(teamId: Long, email: String): void
+        + dissolveTeam(teamId: Long): void
+        + transferCaptaincy(teamId: Long, newCaptain: String): void
+        
+        - isCaptain(teamId: Long, email: String): boolean
+        - isMember(teamId: Long, email: String): boolean
+        
+        ' Helper pour créer l'objet avant persistence
+        - createInvitationObject(teamId: Long, sender: String, target: String): Invitation
+    }
+    
+    abstract class AbsFactory {
+        {static} + getFactory(type: int): AbsFactory
+        {abstract} + createTeamDAO(): TeamDAO
+        {abstract} + createInvitationDAO(): InvitationDAO
+    }
+
+    class PostgresFactory extends AbsFactory {
+        + createTeamDAO(): TeamDAO
+        + createInvitationDAO(): InvitationDAO
+    }
+}
+
+package "Data Access (DAO)" {
+    
+    ' --- TEAM DAO (Gère Teams + Membres) ---
+    interface TeamDAO {
+        + saveTeam(team: Team): Team
+        + getTeamByName(name: String): Team
+        + getTeamById(id: Long): Team
+        + deleteTeam(id: Long): void
+        + updateCaptain(teamId: Long, newCaptainEmail: String): void
+        
+        + addMember(teamId: Long, userEmail: String): void
+        + removeMember(teamId: Long, userEmail: String): void
+    }
+
+    class TeamPostgres implements TeamDAO {
+        - connection: Connection
+    }
+
+    ' --- INVITATION DAO (Nouveau DAO séparé) ---
+    interface InvitationDAO {
+        + saveInvitation(invitation: Invitation): void
+        + getInvitationById(id: Long): Invitation
+        + updateInvitationStatus(id: Long, status: String): void
+        + getPendingInvitations(userEmail: String): List<Invitation>
+    }
+
+    class InvitationPostgres implements InvitationDAO {
+        - connection: Connection
+    }
+}
+
+package "Model" {
+    class Team {
+        - teamId: Long
+        - name: String
+        - tag: String
+        - avatar: Image
+        - captainEmail: String
+        - membersEmails: List<String>
+    }
+    
+    class Invitation {
+        - invitationId: Long
+        - teamId: Long
+        - senderEmail: String
+        - receiverEmail: String
+        - status: String
+        - sentDate: Date
+    }
+}
+
+' --- RELATIONS ---
+
+' Controller -> Facade
+TeamController .down.> SessionFacade : uses
+
+' Facade -> Manager
+SessionFacade .down.> TeamManager : uses
+
+' Factory Pattern
+TeamManager ..> AbsFactory : uses
+PostgresFactory .up.> TeamPostgres : creates
+PostgresFactory .up.> InvitationPostgres : creates
+
+' Manager utilise les DEUX DAOs
+TeamManager .down.> TeamDAO : uses
+TeamManager .down.> InvitationDAO : uses
+
+' DAOs lisent/écrivent les Models
+TeamPostgres .down.> Team : reads/writes
+InvitationPostgres .down.> Invitation : reads/writes
+
+' Manager crée les objets Model pour les passer aux DAOs
+TeamManager .right.> Team : creates
+TeamManager .right.> Invitation : creates
+
+@enduml
