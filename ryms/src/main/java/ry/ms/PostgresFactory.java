@@ -2,6 +2,8 @@ package ry.ms;
 
 import java.sql.SQLException;
 
+import ry.ms.persistLogic.match.dao.MatchDAO;
+import ry.ms.persistLogic.match.postgres.MatchDAOPostgres;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 /**
@@ -18,6 +20,11 @@ public class PostgresFactory extends AbsFactory {
      */
     @Override
     public UserDAO createUserDAO() {
-            return new UserDAOPostgres();
+        return new UserDAOPostgres();
+    }
+
+    @Override
+    public MatchDAO createMatchDAO(){
+        return new MatchDAOPostgres();
     }
 }

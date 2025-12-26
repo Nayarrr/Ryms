@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.models.User;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**

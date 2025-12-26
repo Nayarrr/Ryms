@@ -3,7 +3,7 @@ package ry.ms.persistLogic.user.login.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.models.User;
 
 /**
  * Abstract Data Access Object (DAO) for User entities.

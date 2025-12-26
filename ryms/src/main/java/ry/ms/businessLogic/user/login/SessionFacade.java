@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import ry.ms.businessLogic.user.login.exceptions.IncorrectPasswordException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.models.User;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 /**
@@ -52,11 +52,6 @@ public class SessionFacade {
      */
     public boolean login(String mail, String password) throws UserDoesntExistException, SQLException, IncorrectPasswordException {
         User user =  userManager.login(mail, password);
-        if(user != null){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return user != null;
     }
 }

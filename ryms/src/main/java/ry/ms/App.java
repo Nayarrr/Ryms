@@ -1,35 +1,28 @@
 package ry.ms;
 
 import javafx.application.Application;
-
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.StackPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import ry.ms.businessLogic.user.login.SessionFacade;
-import ry.ms.businessLogic.user.login.models.User;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import ry.ms.view.user.login.LoginController;
 
 /**
  * Hello world!
  *
  */
-public class App extends Application
-{
+public class App extends Application{
+    
     private TextField loginField;
     private PasswordField passField;
     private Label messageLabel;

@@ -1,6 +1,5 @@
 package ry.ms.view.user.login;
 
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -32,7 +31,6 @@ public class LoginController {
 
 
             }
-            
             else {
                 messageLabel.setText("Nom d'utilisateur ou mot de passe incorrect.");
                 messageLabel.setTextFill(javafx.scene.paint.Color.RED); // Texte rouge pour l'erreur

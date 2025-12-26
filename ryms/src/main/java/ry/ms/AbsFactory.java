@@ -1,4 +1,5 @@
 package ry.ms;
+import ry.ms.persistLogic.match.dao.MatchDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
@@ -24,6 +25,8 @@ public abstract class AbsFactory {
      * @return An implementation of UserDAO.
      */
     public abstract UserDAO createUserDAO();
+
+    public abstract MatchDAO createMatchDAO();
 
 
 }
