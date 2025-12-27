@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import ry.ms.models.Match;
 import ry.ms.models.Team;
@@ -219,6 +221,31 @@ public class MatchDAOPostgres extends MatchDAO{
             conn.setAutoCommit(true);
             throw e;
         }
+    }
+
+    @Override
+    public List<User> getTeamMembers(Long teamId) throws SQLException {
+        List<User> members = new ArrayList<>();
+        String sql = "SELECT u.email, u.username, u.password, u.avatar " +
+                    "FROM users u " +
+                    "INNER JOIN team_members tm ON u.email = tm.user_email " +
+                    "WHERE tm.team_id = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setLong(1, teamId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    members.add(new User(
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getBytes("avatar")
+                    ));
+                }
+            }
+        }
+        return members;
     }
 
 }

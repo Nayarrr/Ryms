@@ -1,8 +1,12 @@
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/main/MainFrame.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/exceptions/TeamDoesntExistException.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/UserManager.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/user/login/LoginFrame.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/AbsFactory.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/Match.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/MatchController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/Team.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/user/login/LoginController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/MatchFacade.java
@@ -16,4 +20,5 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/match/dao/MatchDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/PostgresFactory.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/TeamResult.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/MatchFrame.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/dao/UserDAO.java

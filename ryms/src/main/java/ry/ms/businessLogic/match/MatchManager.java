@@ -2,6 +2,7 @@ package ry.ms.businessLogic.match;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import ry.ms.businessLogic.match.exceptions.MatchDoesntExistException;
 import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
@@ -63,6 +64,10 @@ public class MatchManager {
         }
     }
 
+    public List<User> getTeamMembers(Long teamId) throws SQLException, TeamDoesntExistException {
+        Team team = getTeamById(teamId);
+        return matchDAO.getTeamMembers(teamId);
+    }
 
     public boolean addReferee(Long matchid , String email) throws SQLException, UserDoesntExistException, MatchDoesntExistException{
         try{

@@ -3,6 +3,7 @@ package ry.ms.persistLogic.match.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import ry.ms.models.Match;
 import ry.ms.models.Team;
@@ -29,4 +30,6 @@ public abstract class MatchDAO {
     public abstract boolean addTeam(Match match, Team team) throws SQLException;
 
     public abstract boolean updateRoaster(Long teamId, User currentUser, User newUser) throws SQLException;
+
+    public abstract List<User> getTeamMembers(Long teamId) throws SQLException;
 }

@@ -2,6 +2,7 @@ package ry.ms.businessLogic.match;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 import ry.ms.businessLogic.match.exceptions.MatchDoesntExistException;
 import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
@@ -27,6 +28,10 @@ public class MatchFacade {
         return matchfacade;
     }
 
+    public List<User> getTeamMembers(Long teamId) throws SQLException, TeamDoesntExistException {
+        return matchManager.getTeamMembers(teamId);
+    }
+
     public boolean addReferee(Long matchid, String email) throws SQLException, MatchDoesntExistException, UserDoesntExistException{
         return matchManager.addReferee(matchid, email);
     }
@@ -39,7 +44,7 @@ public class MatchFacade {
         return matchManager.addTeam(matchid, teamid);
     }
 
-    public boolean updateRoaster(User currentUser, User newUser){
-        return false;
+    public boolean updateRoaster(Long teamId, String currentUserEmail, String newUserEmail) throws SQLException, UserDoesntExistException, TeamDoesntExistException{
+        return matchManager.updateRoaster(teamId, currentUserEmail, newUserEmail);
     }
 }
