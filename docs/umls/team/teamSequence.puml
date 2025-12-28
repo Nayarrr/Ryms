@@ -1,0 +1,51 @@
+@startuml
+title Sequence Diagram: Create Team
+
+participant TeamController
+participant SessionFacade
+participant TeamManager
+participant "AbsFactory" as Factory
+participant "PostgresFactory" as PFactory
+participant TeamPostgres
+participant Database
+
+TeamController -> SessionFacade : createTeam(name, tag, avatar, userEmail)
+SessionFacade -> TeamManager : createTeam(name, tag, avatar, userEmail)
+
+TeamManager -> Factory : getFactory(type)
+Factory -> PFactory : create()
+TeamManager <-- PFactory : return PostgresFactory
+TeamManager -> PFactory : createTeamDAO()
+PFactory -> TeamPostgres : new TeamPostgres()
+TeamManager <-- PFactory : return TeamDAO
+
+TeamManager -> TeamPostgres : getTeamByName(name)
+TeamPostgres -> Database : SELECT * FROM teams WHERE name = ?
+
+alt Team Name Not Found (Nom disponible)
+
+    TeamPostgres <-- Database : null
+    TeamManager <-- TeamPostgres : null
+
+    TeamManager -> TeamPostgres : saveTeam(newTeam)
+    TeamPostgres -> Database : INSERT INTO teams...
+    
+    TeamPostgres -> Database : UPDATE user SET role = 'CAPTAIN' WHERE email = ?
+    
+    TeamPostgres <-- Database : success
+    TeamManager <-- TeamPostgres : createdTeam
+
+    SessionFacade <-- TeamManager : return Team
+    TeamController <-- SessionFacade : return Team
+
+else Team Name Found (Erreur)
+
+    TeamPostgres <-- Database : Team details
+    TeamManager <-- TeamPostgres : Team object
+    
+    SessionFacade <-- TeamManager : Throw TeamNameAlreadyExists
+    TeamController <-- SessionFacade : Throw TeamNameAlreadyExists
+
+end
+
+@enduml

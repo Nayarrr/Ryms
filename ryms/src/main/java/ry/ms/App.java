@@ -1,16 +1,23 @@
 package ry.ms;
 
 import javafx.application.Application;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import ry.ms.view.main.MainFrame;
+import ry.ms.view.main.MainFrame; // Important pour charger la suite en FXML
 import ry.ms.view.match.MatchFrame;
 import ry.ms.view.user.login.LoginFrame;
+
 
 /**
  * Point d'entrée de l'application Ryms
  */
 public class App extends Application {
     
+    private TextField loginField;
+    private PasswordField passField;
+    private Label messageLabel;
     private Stage primaryStage;
 
     @Override
