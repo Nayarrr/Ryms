@@ -28,9 +28,14 @@ public class MatchFacade {
         return matchfacade;
     }
 
+    public Long createMatch(Date matchDate, int gameId) throws SQLException {
+        return matchManager.createMatch(matchDate, gameId);
+    }
+
     public List<User> getTeamMembers(Long teamId) throws SQLException, TeamDoesntExistException {
         return matchManager.getTeamMembers(teamId);
     }
+
 
     public boolean addReferee(Long matchid, String email) throws SQLException, MatchDoesntExistException, UserDoesntExistException{
         return matchManager.addReferee(matchid, email);

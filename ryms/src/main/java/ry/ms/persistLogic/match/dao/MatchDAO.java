@@ -32,4 +32,6 @@ public abstract class MatchDAO {
     public abstract boolean updateRoaster(Long teamId, User currentUser, User newUser) throws SQLException;
 
     public abstract List<User> getTeamMembers(Long teamId) throws SQLException;
+
+    public abstract Long createMatch(Date matchDate, int gameId) throws SQLException;
 }

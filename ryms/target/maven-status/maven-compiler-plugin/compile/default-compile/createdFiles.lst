@@ -2,6 +2,7 @@ ry/ms/businessLogic/user/login/UserManager.class
 ry/ms/businessLogic/match/MatchFacade.class
 ry/ms/businessLogic/match/MatchManager.class
 ry/ms/persistLogic/match/postgres/MatchDAOPostgres.class
+ry/ms/view/match/CreateMatchFrame.class
 ry/ms/PostgresFactory.class
 ry/ms/view/user/login/LoginFrame.class
 ry/ms/models/Match.class
@@ -21,4 +22,5 @@ ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.class
 ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.class
 ry/ms/businessLogic/match/exceptions/TeamDoesntExistException.class
 ry/ms/persistLogic/match/dao/MatchDAO.class
+ry/ms/view/match/MatchDetailsFrame.class
 ry/ms/view/main/MainFrame.class

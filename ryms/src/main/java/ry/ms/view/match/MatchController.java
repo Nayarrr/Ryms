@@ -25,6 +25,41 @@ public class MatchController {
 
     private final MatchFacade matchFacade = MatchFacade.getMatchFacade();
 
+    public boolean handleCreateMatchButtonAction(DatePicker datePicker, TextField gameIdField, Label messageLabel) {
+        if (datePicker.getValue() == null || gameIdField.getText() == null || gameIdField.getText().isBlank()) {
+            messageLabel.setTextFill(Color.RED);
+            messageLabel.setText("Veuillez renseigner la date et l'ID du jeu.");
+            return false;
+        }
+
+        int gameId;
+        try {
+            gameId = Integer.parseInt(gameIdField.getText().trim());
+        } catch (NumberFormatException e) {
+            messageLabel.setTextFill(Color.RED);
+            messageLabel.setText("ID du jeu invalide.");
+            return false;
+        }
+
+        // Convertir LocalDate en Date
+        Date matchDate = java.sql.Date.valueOf(datePicker.getValue());
+
+        try {
+            Long matchId = matchFacade.createMatch(matchDate, gameId);
+            messageLabel.setTextFill(Color.GREEN);
+            messageLabel.setText("Match créé avec succès ! ID: " + matchId);
+            gameIdField.setText("");
+            datePicker.setValue(null);
+            return true;
+        } catch (SQLException e) {
+            messageLabel.setTextFill(Color.RED);
+            messageLabel.setText("Erreur lors de la création du match.");
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     public boolean handleAddRefereeButtonAction(TextField matchIdField, TextField emailField, Label messageLabel) {
 
         String idText = matchIdField.getText();
@@ -304,6 +339,8 @@ public class MatchController {
         }
         return false;
     }
+
+
 
 
 

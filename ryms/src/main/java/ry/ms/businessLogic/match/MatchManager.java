@@ -69,6 +69,14 @@ public class MatchManager {
         return matchDAO.getTeamMembers(teamId);
     }
 
+    public Long createMatch(Date matchDate, int gameId) throws SQLException {
+        if (matchDate == null) {
+            throw new IllegalArgumentException("Match date cannot be null");
+        }
+        
+        return matchDAO.createMatch(matchDate, gameId);
+    }
+
     public boolean addReferee(Long matchid , String email) throws SQLException, UserDoesntExistException, MatchDoesntExistException{
         try{
             User referee = getUserById(email);

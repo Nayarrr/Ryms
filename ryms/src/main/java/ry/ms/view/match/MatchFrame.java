@@ -3,23 +3,21 @@ package ry.ms.view.match;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
 public class MatchFrame {
 
     private final Stage stage;
     private final MatchController controller;
+    private VBox matchListContainer; // Pour pouvoir rafraîchir la liste
 
     public MatchFrame(Stage stage) {
         this.stage = stage;
@@ -27,201 +25,111 @@ public class MatchFrame {
     }
 
     public void show() {
-        VBox root = new VBox(20);
+        BorderPane root = new BorderPane();
         root.setPadding(new Insets(20));
-        root.setAlignment(Pos.TOP_CENTER);
 
         // Titre
         Label title = new Label("Gestion des Matchs");
-        title.setFont(new Font("System Bold", 24));
+        title.setFont(Font.font("System", FontWeight.BOLD, 28));
+        BorderPane.setAlignment(title, Pos.CENTER);
+        BorderPane.setMargin(title, new Insets(0, 0, 20, 0));
+        root.setTop(title);
 
-        // Message global
-        Label messageLabel = new Label();
-        messageLabel.setWrapText(true);
+        // Centre : Bouton créer un match
+        VBox centerBox = new VBox(30);
+        centerBox.setAlignment(Pos.CENTER);
 
-        // --- Section 1: Ajouter un arbitre ---
-        VBox refereeSection = createRefereeSection(messageLabel);
-
-        // --- Section 2: Ajouter une date ---
-        VBox dateSection = createDateSection(messageLabel);
-
-        // --- Section 3: Ajouter une équipe ---
-        VBox teamSection = createTeamSection(messageLabel);
-
-        // --- Section 4: Mise à jour du roster ---
-        VBox rosterSection = createRosterSection();
-
-        // Bouton retour
-        Button backButton = new Button("← Retour au menu principal");
-        backButton.setOnAction(e -> {
-            // TODO: Retourner au MainFrame
-            System.out.println("Retour au menu principal");
+        Button createMatchButton = new Button("Créer un Match");
+        createMatchButton.setFont(Font.font(16));
+        createMatchButton.setPrefWidth(200);
+        createMatchButton.setPrefHeight(50);
+        createMatchButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;");
+        createMatchButton.setOnAction(e -> {
+            CreateMatchFrame createFrame = new CreateMatchFrame(stage, this::refreshMatchList);
+            createFrame.show();
         });
 
-        // Séparateurs
-        Separator sep1 = new Separator();
-        Separator sep2 = new Separator();
-        Separator sep3 = new Separator();
+        centerBox.getChildren().add(createMatchButton);
+        root.setCenter(centerBox);
 
-        root.getChildren().addAll(
-            title,
-            new Separator(),
-            refereeSection,
-            sep1,
-            dateSection,
-            sep2,
-            teamSection,
-            sep3,
-            rosterSection,
-            messageLabel,
-            backButton
-        );
+        // Droite : Liste des matchs à venir
+        VBox rightPanel = createUpcomingMatchesPanel();
+        root.setRight(rightPanel);
 
-        ScrollPane scrollPane = new ScrollPane(root);
-        scrollPane.setFitToWidth(true);
-
-        Scene scene = new Scene(scrollPane, 700, 700);
+        Scene scene = new Scene(root, 1000, 600);
         stage.setScene(scene);
         stage.setTitle("Gestion des Matchs");
         stage.show();
     }
 
-    private VBox createRefereeSection(Label messageLabel) {
-        VBox section = new VBox(10);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-background-radius: 5;");
+    private VBox createUpcomingMatchesPanel() {
+        VBox panel = new VBox(10);
+        panel.setPadding(new Insets(10));
+        panel.setPrefWidth(350);
+        panel.setStyle("-fx-background-color: #f5f5f5; -fx-border-color: #ddd; -fx-border-radius: 5;");
 
-        Label sectionTitle = new Label("Ajouter un arbitre au match");
-        sectionTitle.setFont(new Font("System Bold", 16));
+        Label panelTitle = new Label("Matchs à venir");
+        panelTitle.setFont(Font.font("System", FontWeight.BOLD, 18));
 
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
+        // Conteneur pour la liste de matchs
+        matchListContainer = new VBox(10);
+        loadMatchList();
 
-        Label matchIdLabel = new Label("ID du match:");
-        TextField matchIdField = new TextField();
-        matchIdField.setPromptText("Ex: 1");
+        ScrollPane scrollPane = new ScrollPane(matchListContainer);
+        scrollPane.setFitToWidth(true);
+        scrollPane.setStyle("-fx-background-color: transparent;");
 
-        Label emailLabel = new Label("Email de l'arbitre:");
-        TextField emailField = new TextField();
-        emailField.setPromptText("Ex: referee@ryms.com");
-
-        Button addButton = new Button("Ajouter l'arbitre");
-        addButton.setOnAction(e -> 
-            controller.handleAddRefereeButtonAction(matchIdField, emailField, messageLabel)
-        );
-
-        grid.add(matchIdLabel, 0, 0);
-        grid.add(matchIdField, 1, 0);
-        grid.add(emailLabel, 0, 1);
-        grid.add(emailField, 1, 1);
-        grid.add(addButton, 1, 2);
-
-        section.getChildren().addAll(sectionTitle, grid);
-        return section;
+        panel.getChildren().addAll(panelTitle, new Separator(), scrollPane);
+        return panel;
     }
 
-    private VBox createDateSection(Label messageLabel) {
-        VBox section = new VBox(10);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-background-radius: 5;");
-
-        Label sectionTitle = new Label("Définir la date du match");
-        sectionTitle.setFont(new Font("System Bold", 16));
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-
-        Label matchIdLabel = new Label("ID du match:");
-        TextField matchIdField = new TextField();
-        matchIdField.setPromptText("Ex: 1");
-
-        Label dateLabel = new Label("Date:");
-        DatePicker datePicker = new DatePicker();
-
-        Button setDateButton = new Button("Définir la date");
-        setDateButton.setOnAction(e -> 
-            controller.handleAddDateButtonAction(matchIdField, datePicker, messageLabel)
+    /**
+     * Charge la liste des matchs (données fictives pour l'instant)
+     */
+    private void loadMatchList() {
+        matchListContainer.getChildren().clear();
+        
+        // TODO: Remplacer par des données réelles de la BDD
+        // List<Match> matches = controller.getAllUpcomingMatches();
+        
+        // Données fictives temporaires
+        matchListContainer.getChildren().addAll(
+            createMatchCard("Team Alpha", "Team Beta", 1L),
+            createMatchCard("Team Gamma", "Team Delta", 2L),
+            createMatchCard("Team Epsilon", "Team Zeta", 3L)
         );
-
-        grid.add(matchIdLabel, 0, 0);
-        grid.add(matchIdField, 1, 0);
-        grid.add(dateLabel, 0, 1);
-        grid.add(datePicker, 1, 1);
-        grid.add(setDateButton, 1, 2);
-
-        section.getChildren().addAll(sectionTitle, grid);
-        return section;
     }
 
-    private VBox createTeamSection(Label messageLabel) {
-        VBox section = new VBox(10);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-background-radius: 5;");
-
-        Label sectionTitle = new Label("Ajouter une équipe au match");
-        sectionTitle.setFont(new Font("System Bold", 16));
-
-        GridPane grid = new GridPane();
-        grid.setHgap(10);
-        grid.setVgap(10);
-
-        Label matchIdLabel = new Label("ID du match:");
-        TextField matchIdField = new TextField();
-        matchIdField.setPromptText("Ex: 1");
-
-        Label teamIdLabel = new Label("ID de l'équipe:");
-        TextField teamIdField = new TextField();
-        teamIdField.setPromptText("Ex: 5");
-
-        Button addTeamButton = new Button("Ajouter l'équipe");
-        addTeamButton.setOnAction(e -> 
-            controller.handleAddTeamButtonAction(matchIdField, teamIdField, messageLabel)
-        );
-
-        grid.add(matchIdLabel, 0, 0);
-        grid.add(matchIdField, 1, 0);
-        grid.add(teamIdLabel, 0, 1);
-        grid.add(teamIdField, 1, 1);
-        grid.add(addTeamButton, 1, 2);
-
-        section.getChildren().addAll(sectionTitle, grid);
-        return section;
+    /**
+     * Rafraîchit la liste des matchs
+     */
+    private void refreshMatchList() {
+        loadMatchList();
+        System.out.println("Liste des matchs rafraîchie");
     }
 
-    private VBox createRosterSection() {
-        VBox section = new VBox(10);
-        section.setPadding(new Insets(10));
-        section.setStyle("-fx-border-color: lightgray; -fx-border-radius: 5; -fx-background-radius: 5;");
+    private VBox createMatchCard(String team1Name, String team2Name, Long matchId) {
+        VBox card = new VBox(8);
+        card.setPadding(new Insets(10));
+        card.setStyle("-fx-background-color: white; -fx-border-color: #ccc; -fx-border-radius: 5; -fx-background-radius: 5;");
 
-        Label sectionTitle = new Label("Mise à jour du roster d'une équipe");
-        sectionTitle.setFont(new Font("System Bold", 16));
+        Label matchLabel = new Label(team1Name + " vs " + team2Name);
+        matchLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
 
-        HBox hbox = new HBox(10);
-        hbox.setAlignment(Pos.CENTER_LEFT);
+        Label statusLabel = new Label("À venir");
+        statusLabel.setStyle("-fx-text-fill: #ff9800; -fx-font-style: italic;");
 
-        Label teamIdLabel = new Label("ID de l'équipe:");
-        TextField teamIdField = new TextField();
-        teamIdField.setPromptText("Ex: 5");
-        teamIdField.setPrefWidth(100);
+        Button detailsButton = new Button("Voir les détails");
+        detailsButton.setPrefWidth(Double.MAX_VALUE);
+        detailsButton.setStyle("-fx-background-color: #2196F3; -fx-text-fill: white;");
+        detailsButton.setOnAction(e -> showMatchDetails(matchId, team1Name, team2Name));
 
-        Button updateRosterButton = new Button("Ouvrir la gestion du roster");
-        updateRosterButton.setOnAction(e -> {
-            try {
-                Long teamId = Long.parseLong(teamIdField.getText().trim());
-                controller.openUpdateRosterModal(teamId, stage);
-            } catch (NumberFormatException ex) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Erreur");
-                alert.setHeaderText("ID invalide");
-                alert.setContentText("Veuillez entrer un ID d'équipe valide.");
-                alert.showAndWait();
-            }
-        });
+        card.getChildren().addAll(matchLabel, statusLabel, detailsButton);
+        return card;
+    }
 
-        hbox.getChildren().addAll(teamIdLabel, teamIdField, updateRosterButton);
-        section.getChildren().addAll(sectionTitle, hbox);
-        return section;
+    private void showMatchDetails(Long matchId, String team1Name, String team2Name) {
+        MatchDetailsFrame detailsFrame = new MatchDetailsFrame(stage, matchId, team1Name, team2Name);
+        detailsFrame.show();
     }
 }

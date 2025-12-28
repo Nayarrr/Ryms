@@ -2,7 +2,6 @@ package ry.ms;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import ry.ms.businessLogic.user.login.SessionFacade;
 import ry.ms.view.main.MainFrame;
 import ry.ms.view.match.MatchFrame;
 import ry.ms.view.user.login.LoginFrame;
@@ -55,21 +54,6 @@ public class App extends Application {
 
     public static void main(String[] args) {
         System.out.println("--- Starting Ryms Application ---");
-        
-        // Test de connexion (optionnel, pour debug)
-        try {
-            SessionFacade facade = SessionFacade.getSessionFactory();
-            System.out.println("SessionFacade initialized successfully");
-            
-            // Test de login
-            boolean loginSuccess = facade.login("admin@ryms.com", "password_123");
-            if (loginSuccess) {
-                System.out.println("Test login successful");
-            }
-        } catch (Exception e) {
-            System.err.println("Error initializing: " + e.getMessage());
-            e.printStackTrace();
-        }
         
         launch(args);
     }

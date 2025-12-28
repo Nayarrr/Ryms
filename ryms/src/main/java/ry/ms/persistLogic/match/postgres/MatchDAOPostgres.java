@@ -248,4 +248,21 @@ public class MatchDAOPostgres extends MatchDAO{
         return members;
     }
 
+    @Override
+    public Long createMatch(Date matchDate, int gameId) throws SQLException {
+        String sql = "INSERT INTO matchs (match_date, game_id) VALUES (?, ?) RETURNING match_id";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setTimestamp(1, new java.sql.Timestamp(matchDate.getTime()));
+            stmt.setInt(2, gameId);
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getLong("match_id");
+                }
+            }
+        }
+        throw new SQLException("Failed to create match, no ID returned");
+    }
+
 }
