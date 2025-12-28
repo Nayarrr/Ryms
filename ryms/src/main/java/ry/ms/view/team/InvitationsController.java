@@ -3,7 +3,6 @@ package ry.ms.view.team;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import ry.ms.businessLogic.team.models.Invitation;
-import ry.ms.persistLogic.team.postgres.InvitationDAOPostgres;
 
 import java.util.List;
 
@@ -21,10 +20,8 @@ public class InvitationsController {
 
     private void refreshList() {
         try {
-            // Note: Normalement on ne devrait pas appeler le DAO directement ici, 
-            // mais exposer une méthode "getMyInvitations" dans le controller.
-            // Pour simplifier l'exercice :
-            List<Invitation> list = new InvitationDAOPostgres().findPendingByReceiver(myEmail);
+            // Use the proper architecture layer instead of direct DAO access
+            List<Invitation> list = controller.getMyInvitations(myEmail);
             invitationListView.getItems().setAll(list);
             
             // Custom Cell Factory pour afficher un texte joli

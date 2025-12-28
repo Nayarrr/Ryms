@@ -1,9 +1,11 @@
 package ry.ms.view.team;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Objects;
 
 import ry.ms.businessLogic.team.SessionFacade;
+import ry.ms.businessLogic.team.models.Invitation;
 import ry.ms.businessLogic.team.models.Team;
 
 public class TeamController {
@@ -66,6 +68,14 @@ public class TeamController {
             return sessionFacade.getTeamByMemberEmail(userEmail);
         } catch (SQLException ex) {
             return handleSqlException("Failed to load team by member email", ex);
+        }
+    }
+
+    public List<Invitation> getMyInvitations(String userEmail) {
+        try {
+            return sessionFacade.getMyInvitations(userEmail);
+        } catch (SQLException ex) {
+            return handleSqlException("Failed to load invitations", ex);
         }
     }
 

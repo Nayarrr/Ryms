@@ -2,6 +2,7 @@ package ry.ms.businessLogic.team;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import ry.ms.AbsFactory;
@@ -117,6 +118,10 @@ public class TeamManager {
 
     public Team getTeamByMemberEmail(String userEmail) throws SQLException {
         return teamDAO.getTeamByMemberEmail(userEmail);
+    }
+
+    public List<Invitation> getMyInvitations(String userEmail) throws SQLException {
+        return invitationDAO.findPendingByReceiver(userEmail);
     }
 
     private Team loadTeamOrThrow(Long teamId) throws SQLException {

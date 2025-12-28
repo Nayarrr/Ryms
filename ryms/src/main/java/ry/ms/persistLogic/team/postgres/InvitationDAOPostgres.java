@@ -26,9 +26,9 @@ public class InvitationDAOPostgres implements InvitationDAO {
     private static final String UPDATE_STATUS_SQL =
             "UPDATE invitations SET status = ? WHERE invitation_id = ?";
 
-        private static final String SELECT_PENDING_BY_RECEIVER_SQL =
+    private static final String SELECT_PENDING_BY_RECEIVER_SQL =
             "SELECT invitation_id, team_id, sender_email, receiver_email, status, sent_at " +
-                "FROM invitations WHERE receiver_email = ? AND status = ?";
+            "FROM invitations WHERE receiver_email = ? AND status = ?";
 
     @Override
     public void save(Invitation invitation) throws SQLException {
