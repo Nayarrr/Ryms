@@ -13,8 +13,8 @@ ry/ms/App.class
 ry/ms/persistLogic/team/dao/TeamDAO.class
 ry/ms/AbsFactory.class
 ry/ms/persistLogic/user/login/dao/UserDAO.class
-ry/ms/view/user/login/LoginController.class
 ry/ms/persistLogic/team/postgres/TeamDAOPostgres.class
+ry/ms/view/user/login/LoginController.class
 ry/ms/businessLogic/team/TeamManager.class
 ry/ms/businessLogic/user/login/SessionFacade.class
 ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.class

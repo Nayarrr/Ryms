@@ -2,6 +2,7 @@ package ry.ms.businessLogic.team;
 
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import ry.ms.AbsFactory;
@@ -13,6 +14,8 @@ import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 public class TeamManager {
+
+    private static final int MAX_TEAM_SIZE = 50; // Maximum team size limit
 
     private final TeamDAO teamDAO;
     private final InvitationDAO invitationDAO;
@@ -51,6 +54,11 @@ public class TeamManager {
             throw new IllegalStateException("Target user is already a member of the team.");
         }
 
+        Invitation existingPendingInvitation = invitationDAO.getPendingInvitation(teamId, targetEmail);
+        if (existingPendingInvitation != null) {
+            throw new IllegalStateException("A pending invitation for this user and team already exists.");
+        }
+
         Invitation invitation = new Invitation(null, teamId, senderEmail, targetEmail, InvitationStatus.PENDING, new Date());
         invitationDAO.save(invitation);
     }
@@ -58,6 +66,11 @@ public class TeamManager {
     public void acceptInvitation(Long invitationId) throws SQLException {
         Invitation invitation = requireInvitation(invitationId);
         ensurePending(invitation);
+
+        Team team = loadTeamOrThrow(invitation.getTeamId());
+        if (team.getMemberEmails().size() >= MAX_TEAM_SIZE) {
+            throw new IllegalStateException("Team has reached maximum size of " + MAX_TEAM_SIZE + " members.");
+        }
 
         teamDAO.addMember(invitation.getTeamId(), invitation.getReceiver());
         invitationDAO.updateStatus(invitationId, InvitationStatus.ACCEPTED);
@@ -117,6 +130,10 @@ public class TeamManager {
 
     public Team getTeamByMemberEmail(String userEmail) throws SQLException {
         return teamDAO.getTeamByMemberEmail(userEmail);
+    }
+
+    public List<Invitation> getMyInvitations(String userEmail) throws SQLException {
+        return invitationDAO.findPendingByReceiver(userEmail);
     }
 
     private Team loadTeamOrThrow(Long teamId) throws SQLException {

@@ -72,6 +72,8 @@ public class MainLayoutController {
     private void handleLogout() {
         System.out.println("Déconnexion...");
         // Logique pour fermer et revenir au login (à implémenter selon ton App.java)
-        ((Stage) contentArea.getScene().getWindow()).close();
+        if (contentArea.getScene() != null && contentArea.getScene().getWindow() instanceof Stage) {
+            ((Stage) contentArea.getScene().getWindow()).close();
+        }
     }
 }

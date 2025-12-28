@@ -1,9 +1,11 @@
 package ry.ms.businessLogic.team;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import ry.ms.AbsFactory;
 import ry.ms.PostgresFactory;
+import ry.ms.businessLogic.team.models.Invitation;
 import ry.ms.businessLogic.team.models.Team;
 
 public final class SessionFacade {
@@ -58,5 +60,9 @@ public final class SessionFacade {
 
     public Team getTeamByMemberEmail(String userEmail) throws SQLException {
         return teamManager.getTeamByMemberEmail(userEmail);
+    }
+
+    public List<Invitation> getMyInvitations(String userEmail) throws SQLException {
+        return teamManager.getMyInvitations(userEmail);
     }
 }
