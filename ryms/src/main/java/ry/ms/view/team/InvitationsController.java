@@ -45,7 +45,10 @@ public class InvitationsController {
     @FXML
     private void handleAccept() {
         Invitation selected = invitationListView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null) {
+            statusLabel.setText("Veuillez sélectionner une invitation.");
+            return;
+        }
         
         try {
             controller.acceptInvitation(selected.getId());
@@ -60,7 +63,10 @@ public class InvitationsController {
     @FXML
     private void handleReject() {
         Invitation selected = invitationListView.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null) {
+            statusLabel.setText("Veuillez sélectionner une invitation.");
+            return;
+        }
         
         try {
             controller.rejectInvitation(selected.getId());
