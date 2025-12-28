@@ -15,7 +15,7 @@ import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 public class TeamManager {
 
-    private static final int MAX_TEAM_SIZE = 50; // Configurable maximum team size
+    private static final int MAX_TEAM_SIZE = 50; // Maximum team size limit
 
     private final TeamDAO teamDAO;
     private final InvitationDAO invitationDAO;

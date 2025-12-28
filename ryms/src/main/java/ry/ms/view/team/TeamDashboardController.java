@@ -6,8 +6,11 @@ import ry.ms.businessLogic.team.models.Team;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class TeamDashboardController {
+
+    private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
     @FXML private Label teamNameLabel;
     @FXML private Label teamTagLabel;
@@ -69,8 +72,8 @@ public class TeamDashboardController {
     }
 
     private boolean isValidEmail(String email) {
-        // Basic email validation pattern
-        return email != null && email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+        // Basic email validation using pre-compiled pattern
+        return email != null && EMAIL_PATTERN.matcher(email).matches();
     }
 
     @FXML
