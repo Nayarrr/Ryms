@@ -15,4 +15,6 @@ public interface InvitationDAO {
     void updateStatus(Long id, InvitationStatus status) throws SQLException;
 
     List<Invitation> findPendingByReceiver(String email) throws SQLException;
+
+    Invitation getPendingInvitation(Long teamId, String receiverEmail) throws SQLException;
 }

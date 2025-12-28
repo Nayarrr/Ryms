@@ -15,6 +15,8 @@ import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 public class TeamManager {
 
+    private static final int MAX_TEAM_SIZE = 50; // Configurable maximum team size
+
     private final TeamDAO teamDAO;
     private final InvitationDAO invitationDAO;
     private final UserDAO userDAO;
@@ -52,6 +54,11 @@ public class TeamManager {
             throw new IllegalStateException("Target user is already a member of the team.");
         }
 
+        Invitation existingPendingInvitation = invitationDAO.getPendingInvitation(teamId, targetEmail);
+        if (existingPendingInvitation != null) {
+            throw new IllegalStateException("A pending invitation for this user and team already exists.");
+        }
+
         Invitation invitation = new Invitation(null, teamId, senderEmail, targetEmail, InvitationStatus.PENDING, new Date());
         invitationDAO.save(invitation);
     }
@@ -59,6 +66,11 @@ public class TeamManager {
     public void acceptInvitation(Long invitationId) throws SQLException {
         Invitation invitation = requireInvitation(invitationId);
         ensurePending(invitation);
+
+        Team team = loadTeamOrThrow(invitation.getTeamId());
+        if (team.getMemberEmails().size() >= MAX_TEAM_SIZE) {
+            throw new IllegalStateException("Team has reached maximum size of " + MAX_TEAM_SIZE + " members.");
+        }
 
         teamDAO.addMember(invitation.getTeamId(), invitation.getReceiver());
         invitationDAO.updateStatus(invitationId, InvitationStatus.ACCEPTED);

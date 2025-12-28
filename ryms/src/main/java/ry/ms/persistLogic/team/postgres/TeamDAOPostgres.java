@@ -50,7 +50,12 @@ public class TeamDAOPostgres implements TeamDAO {
                 team.setMemberEmails(getMembers(conn, teamId));
                 return team;
             } catch (SQLException ex) {
-                conn.rollback();
+                try {
+                    conn.rollback();
+                } catch (SQLException rollbackEx) {
+                    ex.addSuppressed(rollbackEx);
+                    System.err.println("Rollback failed while saving team: " + rollbackEx.getMessage());
+                }
                 System.err.println("Error while saving team: " + ex.getMessage());
                 throw ex;
             } finally {

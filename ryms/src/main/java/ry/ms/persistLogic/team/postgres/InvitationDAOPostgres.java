@@ -30,6 +30,10 @@ public class InvitationDAOPostgres implements InvitationDAO {
             "SELECT invitation_id, team_id, sender_email, receiver_email, status, sent_at " +
             "FROM invitations WHERE receiver_email = ? AND status = ?";
 
+    private static final String SELECT_PENDING_BY_TEAM_AND_RECEIVER_SQL =
+            "SELECT invitation_id, team_id, sender_email, receiver_email, status, sent_at " +
+            "FROM invitations WHERE team_id = ? AND receiver_email = ? AND status = ?";
+
     @Override
     public void save(Invitation invitation) throws SQLException {
         try (Connection conn = DBConfig.getConnection();
@@ -94,6 +98,26 @@ public class InvitationDAOPostgres implements InvitationDAO {
             }
         }
         return invitations;
+    }
+
+    @Override
+    public Invitation getPendingInvitation(Long teamId, String receiverEmail) throws SQLException {
+        if (teamId == null || receiverEmail == null) {
+            return null;
+        }
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_PENDING_BY_TEAM_AND_RECEIVER_SQL)) {
+
+            stmt.setLong(1, teamId);
+            stmt.setString(2, receiverEmail);
+            stmt.setString(3, InvitationStatus.PENDING.name());
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapInvitation(rs);
+                }
+            }
+        }
+        return null;
     }
 
     private Invitation mapInvitation(ResultSet rs) throws SQLException {
