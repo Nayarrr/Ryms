@@ -1,8 +1,9 @@
 package ry.ms.persistLogic.team.dao;
 
 import java.sql.SQLException;
+import java.util.List;
 
-import ry.ms.businessLogic.team.models.Team;
+import ry.ms.models.Team;
 
 /**
  * Data Access Object for team entities.
@@ -32,4 +33,8 @@ public interface TeamDAO {
     void updateCaptain(Long teamId, String newCaptainEmail) throws SQLException;
 
     void deleteTeam(Long teamId) throws SQLException;
+
+    List<Team> getAllTeams() throws SQLException;
+
+    List<Team> searchTeamsByName(String searchTerm) throws SQLException;
 }

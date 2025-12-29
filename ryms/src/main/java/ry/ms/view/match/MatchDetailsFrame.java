@@ -2,6 +2,12 @@ package ry.ms.view.match;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+
+import ry.ms.models.Match;
+import ry.ms.models.Team;
+import ry.ms.models.User;
+import java.sql.SQLException;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,14 +26,12 @@ public class MatchDetailsFrame {
 
     private final Stage stage;
     private final Long matchId;
-    private final String team1Name;
-    private final String team2Name;
+    private final MatchController controller;
 
     public MatchDetailsFrame(Stage stage, Long matchId, String team1Name, String team2Name) {
         this.stage = stage;
         this.matchId = matchId;
-        this.team1Name = team1Name;
-        this.team2Name = team2Name;
+        this.controller = new MatchController();
     }
 
     public void show() {
@@ -35,21 +39,60 @@ public class MatchDetailsFrame {
         root.setPadding(new Insets(20));
         root.setAlignment(Pos.TOP_CENTER);
 
+        // Bouton retour et bouton assigner équipe
+        HBox topButtons = new HBox(15);
+        topButtons.setAlignment(Pos.CENTER_LEFT);
+        
         Button backButton = new Button("← Retour");
         backButton.setOnAction(e -> {
             MatchFrame matchFrame = new MatchFrame(stage);
             matchFrame.show();
         });
-        HBox backBox = new HBox(backButton);
-        backBox.setAlignment(Pos.TOP_LEFT);
+        
+        Button assignTeamButton = new Button("+ Assigner une équipe");
+        assignTeamButton.setStyle("-fx-background-color: #4CAF50; -fx-text-fill: white;");
+        assignTeamButton.setOnAction(e -> {
+            AssignTeamFrame assignFrame = new AssignTeamFrame(stage, matchId, this::show);
+            assignFrame.show();
+        });
+        
+        topButtons.getChildren().addAll(backButton, assignTeamButton);
+
+        // Récupérer les données du match
+        Match match = controller.getMatchById(matchId);
+        
+        if (match == null) {
+            Label errorLabel = new Label("Match introuvable");
+            errorLabel.setStyle("-fx-text-fill: red; -fx-font-size: 18px;");
+            root.getChildren().addAll(backButton, errorLabel);
+            
+            Scene scene = new Scene(root, 900, 700);
+            stage.setScene(scene);
+            stage.setTitle("Erreur");
+            stage.show();
+            return;
+        }
 
         // Titre : Team1 vs Team2
+        String team1Name = "En attente";
+        String team2Name = "En attente";
+        
+        if (match.getTeams() != null && !match.getTeams().isEmpty()) {
+            if (match.getTeams().size() >= 1) {
+                team1Name = match.getTeams().get(0).getName();
+            }
+            if (match.getTeams().size() >= 2) {
+                team2Name = match.getTeams().get(1).getName();
+            }
+        }
+        
         Label matchTitle = new Label(team1Name + " vs " + team2Name);
         matchTitle.setFont(Font.font("System", FontWeight.BOLD, 32));
 
         // Date et heure
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy à HH:mm");
-        Label dateLabel = new Label("Date : " + dateFormat.format(new Date())); // TODO: Récupérer depuis la BDD
+        String dateStr = match.getMatchDate() != null ? dateFormat.format(match.getMatchDate()) : "Date non définie";
+        Label dateLabel = new Label("Date : " + dateStr);
         dateLabel.setFont(Font.font(16));
 
         // Liste des arbitres
@@ -57,24 +100,37 @@ public class MatchDetailsFrame {
         Label refereesTitle = new Label("Arbitres :");
         refereesTitle.setFont(Font.font("System", FontWeight.BOLD, 16));
         
-        // TODO: Récupérer depuis la BDD
-        Label ref1 = new Label("• referee1@ryms.com");
-        Label ref2 = new Label("• referee2@ryms.com");
+        refereesBox.getChildren().add(refereesTitle);
         
-        refereesBox.getChildren().addAll(refereesTitle, ref1, ref2);
+        if (match.getReferees() != null && !match.getReferees().isEmpty()) {
+            for (User referee : match.getReferees()) {
+                Label refLabel = new Label("• " + referee.getEmail());
+                refereesBox.getChildren().add(refLabel);
+            }
+        } else {
+            Label noRefLabel = new Label("Aucun arbitre assigné");
+            noRefLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic;");
+            refereesBox.getChildren().add(noRefLabel);
+        }
 
         // Compositions des équipes
         HBox teamsComposition = new HBox(20);
         teamsComposition.setAlignment(Pos.CENTER);
 
-        VBox team1Box = createTeamCompositionBox(team1Name, 1L);
-        VBox team2Box = createTeamCompositionBox(team2Name, 2L);
-
-        teamsComposition.getChildren().addAll(team1Box, team2Box);
+        if (match.getTeams() != null && !match.getTeams().isEmpty()) {
+            for (Team team : match.getTeams()) {
+                VBox teamBox = createTeamCompositionBox(team);
+                teamsComposition.getChildren().add(teamBox);
+            }
+        } else {
+            Label noTeamsLabel = new Label("Aucune équipe assignée");
+            noTeamsLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic; -fx-font-size: 16px;");
+            teamsComposition.getChildren().add(noTeamsLabel);
+        }
 
         // Assemblage
         root.getChildren().addAll(
-            backBox,
+            topButtons,
             matchTitle,
             dateLabel,
             new Separator(),
@@ -93,14 +149,14 @@ public class MatchDetailsFrame {
         stage.show();
     }
 
-    private VBox createTeamCompositionBox(String teamName, Long teamId) {
+    private VBox createTeamCompositionBox(Team team) {
         VBox teamBox = new VBox(10);
         teamBox.setPadding(new Insets(15));
         teamBox.setPrefWidth(400);
         teamBox.setStyle("-fx-border-color: #2196F3; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: #f9f9f9;");
 
         // Nom de l'équipe
-        Label teamNameLabel = new Label(teamName);
+        Label teamNameLabel = new Label(team.getName());
         teamNameLabel.setFont(Font.font("System", FontWeight.BOLD, 20));
         teamNameLabel.setStyle("-fx-text-fill: #2196F3;");
 
@@ -108,7 +164,9 @@ public class MatchDetailsFrame {
         HBox coachBox = new HBox(5);
         Label coachLabel = new Label("Coach :");
         coachLabel.setFont(Font.font("System", FontWeight.BOLD, 14));
-        Label coachName = new Label("coach@ryms.com"); // TODO: Récupérer depuis BDD
+        
+        String coachEmail = team.getCaptainEmail() != null ? team.getCaptainEmail() : "Non assigné";
+        Label coachName = new Label(coachEmail);
         coachBox.getChildren().addAll(coachLabel, coachName);
 
         // Roster
@@ -118,14 +176,20 @@ public class MatchDetailsFrame {
         VBox rosterList = new VBox(5);
         rosterList.setPadding(new Insets(5, 0, 0, 15));
         
-        // TODO: Récupérer depuis la BDD via getTeamMembers()
-        rosterList.getChildren().addAll(
-            new Label("• player1@ryms.com"),
-            new Label("• player2@ryms.com"),
-            new Label("• player3@ryms.com"),
-            new Label("• player4@ryms.com"),
-            new Label("• player5@ryms.com")
-        );
+        try {
+            List<User> members = controller.getTeamMembers(team.getTeamId());
+            
+            if (members.isEmpty()) {
+                rosterList.getChildren().add(new Label("• Aucun membre"));
+            } else {
+                for (User member : members) {
+                    rosterList.getChildren().add(new Label("• " + member.getEmail()));
+                }
+            }
+        } catch (Exception e) {
+            rosterList.getChildren().add(new Label("• Erreur de chargement"));
+            e.printStackTrace();
+        }
 
         teamBox.getChildren().addAll(
             teamNameLabel,

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ry.ms.view.match.MatchListViewController"
+            prefHeight="600.0" prefWidth="800.0"
+            style="-fx-background-color: #f5f5f5;">
+
+    <!-- Barre supérieure -->
+    <top>
+        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20;">
+            <HBox spacing="15" alignment="CENTER_LEFT">
+                <Label text="Gestion des Matchs" styleClass="page-title">
+                    <font>
+                        <Font name="System Bold" size="28"/>
+                    </font>
+                </Label>
+                
+                <Region HBox.hgrow="ALWAYS"/>
+                
+                <Button fx:id="createMatchButton" 
+                        text="+ Créer un Match"
+                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;"
+                        onAction="#handleCreateMatch"/>
+                
+                <Button fx:id="refreshButton"
+                        text="🔄 Actualiser"
+                        style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;"
+                        onAction="#handleRefresh"/>
+            </HBox>
+            
+            <Separator/>
+        </VBox>
+    </top>
+
+    <!-- Liste des matchs -->
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <Label text="Liste des matchs" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+            
+            <TableView fx:id="matchTableView" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="idColumn" text="ID" prefWidth="60"/>
+                    <TableColumn fx:id="team1Column" text="Équipe 1" prefWidth="200"/>
+                    <TableColumn fx:id="team2Column" text="Équipe 2" prefWidth="200"/>
+                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
+                    <TableColumn fx:id="statusColumn" text="Statut" prefWidth="100"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="150"/>
+                </columns>
+                
+                <placeholder>
+                    <Label text="Aucun match pour le moment. Cliquez sur 'Créer un Match' pour commencer."/>
+                </placeholder>
+            </TableView>
+        </VBox>
+    </center>
+
+    <!-- Barre inférieure (optionnelle) -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10; -fx-background-color: white;">
+            <Label fx:id="statusLabel" text="Prêt"/>
+        </HBox>
+    </bottom>
+</BorderPane>

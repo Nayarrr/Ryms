@@ -1,19 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns:fx="http://javafx.com/fxml"
       fx:controller="ry.ms.view.team.CreateTeamController"
-      alignment="CENTER" spacing="15" style="-fx-padding: 40;">
+      spacing="20"
+      alignment="CENTER"
+      prefHeight="400"
+      prefWidth="500"
+      style="-fx-padding: 30; -fx-background-color: white;">
 
-    <Label text="Créer votre Équipe" style="-fx-font-size: 24px;"/>
-    
-    <TextField fx:id="nameField" promptText="Nom de l'équipe (ex: T1)" maxWidth="300"/>
-    <TextField fx:id="tagField" promptText="Tag (ex: SKT)" maxWidth="300"/>
-    <TextField fx:id="avatarField" promptText="URL Avatar (optionnel)" maxWidth="300"/>
-    
-    <Button text="Créer l'équipe" onAction="#handleCreateTeam" 
-            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;"/>
-            
-    <Label fx:id="errorLabel" textFill="RED"/>
+    <!-- Titre -->
+    <Label text="Créer une nouvelle équipe">
+        <font>
+            <Font name="System Bold" size="24"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+    <!-- Formulaire -->
+    <GridPane hgap="15" vgap="15" alignment="CENTER">
+        <!-- Nom de l'équipe -->
+        <Label text="Nom de l'équipe :" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="nameField"
+                   prefWidth="300"
+                   promptText="Ex: Phoenix Legends"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="0"/>
+
+        <!-- Tag de l'équipe -->
+        <Label text="Tag (3-5 lettres) :" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="tagField"
+                   prefWidth="300"
+                   promptText="Ex: PHX"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="1"/>
+
+        <!-- Avatar URL -->
+        <Label text="Avatar (URL) :" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <font><Font size="14"/></font>
+        </Label>
+        <TextField fx:id="avatarField"
+                   prefWidth="300"
+                   promptText="https://... (optionnel)"
+                   GridPane.columnIndex="1"
+                   GridPane.rowIndex="2"/>
+    </GridPane>
+
+    <!-- Bouton de création -->
+    <Button text="Créer l'équipe"
+            prefWidth="200"
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 10;"
+            onAction="#handleCreateTeam"/>
+
+    <!-- Message d'erreur -->
+    <Label fx:id="errorLabel" 
+           wrapText="true" 
+           prefWidth="400"
+           style="-fx-text-fill: red;"/>
 </VBox>

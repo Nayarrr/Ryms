@@ -22,13 +22,16 @@ public class Match {
         this.matchId = matchid;
         this.matchDate = matchDate;
         this.gameId = gameId;
+        this.referees = new ArrayList<>();
+        this.teams = new ArrayList<>();
+        this.teamResults = new ArrayList<>();
     }
 
     public Long getMatchId(){
         return this.matchId;
     }
 
-    protected void setMatchId(Long matchid){
+    public void setMatchId(Long matchid){
         this.matchId = matchid;
     }
     

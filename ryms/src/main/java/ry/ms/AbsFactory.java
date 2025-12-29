@@ -1,10 +1,9 @@
 package ry.ms;
 import ry.ms.persistLogic.match.dao.MatchDAO;
-import ry.ms.persistLogic.user.login.dao.UserDAO;
-
-import ry.ms.persistLogic.user.login.dao.UserDAO;
+import ry.ms.models.User;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
  * Abstract Factory for creating Data Access Object DAO instances.

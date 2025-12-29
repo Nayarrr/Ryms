@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ry.ms.view.team.MainLayoutController"
+            prefHeight="600.0" prefWidth="1200.0">
+
+    <top>
+        <VBox spacing="0">
+            <!-- Barre de navigation principale -->
+            <HBox spacing="0" style="-fx-background-color: #2c3e50;">
+                <!-- Logo/Titre -->
+                <VBox style="-fx-background-color: #34495e; -fx-padding: 15 30; -fx-alignment: center;">
+                    <Label text="RYMS" textFill="WHITE" style="-fx-font-size: 20px; -fx-font-weight: bold;"/>
+                </VBox>
+
+                <!-- Boutons de navigation -->
+                <HBox spacing="0" HBox.hgrow="ALWAYS">
+                    <Button text="🏠 Équipes" 
+                            onAction="#handleTeamsClick"
+                            style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 30; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"/>
+                    
+                    <Button text="⚽ Matchs" 
+                            onAction="#handleMatchsClick"
+                            style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-size: 16px; -fx-padding: 15 30; -fx-cursor: hand; -fx-border-width: 0 0 3 0; -fx-border-color: transparent;"/>
+                </HBox>
+
+                <!-- Zone utilisateur -->
+                <HBox spacing="15" style="-fx-padding: 10 20; -fx-alignment: center-right;">
+                    <Button text="🔔 Invitations" 
+                            onAction="#handleOpenInvitations"
+                            style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-padding: 8 15;"/>
+                    
+                    <Button text="Déconnexion" 
+                            onAction="#handleLogout" 
+                            style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-padding: 8 15;"/>
+                </HBox>
+            </HBox>
+            
+            <!-- Ligne de séparation -->
+            <Separator style="-fx-background-color: #34495e;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="contentArea" style="-fx-background-color: #ecf0f1;"/>
+    </center>
+</BorderPane>

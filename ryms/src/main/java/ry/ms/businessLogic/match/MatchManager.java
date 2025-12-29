@@ -11,19 +11,25 @@ import ry.ms.models.Match;
 import ry.ms.models.Team;
 import ry.ms.models.User;
 import ry.ms.persistLogic.match.dao.MatchDAO;
+import ry.ms.persistLogic.team.dao.TeamDAO;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 public class MatchManager {
 
     private static MatchManager matchmanager;
     private final MatchDAO matchDAO;
+    private final UserDAO userDAO;
+    private final TeamDAO teamDAO;
 
-    private MatchManager(MatchDAO matchDAO){
+    private MatchManager(MatchDAO matchDAO, UserDAO userDAO, TeamDAO teamDAO){
         this.matchDAO = matchDAO;
+        this.userDAO = userDAO;
+        this.teamDAO = teamDAO;
     }
 
-    public static MatchManager getMatchManager(MatchDAO matchDAO){
+    public static MatchManager getMatchManager(MatchDAO matchDAO,  UserDAO userDAO, TeamDAO teamDAO){
         if(matchmanager == null){
-            matchmanager = new MatchManager(matchDAO);
+            matchmanager = new MatchManager(matchDAO, userDAO, teamDAO);
         }
         return matchmanager;
     }
@@ -40,7 +46,7 @@ public class MatchManager {
         }
     }
 
-    private Match getMatchById(Long matchid) throws SQLException, MatchDoesntExistException{
+    public Match getMatchById(Long matchid) throws SQLException, MatchDoesntExistException{
         try {
             Match match = matchDAO.getMatchById(matchid);
             if(match == null){
@@ -69,12 +75,48 @@ public class MatchManager {
         return matchDAO.getTeamMembers(teamId);
     }
 
+    public List<Match> getAllMatches() throws SQLException {
+        return matchDAO.getAllMatches();
+    }
+
+    public List<User> getAllUsers() throws SQLException {
+        return userDAO.getAllUsers();
+    }
+
+    public List<Team> getAllTeams() throws SQLException {
+        return teamDAO.getAllTeams();
+    }
+
+    public List<User> searchUsersByEmail(String searchTerm) throws SQLException {
+        return matchDAO.searchUsersByEmail(searchTerm);
+    }
+
     public Long createMatch(Date matchDate, int gameId) throws SQLException {
         if (matchDate == null) {
             throw new IllegalArgumentException("Match date cannot be null");
         }
         
         return matchDAO.createMatch(matchDate, gameId);
+    }
+
+    public Match createCompleteMatch(Team team1, Team team2, java.time.LocalDate matchDate, int gameId, User referee) throws SQLException {
+        if (team1 == null || team2 == null) {
+            throw new IllegalArgumentException("Les deux équipes doivent être spécifiées");
+        }
+
+        if (team1.getTeamId().equals(team2.getTeamId())) {
+            throw new IllegalArgumentException("Les deux équipes doivent être différentes");
+        }
+
+        if (matchDate == null || matchDate.isBefore(java.time.LocalDate.now())) {
+            throw new IllegalArgumentException("La date du match doit être dans le futur ou aujourd'hui");
+        }
+
+        if (referee == null) {
+            throw new IllegalArgumentException("Un arbitre doit être spécifié");
+        }
+
+        return matchDAO.createCompleteMatch(team1, team2, matchDate, gameId, referee);
     }
 
     public boolean addReferee(Long matchid , String email) throws SQLException, UserDoesntExistException, MatchDoesntExistException{
@@ -151,4 +193,24 @@ public class MatchManager {
             throw new UserDoesntExistException("User does not exist");
         }
     }
+
+    public List<Team> getTeamsForMatch(Long matchId) throws SQLException {
+        return matchDAO.getTeamsForMatch(matchId);
+    }
+
+    public boolean deleteMatch(Long matchId) throws SQLException, MatchDoesntExistException {
+        // Vérifier que le match existe
+        Match match = matchDAO.getMatchById(matchId);
+        if (match == null) {
+            throw new MatchDoesntExistException("Le match avec l'ID " + matchId + " n'existe pas.");
+        }
+        
+        // Supprimer le match (les relations en cascade seront gérées par la DB)
+        return matchDAO.delete(matchId);
+    }
+
+
+
+
+
 }

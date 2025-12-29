@@ -3,6 +3,8 @@ package ry.ms.persistLogic.user.login.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import java.util.List;
+
 import ry.ms.models.User;
 
 /**
@@ -30,4 +32,6 @@ public abstract class UserDAO {
      * @throws SQLException if a database access error occurs.
      */
     public abstract User getUserById(String email) throws SQLException;
+
+    public abstract List<User> getAllUsers() throws SQLException;
 }

@@ -8,8 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import ry.ms.businessLogic.team.models.Team;
 import ry.ms.persistLogic.team.dao.TeamDAO;
+import ry.ms.models.Team;
 import ry.ms.persistLogic.DBConfig;
 
 public class TeamDAOPostgres implements TeamDAO {
@@ -36,6 +36,12 @@ public class TeamDAOPostgres implements TeamDAO {
             "DELETE FROM teams WHERE team_id = ?";
     private static final String SELECT_TEAM_BY_MEMBER_SQL =
     "SELECT t.* FROM teams t JOIN team_members tm ON t.team_id = tm.team_id WHERE tm.user_email = ?";
+    private static final String SELECT_ALL_TEAMS_SQL =
+            "SELECT team_id, name, tag, avatar, captain_email FROM teams ORDER BY name";
+    private static final String SELECT_TEAMS_BY_NAME_SQL = 
+            "SELECT team_id, name, tag, avatar, captain_email FROM teams " +
+                "WHERE LOWER(name) LIKE LOWER(?) ORDER BY name LIMIT 10";
+
 
     @Override
     public Team saveTeam(Team team) throws SQLException {
@@ -223,4 +229,43 @@ public class TeamDAOPostgres implements TeamDAO {
                 rs.getString("captain_email")
         );
     }
+
+    @Override
+    public List<Team> getAllTeams() throws SQLException {
+        List<Team> teams = new ArrayList<>();
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_ALL_TEAMS_SQL);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Team team = mapTeam(rs);
+                // Optionnel : charger les membres pour chaque équipe
+                team.setMemberEmails(getMembers(conn, team.getTeamId()));
+                teams.add(team);
+            }
+        }
+        return teams;
+    }
+
+    @Override
+    public List<Team> searchTeamsByName(String searchTerm) throws SQLException {
+        List<Team> teams = new ArrayList<>();
+        
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_TEAMS_BY_NAME_SQL)) {
+            
+            stmt.setString(1, searchTerm + "%");
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Team team = mapTeam(rs);
+                    team.setMemberEmails(getMembers(conn, team.getTeamId()));
+                    teams.add(team);
+                }
+            }
+        }
+        
+        return teams;
+    }
 }
+

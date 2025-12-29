@@ -2,6 +2,7 @@ package ry.ms.persistLogic.match.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -34,4 +35,16 @@ public abstract class MatchDAO {
     public abstract List<User> getTeamMembers(Long teamId) throws SQLException;
 
     public abstract Long createMatch(Date matchDate, int gameId) throws SQLException;
+
+    public abstract List<Match> getAllMatches() throws SQLException;
+
+    public abstract List<User> searchUsersByEmail(String searchTerm) throws SQLException;
+
+    public abstract List<Team> getTeamsForMatch(Long matchId) throws SQLException;
+
+    public abstract boolean delete(Long matchId) throws SQLException;
+
+    public abstract Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate, int gameId, User referee) throws SQLException;
+    
+
 }

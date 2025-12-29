@@ -32,7 +32,7 @@ public class PostgresFactory extends AbsFactory {
     public MatchDAO createMatchDAO(){
         return new MatchDAOPostgres();
     }
-    
+
     public TeamDAO createTeamDAO() {
         return new TeamDAOPostgres();
     }

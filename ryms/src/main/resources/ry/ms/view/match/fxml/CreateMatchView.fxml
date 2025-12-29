@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="ry.ms.view.match.CreateMatchController"
+      spacing="20" 
+      alignment="CENTER" 
+      prefHeight="750" 
+      prefWidth="900">
+    
+    <padding>
+        <Insets top="30" right="30" bottom="30" left="30"/>
+    </padding>
+
+    <!-- Titre -->
+    <Label text="Créer un Match" styleClass="title">
+        <font>
+            <Font name="System Bold" size="24"/>
+        </font>
+    </Label>
+
+    <Separator/>
+
+    <!-- Formulaire -->
+    <GridPane hgap="15" vgap="15" alignment="CENTER">
+        <!-- Équipe 1 -->
+        <Label text="Équipe 1 :" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <font>
+                <Font size="14"/>
+            </font>
+        </Label>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
+            <TextField fx:id="team1SearchField" 
+                       prefWidth="300" 
+                       promptText="Tapez le nom ou tag de l'équipe..."/>
+            <ListView fx:id="team1ListView" 
+                      prefHeight="100" 
+                      visible="false" 
+                      managed="false"/>
+        </VBox>
+
+        <!-- Équipe 2 -->
+        <Label text="Équipe 2 :" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <font>
+                <Font size="14"/>
+            </font>
+        </Label>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="team2SearchField" 
+                       prefWidth="300" 
+                       promptText="Tapez le nom ou tag de l'équipe..."/>
+            <ListView fx:id="team2ListView" 
+                      prefHeight="100" 
+                      visible="false" 
+                      managed="false"/>
+        </VBox>
+
+        <!-- Date -->
+        <Label text="Date du match :" GridPane.columnIndex="0" GridPane.rowIndex="2">
+            <font>
+                <Font size="14"/>
+            </font>
+        </Label>
+        <DatePicker fx:id="matchDatePicker" 
+                    prefWidth="300" 
+                    promptText="Sélectionner une date"
+                    GridPane.columnIndex="1" 
+                    GridPane.rowIndex="2"/>
+
+        <!-- Game ID -->
+        <Label text="ID du jeu :" GridPane.columnIndex="0" GridPane.rowIndex="3">
+            <font>
+                <Font size="14"/>
+            </font>
+        </Label>
+        <TextField fx:id="gameIdField" 
+                   prefWidth="300" 
+                   text="1"
+                   promptText="1 = Rocket League, 2 = Valorant, 3 = LoL"
+                   GridPane.columnIndex="1" 
+                   GridPane.rowIndex="3"/>
+
+        <!-- Utilisateur (arbitre) -->
+        <Label text="Utilisateur (arbitre) :" GridPane.columnIndex="0" GridPane.rowIndex="4">
+            <font>
+                <Font size="14"/>
+            </font>
+        </Label>
+        <VBox GridPane.columnIndex="1" GridPane.rowIndex="4">
+            <TextField fx:id="userSearchField" 
+                       prefWidth="300" 
+                       promptText="Tapez l'email ou nom d'utilisateur..."/>
+            <ListView fx:id="userListView" 
+                      prefHeight="100" 
+                      visible="false" 
+                      managed="false"/>
+        </VBox>
+    </GridPane>
+
+    <!-- Boutons -->
+    <HBox spacing="15" alignment="CENTER">
+        <Button text="Créer le match" 
+                prefWidth="150"
+                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
+                onAction="#handleCreateMatch"/>
+        <Button text="Annuler" 
+                prefWidth="150"
+                style="-fx-background-color: #f44336; -fx-text-fill: white;"
+                onAction="#handleCancel"/>
+    </HBox>
+
+    <!-- Message -->
+    <Label fx:id="messageLabel" wrapText="true" prefWidth="500"/>
+</VBox>

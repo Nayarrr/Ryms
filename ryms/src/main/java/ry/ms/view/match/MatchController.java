@@ -1,6 +1,7 @@
 package ry.ms.view.match;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,12 +19,21 @@ import javafx.stage.Stage;
 import ry.ms.businessLogic.match.MatchFacade;
 import ry.ms.businessLogic.match.exceptions.MatchDoesntExistException;
 import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
+import ry.ms.businessLogic.team.TeamFacade;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
+import ry.ms.models.Match;
+import ry.ms.models.Team;
 import ry.ms.models.User;
-
 public class MatchController {
 
-    private final MatchFacade matchFacade = MatchFacade.getMatchFacade();
+    private final MatchFacade matchFacade;
+
+    private final TeamFacade teamFacade;
+
+    public MatchController(){
+        this.matchFacade = MatchFacade.getMatchFacade();
+        this.teamFacade = TeamFacade.getInstance();
+    }
 
     public boolean handleCreateMatchButtonAction(DatePicker datePicker, TextField gameIdField, Label messageLabel) {
         if (datePicker.getValue() == null || gameIdField.getText() == null || gameIdField.getText().isBlank()) {
@@ -340,6 +350,171 @@ public class MatchController {
         return false;
     }
 
+    public List<Team> getAllTeams() {
+        try {
+            return teamFacade.getAllTeams();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des équipes: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean handleAddTeamToMatch(Long matchId, Long teamId, Label messageLabel) {
+        if (matchId == null || teamId == null) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("ID du match ou de l'équipe manquant.");
+            return false;
+        }
+
+        try {
+            boolean added = matchFacade.addTeam(matchId, teamId);
+            if (added) {
+                messageLabel.setStyle("-fx-text-fill: green;");
+                messageLabel.setText("Équipe assignée avec succès !");
+                return true;
+            } else {
+                messageLabel.setStyle("-fx-text-fill: orange;");
+                messageLabel.setText("Cette équipe est déjà assignée à ce match.");
+                return false;
+            }
+        } catch (TeamDoesntExistException e) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Équipe introuvable.");
+            e.printStackTrace();
+        } catch (MatchDoesntExistException e) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Match introuvable.");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Erreur base de données.");
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public List<Match> getAllMatches() {
+        try {
+            return matchFacade.getAllMatches();
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de la récupération des matchs: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<User> getAllUsers() {
+        try {
+            return matchFacade.getAllUsers();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public Match getMatchById(Long matchId) {
+        try {
+            return matchFacade.getMatchById(matchId);
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération du match: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<User> getTeamMembers(Long teamId) {
+        try {
+            return matchFacade.getTeamMembers(teamId);
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération des membres: " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public List<Team> searchTeamsByName(String searchTerm) {
+        try {
+            return TeamFacade.getInstance().searchTeamsByName(searchTerm);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+    
+    public List<User> searchUsersByEmail(String searchTerm) {
+        try {
+            return matchFacade.searchUsersByEmail(searchTerm);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public Team getTeamForMatch(Match match, int teamNumber) {
+        try {
+            List<Team> teams = matchFacade.getTeamsForMatch((long) match.getMatchId());
+            
+            if (teams == null || teams.isEmpty()) {
+                return null;
+            }
+            
+            if (teamNumber == 1 && teams.size() >= 1) {
+                return teams.get(0);
+            } else if (teamNumber == 2 && teams.size() >= 2) {
+                return teams.get(1);
+            }
+            
+            return null;
+            
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la récupération de l'équipe: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public boolean deleteMatch(long matchId) {
+        try {
+            return matchFacade.deleteMatch(matchId);
+        } catch (Exception e) {
+            System.err.println("Erreur lors de la suppression du match: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean handleCreateCompleteMatch(
+            Team team1,
+            Team team2,
+            java.time.LocalDate matchDate,
+            int gameId,
+            User referee,
+            Label messageLabel) {
+        
+        try {
+            Match match = matchFacade.createCompleteMatch(team1, team2, matchDate, gameId, referee);
+            
+            if (match != null && match.getMatchId() != null) {
+                messageLabel.setStyle("-fx-text-fill: green;");
+                messageLabel.setText("✓ Match créé avec succès ! ID: " + match.getMatchId());
+                System.out.println("✅ Match " + match.getMatchId() + " créé entre " + 
+                                   team1.getName() + " et " + team2.getName());
+                return true;
+            } else {
+                messageLabel.setStyle("-fx-text-fill: red;");
+                messageLabel.setText("❌ Erreur lors de la création du match.");
+                return false;
+            }
+            
+        } catch (Exception e) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("❌ Erreur : " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 
 

@@ -1,4 +1,4 @@
-package ry.ms.view.team;
+package ry.ms.view.user;
 
 public final class UserSession {
     private static volatile UserSession instance;
@@ -17,6 +17,15 @@ public final class UserSession {
         return instance;
     }
 
-    public void setUserEmail(String email) { this.userEmail = email; }
-    public String getUserEmail() { return userEmail; }
+    public void setUserEmail(String email) { 
+        this.userEmail = email; 
+    }
+    
+    public String getUserEmail() { 
+        return userEmail; 
+    }
+
+    public void clearSession() {
+        this.userEmail = null;
+    }
 }
