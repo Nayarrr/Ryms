@@ -1,16 +1,21 @@
 package ry.ms.view.match;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.stage.Stage;
-import ry.ms.models.Team;
-import ry.ms.models.User;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+import ry.ms.models.Team;
+import ry.ms.models.User;
 
 public class CreateMatchController {
 
@@ -53,11 +58,6 @@ public class CreateMatchController {
     private void loadTeams() {
         try {
             allTeams = matchController.getAllTeams();
-            System.out.println("🔍 DEBUG: Nombre d'équipes chargées = " + (allTeams == null ? "NULL" : allTeams.size()));
-            
-            if (allTeams != null && !allTeams.isEmpty()) {
-                System.out.println("🔍 DEBUG: Première équipe = " + allTeams.get(0).getName());
-            }
             
             if (allTeams == null || allTeams.isEmpty()) {
                 messageLabel.setStyle("-fx-text-fill: orange;");
@@ -72,11 +72,6 @@ public class CreateMatchController {
     private void loadUsers() {
         try {
             allUsers = matchController.getAllUsers();
-            System.out.println("🔍 DEBUG: Nombre d'utilisateurs chargés = " + (allUsers == null ? "NULL" : allUsers.size()));
-            
-            if (allUsers != null && !allUsers.isEmpty()) {
-                System.out.println("🔍 DEBUG: Premier utilisateur = " + allUsers.get(0).getEmail());
-            }
             
             if (allUsers == null || allUsers.isEmpty()) {
                 messageLabel.setStyle("-fx-text-fill: orange;");
@@ -89,9 +84,7 @@ public class CreateMatchController {
     }
 
     private void setupTeamAutocomplete(TextField searchField, ListView<Team> listView, boolean isTeam1) {
-        System.out.println("🔍 DEBUG: Configuration autocomplétion pour " + (isTeam1 ? "équipe 1" : "équipe 2"));
         
-        // Configuration du ListView
         listView.setCellFactory(lv -> new ListCell<Team>() {
             @Override
             protected void updateItem(Team team, boolean empty) {
@@ -106,8 +99,6 @@ public class CreateMatchController {
 
         // Recherche en temps réel
         searchField.textProperty().addListener((obs, oldVal, newVal) -> {
-            System.out.println("🔍 DEBUG: Texte saisi = '" + newVal + "'");
-            System.out.println("🔍 DEBUG: allTeams est null ? " + (allTeams == null));
             
             if (allTeams == null) {
                 System.err.println("❌ ERREUR: allTeams est NULL !");
@@ -121,33 +112,28 @@ public class CreateMatchController {
             }
 
             String query = newVal.toLowerCase().trim();
-            System.out.println("🔍 DEBUG: Recherche pour '" + query + "'");
+            
             
             ObservableList<Team> filtered = FXCollections.observableArrayList(
                 allTeams.stream()
                     .filter(t -> {
                         boolean match = t.getName().toLowerCase().contains(query) 
                                      || t.getTag().toLowerCase().contains(query);
-                        if (match) {
-                            System.out.println("🔍 DEBUG: Équipe trouvée = " + t.getName());
-                        }
                         return match;
                     })
                     .limit(5)
                     .collect(Collectors.toList())
             );
 
-            System.out.println("🔍 DEBUG: Nombre de résultats filtrés = " + filtered.size());
-
             if (filtered.isEmpty()) {
                 listView.setVisible(false);
                 listView.setManaged(false);
-                System.out.println("🔍 DEBUG: Aucun résultat, liste cachée");
+                
             } else {
                 listView.setItems(filtered);
                 listView.setVisible(true);
                 listView.setManaged(true);
-                System.out.println("🔍 DEBUG: Liste affichée avec " + filtered.size() + " résultats");
+                
             }
         });
 
@@ -155,7 +141,6 @@ public class CreateMatchController {
         listView.setOnMouseClicked(event -> {
             Team selected = listView.getSelectionModel().getSelectedItem();
             if (selected != null) {
-                System.out.println("🔍 DEBUG: Équipe sélectionnée = " + selected.getName());
                 searchField.setText(selected.getName() + " [" + selected.getTag() + "]");
                 if (isTeam1) {
                     selectedTeam1 = selected;

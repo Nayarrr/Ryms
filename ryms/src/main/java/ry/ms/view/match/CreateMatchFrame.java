@@ -32,8 +32,10 @@ public class CreateMatchFrame {
             controller.setModalStage(modal);
             controller.setOnMatchCreated(onMatchCreated);
 
-            Scene scene = new Scene(root);
+            Scene scene = new Scene(root, 900, 700);
             modal.setScene(scene);
+            modal.setMinWidth(800);
+            modal.setMinHeight(650);
             modal.show();
 
         } catch (Exception e) {
