@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ry.ms.view.team.InvitationsController"
+      spacing="10" style="-fx-padding: 20;" prefWidth="400" prefHeight="300">
+
+    <Label text="Invitations en attente" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+    
+    <ListView fx:id="invitationListView" VBox.vgrow="ALWAYS"/>
+    
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Accepter" onAction="#handleAccept" style="-fx-background-color: green; -fx-text-fill: white;"/>
+        <Button text="Refuser" onAction="#handleReject" style="-fx-background-color: red; -fx-text-fill: white;"/>
+    </HBox>
+    
+    <Label fx:id="statusLabel"/>
+</VBox>

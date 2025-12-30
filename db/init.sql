@@ -34,9 +34,22 @@ CREATE TABLE IF NOT EXISTS invitations (
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS games (
+    game_id SERIAL PRIMARY KEY,
+    name VARCHAR(255)
+    editor VARCHAR(255)
+    releaseDate TIMESTAMP
+    logo BYTEA
+)
+
 -- WARNING: These seed users contain plain text passwords for development/testing only.
 -- In production, passwords MUST be hashed using a strong algorithm (bcrypt, scrypt, or Argon2)
 -- before storage. The application layer should implement password hashing.
 INSERT INTO users (email, username, password) VALUES
 ('admin@ryms.com', 'admin', 'password_123'),
 ('test@ryms.com', 'testuser', 'password_456');
+
+INSERT INTO games (name, editor) VALUES
+('Rocket League', 'Psyonix'),
+('League of Legends', 'Riot Games'),
+('VALORANT', 'Riot Games');

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ry.ms.view.team.CreateTeamController"
+      alignment="CENTER" spacing="15" style="-fx-padding: 40;">
+
+    <Label text="Créer votre Équipe" style="-fx-font-size: 24px;"/>
+    
+    <TextField fx:id="nameField" promptText="Nom de l'équipe (ex: T1)" maxWidth="300"/>
+    <TextField fx:id="tagField" promptText="Tag (ex: SKT)" maxWidth="300"/>
+    <TextField fx:id="avatarField" promptText="URL Avatar (optionnel)" maxWidth="300"/>
+    
+    <Button text="Créer l'équipe" onAction="#handleCreateTeam" 
+            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px;"/>
+            
+    <Label fx:id="errorLabel" textFill="RED"/>
+</VBox>
