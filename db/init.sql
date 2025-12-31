@@ -39,7 +39,8 @@ CREATE TABLE IF NOT EXISTS invitations (
 -- before storage. The application layer should implement password hashing.
 INSERT INTO users (email, username, password) VALUES
 ('admin@ryms.com', 'admin', 'password_123'),
-('test@ryms.com', 'testuser', 'password_456');
+('test@ryms.com', 'testuser', 'password_456'),
+('ra@ryms.com', 'randomuser', 'password_789');
 
 CREATE TABLE IF NOT EXISTS matchs(
     match_id SERIAL PRIMARY KEY,

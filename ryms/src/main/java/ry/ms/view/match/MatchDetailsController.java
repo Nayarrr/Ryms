@@ -256,9 +256,11 @@ public class MatchDetailsController {
             messageLabel
         );
 
-        Scene scene = new Scene(layout, 400, 350);
-        modal.setScene(scene);
-        modal.show();
+        Scene scene = new Scene(layout, 800, 300);
+            modal.setScene(scene);
+            modal.setMinWidth(800);
+            modal.setMinHeight(300);    
+            modal.show();
     }
 
     @FXML
