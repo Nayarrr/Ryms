@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ry.ms.AbsFactory;
-import ry.ms.PostgresFactory;
 import ry.ms.models.Invitation;
 import ry.ms.models.Team;
 
@@ -15,7 +14,7 @@ public final class TeamFacade {
     private final TeamManager teamManager;
 
     private TeamFacade() {
-        AbsFactory factory = new PostgresFactory();
+        AbsFactory factory = AbsFactory.getInstance();
         this.teamManager = new TeamManager(factory);
     }
 

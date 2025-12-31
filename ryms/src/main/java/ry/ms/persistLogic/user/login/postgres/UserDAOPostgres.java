@@ -1,7 +1,6 @@
 package ry.ms.persistLogic.user.login.postgres;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ry.ms.models.User;
-import ry.ms.persistLogic.user.login.dao.UserDAO;
 import ry.ms.persistLogic.DBConfig;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
  * PostgreSQL implementation of the UserDAO.
@@ -19,12 +18,8 @@ import ry.ms.persistLogic.DBConfig;
  */
 public class UserDAOPostgres extends UserDAO {
 
-    private static final String URL = "jdbc:postgresql://localhost:5432/ryms_database";
-    private static final String USER = "ryms";
-    private static final String PASSWORD = "ryms";
-
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USER, PASSWORD);
+        return DBConfig.getConnection();
     }
 
     /**

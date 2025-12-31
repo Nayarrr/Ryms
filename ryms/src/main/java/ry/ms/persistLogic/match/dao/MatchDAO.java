@@ -1,6 +1,5 @@
 package ry.ms.persistLogic.match.dao;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Date;
@@ -10,15 +9,7 @@ import ry.ms.models.Match;
 import ry.ms.models.Team;
 import ry.ms.models.User;
 
-public abstract class MatchDAO {
-
-    protected final Connection conn;
-
-    public MatchDAO(Connection conn){
-        this.conn = conn;
-    }
-
-    public abstract User getUserById(String email) throws SQLException;
+public interface MatchDAO {
 
     public abstract Match getMatchById(Long matchid) throws SQLException;
 
