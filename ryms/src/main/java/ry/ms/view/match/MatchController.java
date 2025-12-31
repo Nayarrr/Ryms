@@ -24,198 +24,104 @@ import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
 import ry.ms.models.Match;
 import ry.ms.models.Team;
 import ry.ms.models.User;
+
 public class MatchController {
 
     private final MatchFacade matchFacade;
-
     private final TeamFacade teamFacade;
 
-    public MatchController(){
+    public MatchController() {
         this.matchFacade = MatchFacade.getMatchFacade();
         this.teamFacade = TeamFacade.getInstance();
     }
 
-    public boolean handleCreateMatchButtonAction(DatePicker datePicker, TextField gameIdField, Label messageLabel) {
-        if (datePicker.getValue() == null || gameIdField.getText() == null || gameIdField.getText().isBlank()) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Veuillez renseigner la date et l'ID du jeu.");
-            return false;
-        }
-
-        int gameId;
+    public boolean createMatch(Team team1, Team team2, Date matchDate, int gameId, List<User> referees) {
         try {
-            gameId = Integer.parseInt(gameIdField.getText().trim());
-        } catch (NumberFormatException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("ID du jeu invalide.");
-            return false;
-        }
+            Long matchId = matchFacade.createMatch(team1.getTeamId(), team2.getTeamId(), matchDate, gameId);
+            
+            if (matchId == null) {
+                System.err.println("❌ Erreur : Match non créé");
+                return false;
+            }
 
-        // Convertir LocalDate en Date
-        Date matchDate = java.sql.Date.valueOf(datePicker.getValue());
+            if (referees != null && !referees.isEmpty()) {
+                for (User referee : referees) {
+                    try {
+                        matchFacade.addReferee(matchId, referee.getEmail());
+                        System.out.println("✅ Arbitre ajouté: " + referee.getEmail());
+                    } catch (Exception e) {
+                        System.err.println("⚠️ Erreur ajout arbitre " + referee.getEmail() + ": " + e.getMessage());
+                    }
+                }
+            }
 
-        try {
-            Long matchId = matchFacade.createMatch(matchDate, gameId);
-            messageLabel.setTextFill(Color.GREEN);
-            messageLabel.setText("Match créé avec succès ! ID: " + matchId);
-            gameIdField.setText("");
-            datePicker.setValue(null);
+            System.out.println("✅ Match " + matchId + " créé entre " + team1.getName() + " et " + team2.getName());
             return true;
-        } catch (SQLException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Erreur lors de la création du match.");
-            e.printStackTrace();
-        }
 
-        return false;
+        } catch (Exception e) {
+            System.err.println("❌ Erreur création match: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean addRefereeToMatch(Long matchId, String refereeEmail, Label messageLabel) {
+        return executeWithExceptionHandling(
+            () -> matchFacade.addReferee(matchId, refereeEmail),
+            messageLabel,
+            "✅ Arbitre ajouté avec succès !",
+            "❌ Erreur lors de l'ajout de l'arbitre."
+        );
     }
 
     public boolean handleAddRefereeButtonAction(TextField matchIdField, TextField emailField, Label messageLabel) {
+        Long matchId = parseMatchId(matchIdField.getText(), messageLabel);
+        if (matchId == null) return false;
 
-        String idText = matchIdField.getText();
         String email = emailField.getText() == null ? "" : emailField.getText().trim();
-
-        if (idText == null || idText.isBlank() || email.isBlank()) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Veuillez renseigner l'ID du match et l'email de l'arbitre.");
+        if (email.isBlank()) {
+            showError(messageLabel, "Veuillez renseigner l'email de l'arbitre.");
             return false;
         }
 
-        Long matchId;
-        try {
-            matchId = Long.parseLong(idText.trim());
-        } catch (NumberFormatException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("ID du match invalide.");
-            return false;
-        }
-
-        try {
-            boolean added = matchFacade.addReferee(matchId, email);
-            if (added) {
-                messageLabel.setTextFill(Color.GREEN);
-                messageLabel.setText("Arbitre ajouté au match.");
-                // optionally clear the email field
-                emailField.setText("");
-                return true;
-            } else {
-                messageLabel.setTextFill(Color.ORANGE);
-                messageLabel.setText("Cet arbitre est déjà assigné à ce match.");
-                return false;
-            }
-        } catch (UserDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Utilisateur introuvable.");
-        } catch (MatchDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Match introuvable.");
-        } catch (SQLException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Erreur base de données.");
-            e.printStackTrace();
-        }
-
-        return false;
+        boolean success = addRefereeToMatch(matchId, email, messageLabel);
+        if (success) emailField.clear();
+        return success;
     }
 
     public boolean handleAddDateButtonAction(TextField matchIdField, DatePicker datePicker, Label messageLabel) {
-        String idText = matchIdField.getText();
-        
-        if (idText == null || idText.isBlank() || datePicker.getValue() == null) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Veuillez renseigner l'ID du match et la date.");
+        Long matchId = parseMatchId(matchIdField.getText(), messageLabel);
+        if (matchId == null) return false;
+
+        if (datePicker.getValue() == null) {
+            showError(messageLabel, "Veuillez sélectionner une date.");
             return false;
         }
 
-        Long matchId;
-        try {
-            matchId = Long.parseLong(idText.trim());
-        } catch (NumberFormatException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("ID du match invalide.");
-            return false;
-        }
-
-        // Convertir LocalDate en Date
         Date date = java.sql.Date.valueOf(datePicker.getValue());
-
-        try {
-            boolean updated = matchFacade.addDate(matchId, date);
-            if (updated) {
-                messageLabel.setTextFill(Color.GREEN);
-                messageLabel.setText("Date du match mise à jour.");
-                return true;
-            } else {
-                messageLabel.setTextFill(Color.RED);
-                messageLabel.setText("Impossible de mettre à jour la date.");
-                return false;
-            }
-        } catch (MatchDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Match introuvable.");
-        } catch (SQLException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Erreur base de données.");
-            e.printStackTrace();
-        }
-
-        return false;
+        return executeWithExceptionHandling(
+            () -> matchFacade.addDate(matchId, date),
+            messageLabel,
+            "✅ Date du match mise à jour.",
+            "❌ Impossible de mettre à jour la date."
+        );
     }
 
     public boolean handleAddTeamButtonAction(TextField matchIdField, TextField teamIdField, Label messageLabel) {
-        String matchIdText = matchIdField.getText();
-        String teamIdText = teamIdField.getText();
+        Long matchId = parseMatchId(matchIdField.getText(), messageLabel);
+        Long teamId = parseTeamId(teamIdField.getText(), messageLabel);
         
-        if (matchIdText == null || matchIdText.isBlank() || teamIdText == null || teamIdText.isBlank()) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Veuillez renseigner l'ID du match et l'ID de l'équipe.");
-            return false;
-        }
+        if (matchId == null || teamId == null) return false;
 
-        Long matchId;
-        Long teamId;
+        boolean success = executeWithExceptionHandling(
+            () -> matchFacade.addTeam(matchId, teamId),
+            messageLabel,
+            "✅ Équipe ajoutée au match.",
+            "❌ Erreur lors de l'ajout de l'équipe."
+        );
         
-        try {
-            matchId = Long.parseLong(matchIdText.trim());
-        } catch (NumberFormatException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("ID du match invalide.");
-            return false;
-        }
-        
-        try {
-            teamId = Long.parseLong(teamIdText.trim());
-        } catch (NumberFormatException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("ID de l'équipe invalide.");
-            return false;
-        }
-
-        try {
-            boolean added = matchFacade.addTeam(matchId, teamId);
-            if (added) {
-                messageLabel.setTextFill(Color.GREEN);
-                messageLabel.setText("Équipe ajoutée au match.");
-                teamIdField.setText("");
-                return true;
-            } else {
-                messageLabel.setTextFill(Color.ORANGE);
-                messageLabel.setText("Cette équipe est déjà assignée à ce match.");
-                return false;
-            }
-        } catch (TeamDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Équipe introuvable.");
-        } catch (MatchDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Match introuvable.");
-        } catch (SQLException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Erreur base de données.");
-            e.printStackTrace();
-        }
-
-        return false;
+        if (success) teamIdField.clear();
+        return success;
     }
 
     public void openUpdateRosterModal(Long teamId, Stage ownerStage) {
@@ -226,9 +132,6 @@ public class MatchController {
 
         VBox layout = new VBox(15);
         layout.setPadding(new Insets(20));
-
-        Label titleLabel = new Label("Sélectionnez le joueur à remplacer :");
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         ComboBox<String> currentUserCombo = new ComboBox<>();
         currentUserCombo.setPromptText("Chargement...");
@@ -243,212 +146,120 @@ public class MatchController {
 
         Label messageLabel = new Label();
 
-        // Charger automatiquement les membres au démarrage
         loadTeamMembersIntoCombo(teamId, currentUserCombo, messageLabel, updateButton);
 
-        // Activer le bouton quand un joueur est sélectionné
-        currentUserCombo.setOnAction(e -> {
-            updateButton.setDisable(currentUserCombo.getValue() == null || newEmailField.getText().isBlank());
-        });
+        currentUserCombo.setOnAction(e -> 
+            updateButton.setDisable(currentUserCombo.getValue() == null || newEmailField.getText().isBlank())
+        );
 
-        newEmailField.textProperty().addListener((obs, oldVal, newVal) -> {
-            updateButton.setDisable(currentUserCombo.getValue() == null || newVal.isBlank());
-        });
+        newEmailField.textProperty().addListener((obs, oldVal, newVal) -> 
+            updateButton.setDisable(currentUserCombo.getValue() == null || newVal.isBlank())
+        );
 
         updateButton.setOnAction(e -> {
-            boolean success = performRosterUpdate(teamId, currentUserCombo.getValue(), 
-                                                  newEmailField.getText(), messageLabel);
-            if (success) {
-                // Recharger la liste après mise à jour
+            if (performRosterUpdate(teamId, currentUserCombo.getValue(), newEmailField.getText(), messageLabel)) {
                 loadTeamMembersIntoCombo(teamId, currentUserCombo, messageLabel, updateButton);
                 newEmailField.clear();
             }
         });
 
-        Button closeButton = new Button("Fermer");
-        closeButton.setOnAction(e -> modal.close());
-
         layout.getChildren().addAll(
-            titleLabel, 
-            new Label("Joueur actuel :"),
-            currentUserCombo, 
-            new Label("Nouveau joueur :"),
-            newEmailField, 
-            updateButton, 
-            closeButton,
+            new Label("Sélectionnez le joueur à remplacer :"),
+            new Label("Joueur actuel :"), currentUserCombo,
+            new Label("Nouveau joueur :"), newEmailField,
+            updateButton,
+            createButton("Fermer", e -> modal.close()),
             messageLabel
         );
 
-        Scene scene = new Scene(layout, 400, 350);
-        modal.setScene(scene);
+        modal.setScene(new Scene(layout, 400, 350));
         modal.show();
     }
 
     private void loadTeamMembersIntoCombo(Long teamId, ComboBox<String> combo, Label messageLabel, Button updateButton) {
         try {
             List<User> members = matchFacade.getTeamMembers(teamId);
-            
             combo.getItems().clear();
             
             if (members.isEmpty()) {
-                messageLabel.setTextFill(Color.ORANGE);
-                messageLabel.setText("Aucun membre dans cette équipe.");
+                showWarning(messageLabel, "Aucun membre dans cette équipe.");
                 combo.setPromptText("Équipe vide");
                 updateButton.setDisable(true);
                 return;
             }
 
-            for (User member : members) {
-                combo.getItems().add(member.getEmail());
-            }
-            
+            members.forEach(m -> combo.getItems().add(m.getEmail()));
             combo.setPromptText("Sélectionner un joueur");
-            messageLabel.setTextFill(Color.GREEN);
-            messageLabel.setText(members.size() + " membre(s) chargé(s).");
+            showSuccess(messageLabel, members.size() + " membre(s) chargé(s).");
             
         } catch (TeamDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Équipe introuvable.");
-            combo.setPromptText("Erreur");
+            showError(messageLabel, "❌ Équipe introuvable.");
+            updateButton.setDisable(true);
         } catch (SQLException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Erreur base de données.");
-            combo.setPromptText("Erreur");
+            showError(messageLabel, "❌ Erreur base de données.");
             e.printStackTrace();
+            updateButton.setDisable(true);
         }
     }
 
     private boolean performRosterUpdate(Long teamId, String currentEmail, String newEmail, Label messageLabel) {
         if (currentEmail == null || newEmail == null || newEmail.isBlank()) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Veuillez remplir tous les champs.");
+            showError(messageLabel, "Veuillez remplir tous les champs.");
             return false;
         }
 
-        try {
-            boolean updated = matchFacade.updateRoaster(teamId, currentEmail, newEmail.trim());
-            if (updated) {
-                messageLabel.setTextFill(Color.GREEN);
-                messageLabel.setText("✓ Roster mis à jour avec succès !");
-                return true;
-            } else {
-                messageLabel.setTextFill(Color.ORANGE);
-                messageLabel.setText("Le nouveau joueur est déjà dans l'équipe.");
-                return false;
-            }
-        } catch (UserDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Utilisateur introuvable.");
-        } catch (TeamDoesntExistException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Équipe introuvable.");
-        } catch (SQLException e) {
-            messageLabel.setTextFill(Color.RED);
-            messageLabel.setText("Erreur base de données.");
-            e.printStackTrace();
-        }
-        return false;
+        return executeWithExceptionHandling(
+            () -> matchFacade.updateRoaster(teamId, currentEmail, newEmail.trim()),
+            messageLabel,
+            "✓ Roster mis à jour avec succès !",
+            "❌ Erreur lors de la mise à jour."
+        );
     }
 
     public List<Team> getAllTeams() {
-        try {
-            return teamFacade.getAllTeams();
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des équipes: " + e.getMessage());
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-
-    public boolean handleAddTeamToMatch(Long matchId, Long teamId, Label messageLabel) {
-        if (matchId == null || teamId == null) {
-            messageLabel.setStyle("-fx-text-fill: red;");
-            messageLabel.setText("ID du match ou de l'équipe manquant.");
-            return false;
-        }
-
-        try {
-            boolean added = matchFacade.addTeam(matchId, teamId);
-            if (added) {
-                messageLabel.setStyle("-fx-text-fill: green;");
-                messageLabel.setText("Équipe assignée avec succès !");
-                return true;
-            } else {
-                messageLabel.setStyle("-fx-text-fill: orange;");
-                messageLabel.setText("Cette équipe est déjà assignée à ce match.");
-                return false;
-            }
-        } catch (TeamDoesntExistException e) {
-            messageLabel.setStyle("-fx-text-fill: red;");
-            messageLabel.setText("Équipe introuvable.");
-            e.printStackTrace();
-        } catch (MatchDoesntExistException e) {
-            messageLabel.setStyle("-fx-text-fill: red;");
-            messageLabel.setText("Match introuvable.");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            messageLabel.setStyle("-fx-text-fill: red;");
-            messageLabel.setText("Erreur base de données.");
-            e.printStackTrace();
-        }
-
-        return false;
+        return executeWithFallback(() -> teamFacade.getAllTeams(), "équipes");
     }
 
     public List<Match> getAllMatches() {
-        try {
-            return matchFacade.getAllMatches();
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération des matchs: " + e.getMessage());
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        return executeWithFallback(() -> matchFacade.getAllMatches(), "matchs");
     }
 
     public List<User> getAllUsers() {
-        try {
-            return matchFacade.getAllUsers();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
+        return executeWithFallback(() -> matchFacade.getAllUsers(), "utilisateurs");
+    }
+
+    public List<User> getTeamMembers(Long teamId) {
+        return executeWithFallback(() -> matchFacade.getTeamMembers(teamId), "membres");
+    }
+
+    public List<Team> searchTeamsByName(String searchTerm) {
+        return executeWithFallback(() -> teamFacade.searchTeamsByName(searchTerm), "équipes");
+    }
+
+    public List<User> searchUsersByEmail(String searchTerm) {
+        return executeWithFallback(() -> matchFacade.searchUsersByEmail(searchTerm), "utilisateurs");
     }
 
     public Match getMatchById(Long matchId) {
         try {
             return matchFacade.getMatchById(matchId);
         } catch (Exception e) {
-            System.err.println("Erreur lors de la récupération du match: " + e.getMessage());
+            System.err.println("❌ Erreur récupération match " + matchId + ": " + e.getMessage());
             e.printStackTrace();
             return null;
         }
     }
 
-    public List<User> getTeamMembers(Long teamId) {
-        try {
-            return matchFacade.getTeamMembers(teamId);
-        } catch (Exception e) {
-            System.err.println("Erreur lors de la récupération des membres: " + e.getMessage());
-            e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
+    public Team getTeamForMatch(Match match, int teamNumber) {
+        if (match == null || match.getMatchId() == null) return null;
 
-    public List<Team> searchTeamsByName(String searchTerm) {
         try {
-            return TeamFacade.getInstance().searchTeamsByName(searchTerm);
+            List<Team> teams = matchFacade.getTeamsForMatch(match.getMatchId());
+            return (teams != null && teams.size() > teamNumber - 1) ? teams.get(teamNumber - 1) : null;
         } catch (SQLException e) {
+            System.err.println("❌ Erreur récupération équipe " + teamNumber + ": " + e.getMessage());
             e.printStackTrace();
-            return new ArrayList<>();
-        }
-    }
-    
-    public List<User> searchUsersByEmail(String searchTerm) {
-        try {
-            return matchFacade.searchUsersByEmail(searchTerm);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return new ArrayList<>();
+            return null;
         }
     }
 
@@ -456,63 +267,107 @@ public class MatchController {
         try {
             return matchFacade.deleteMatch(matchId);
         } catch (Exception e) {
-            System.err.println("Erreur lors de la suppression du match: " + e.getMessage());
+            System.err.println("❌ Erreur suppression match " + matchId + ": " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    public boolean handleCreateCompleteMatch(
-            Team team1,
-            Team team2,
-            java.time.LocalDate matchDate,
-            int gameId,
-            User referee,
-            Label messageLabel) {
-        
+    private boolean executeWithExceptionHandling(
+            SupplierWithException<Boolean> action,
+            Label messageLabel,
+            String successMessage,
+            String failureMessage) {
         try {
-            Match match = matchFacade.createCompleteMatch(team1, team2, matchDate, gameId, referee);
+            boolean result = action.get();
             
-            if (match != null && match.getMatchId() != null) {
-                messageLabel.setStyle("-fx-text-fill: green;");
-                messageLabel.setText("✓ Match créé avec succès ! ID: " + match.getMatchId());
-                System.out.println("✅ Match " + match.getMatchId() + " créé entre " + 
-                                   team1.getName() + " et " + team2.getName());
-                return true;
+            if (result) {
+                showSuccess(messageLabel, successMessage);
             } else {
-                messageLabel.setStyle("-fx-text-fill: red;");
-                messageLabel.setText("❌ Erreur lors de la création du match.");
-                return false;
+                showError(messageLabel, failureMessage);
             }
+            return result;
             
+        } catch (UserDoesntExistException e) {
+            showError(messageLabel, "❌ Utilisateur introuvable.");
+            return false;
+        } catch (MatchDoesntExistException e) {
+            showError(messageLabel, "❌ Match introuvable.");
+            return false;
+        } catch (TeamDoesntExistException e) {
+            showError(messageLabel, "❌ Équipe introuvable.");
+            return false;
+        } catch (SQLException e) {
+            showError(messageLabel, "❌ Erreur base de données: " + e.getMessage());
+            e.printStackTrace();
+            return false;
         } catch (Exception e) {
-            messageLabel.setStyle("-fx-text-fill: red;");
-            messageLabel.setText("❌ Erreur : " + e.getMessage());
+            showError(messageLabel, "❌ Erreur inattendue: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    public Team getTeamForMatch(Match match, int teamNumber) {
-    if (match == null || match.getMatchId() == null) {
-        return null;
-    }
-
-    try {
-        List<Team> teams = matchFacade.getTeamsForMatch(match.getMatchId());
-        
-        if (teams != null && teams.size() > teamNumber - 1) {
-            return teams.get(teamNumber - 1); // teamNumber = 1 ou 2
+    private <T> List<T> executeWithFallback(SupplierWithException<List<T>> action, String resourceName) {
+        try {
+            return action.get();
+        } catch (Exception e) {
+            System.err.println("❌ Erreur récupération " + resourceName + ": " + e.getMessage());
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-        
-        return null;
-    } catch (Exception e) {
-        System.err.println("❌ Erreur lors de la récupération de l'équipe " + teamNumber + " : " + e.getMessage());
-        e.printStackTrace();
-        return null;
     }
-}
 
+    private Long parseMatchId(String text, Label messageLabel) {
+        if (text == null || text.isBlank()) {
+            showError(messageLabel, "Veuillez renseigner l'ID du match.");
+            return null;
+        }
+        try {
+            return Long.parseLong(text.trim());
+        } catch (NumberFormatException e) {
+            showError(messageLabel, "ID du match invalide.");
+            return null;
+        }
+    }
 
+    private Long parseTeamId(String text, Label messageLabel) {
+        if (text == null || text.isBlank()) {
+            showError(messageLabel, "Veuillez renseigner l'ID de l'équipe.");
+            return null;
+        }
+        try {
+            return Long.parseLong(text.trim());
+        } catch (NumberFormatException e) {
+            showError(messageLabel, "ID de l'équipe invalide.");
+            return null;
+        }
+    }
 
+    private void showSuccess(Label label, String message) {
+        label.setTextFill(Color.GREEN);
+        label.setText(message);
+    }
+
+    private void showWarning(Label label, String message) {
+        label.setTextFill(Color.ORANGE);
+        label.setText(message);
+    }
+
+    private void showError(Label label, String message) {
+        label.setTextFill(Color.RED);
+        label.setText(message);
+    }
+
+    private Button createButton(String text, javafx.event.EventHandler<javafx.event.ActionEvent> action) {
+        Button button = new Button(text);
+        button.setOnAction(action);
+        return button;
+    }
+
+    //Interface avec une seule méthode abstraite (utilisable dans les lambdas) pour eviter les duplications de catch, message label, etc etc
+    @FunctionalInterface
+    private interface SupplierWithException<T> {
+        T get() throws Exception;
+    }
 }

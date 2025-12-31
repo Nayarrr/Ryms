@@ -67,12 +67,19 @@ public class MatchDAOPostgres extends MatchDAO{
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                return new Match(
+                Match match = new Match(
                     rs.getLong("match_id"),
                     rs.getTimestamp("match_date"),
                     rs.getLong("game_id")
                 );
+
+                match.setReferees(getRefereesForMatch(matchId));
+
+                match.setTeams(getTeamsForMatch(matchId));
+
+                return match;
             }
+
             return null;
             
         } catch (SQLException e) {
@@ -105,20 +112,37 @@ public class MatchDAOPostgres extends MatchDAO{
     }
 
     @Override
-    public boolean addReferee(Match match , User referee) throws SQLException{
+    public boolean addReferee(Match match, User referee) throws SQLException {
         if (match == null || match.getMatchId() == null || referee == null || referee.getEmail() == null) {
             throw new IllegalArgumentException("Match ID and referee email must be provided");
         }
 
-        String sql = "INSERT INTO match_referees (match_id, referee_email) VALUES (?, ?) " +
-                     "ON CONFLICT (match_id, referee_email) DO NOTHING";
+        String checkSql = "SELECT COUNT(*) FROM match_referees WHERE match_id = ? AND referee_email = ?";
+        try (PreparedStatement checkStmt = this.conn.prepareStatement(checkSql)) {
+            checkStmt.setLong(1, match.getMatchId());
+            checkStmt.setString(2, referee.getEmail());
+            
+            try (var rs = checkStmt.executeQuery()) {
+                if (rs.next() && rs.getInt(1) > 0) {
+                    System.out.println("⚠️ L'arbitre " + referee.getEmail() + " est déjà assigné au match " + match.getMatchId());
+                    return false;
+                }
+            }
+        }
 
-        try (PreparedStatement stmt = this.conn.prepareStatement(sql)) {
+        String insertSql = "INSERT INTO match_referees (match_id, referee_email) VALUES (?, ?)";
+        try (PreparedStatement stmt = this.conn.prepareStatement(insertSql)) {
             stmt.setLong(1, match.getMatchId());
             stmt.setString(2, referee.getEmail());
             
             int affectedRows = stmt.executeUpdate();
-            return affectedRows > 0;
+            boolean success = affectedRows > 0;
+            
+            if (success) {
+                System.out.println("✅ Arbitre " + referee.getEmail() + " ajouté au match " + match.getMatchId());
+            }
+            
+            return success;
         }
     }
 

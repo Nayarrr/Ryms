@@ -1,6 +1,5 @@
 package ry.ms;
 import ry.ms.persistLogic.match.dao.MatchDAO;
-import ry.ms.models.User;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
@@ -11,10 +10,10 @@ import ry.ms.persistLogic.user.login.dao.UserDAO;
  */
 public abstract class AbsFactory {
 
-    private AbsFactory absFactory;
+    private static AbsFactory absFactory;
 
-    public AbsFactory getAbsFactory(){
-        if(absFactory != null){
+    public static AbsFactory getInstance(){
+        if(absFactory == null){
             return new PostgresFactory();
         }
         else{

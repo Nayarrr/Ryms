@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+import ry.ms.AbsFactory;
 import ry.ms.businessLogic.match.exceptions.MatchDoesntExistException;
 import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
@@ -12,26 +13,27 @@ import ry.ms.models.Match;
 import ry.ms.models.Team;
 import ry.ms.models.User;
 import ry.ms.persistLogic.match.dao.MatchDAO;
-import ry.ms.persistLogic.match.postgres.MatchDAOPostgres;
 import ry.ms.persistLogic.team.dao.TeamDAO;
-import ry.ms.persistLogic.team.postgres.TeamDAOPostgres;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
-import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 
 public class MatchFacade {
 
     private static MatchFacade matchfacade;
     private final MatchManager matchManager;
+    private final MatchDAO matchDAO;
+    private final TeamDAO teamDAO;
+    private final UserDAO userDAO;
 
-    private MatchFacade(){
-        MatchDAO matchDAO = new MatchDAOPostgres();
-        TeamDAO teamDAO = new TeamDAOPostgres();
-        UserDAO userDAO = new UserDAOPostgres();
+    private MatchFacade() {
+        AbsFactory factory = AbsFactory.getInstance();
+        this.matchDAO = factory.createMatchDAO();
+        this.teamDAO = factory.createTeamDAO();
+        this.userDAO = factory.createUserDAO();
         this.matchManager = MatchManager.getMatchManager(matchDAO, userDAO, teamDAO);
     }
 
-    public static MatchFacade getMatchFacade(){
-        if(matchfacade == null){
+    public static MatchFacade getMatchFacade() {
+        if (matchfacade == null) {
             matchfacade = new MatchFacade();
         }
         return matchfacade;
@@ -41,11 +43,43 @@ public class MatchFacade {
         return matchManager.createMatch(matchDate, gameId);
     }
 
-    public Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate, int gameId, User referee) throws SQLException {
-        return matchManager.createCompleteMatch(team1, team2, matchDate, gameId, referee);
+    public Long createMatch(Long team1Id, Long team2Id, Date matchDate, int gameId) 
+            throws SQLException, TeamDoesntExistException, MatchDoesntExistException {
+        
+        Long matchId = matchManager.createMatch(matchDate, gameId);
+        
+        if (matchId == null) {
+            throw new SQLException("Échec de création du match");
+        }
+
+        matchManager.addTeam(matchId, team1Id);
+        matchManager.addTeam(matchId, team2Id);
+
+        return matchId;
     }
 
-    public List<User> getTeamMembers(Long teamId) throws SQLException, TeamDoesntExistException {
+    public boolean addReferee(Long matchId, String refereeEmail) 
+            throws UserDoesntExistException, MatchDoesntExistException, SQLException {
+        return matchManager.addReferee(matchId, refereeEmail);
+    }
+
+    public boolean addDate(Long matchId, Date date) 
+            throws MatchDoesntExistException, SQLException {
+        return matchManager.addDate(matchId, date);
+    }
+
+    public boolean addTeam(Long matchId, Long teamId) 
+            throws TeamDoesntExistException, MatchDoesntExistException, SQLException {
+        return matchManager.addTeam(matchId, teamId);
+    }
+
+    public boolean updateRoaster(Long teamId, String currentEmail, String newEmail)
+            throws UserDoesntExistException, TeamDoesntExistException, SQLException {
+        return matchManager.updateRoaster(teamId, currentEmail, newEmail);
+    }
+
+    public List<User> getTeamMembers(Long teamId) 
+            throws TeamDoesntExistException, SQLException {
         return matchManager.getTeamMembers(teamId);
     }
 
@@ -53,20 +87,8 @@ public class MatchFacade {
         return matchManager.getAllMatches();
     }
 
-    public boolean addReferee(Long matchid, String email) throws SQLException, MatchDoesntExistException, UserDoesntExistException{
-        return matchManager.addReferee(matchid, email);
-    }
-
-    public boolean addDate(Long matchid, Date date) throws SQLException, MatchDoesntExistException{
-        return matchManager.addDate(matchid, date);
-    }
-
-    public boolean addTeam(Long matchid, Long teamid) throws SQLException, TeamDoesntExistException, MatchDoesntExistException{
-        return matchManager.addTeam(matchid, teamid);
-    }
-
-    public boolean updateRoaster(Long teamId, String currentUserEmail, String newUserEmail) throws SQLException, UserDoesntExistException, TeamDoesntExistException{
-        return matchManager.updateRoaster(teamId, currentUserEmail, newUserEmail);
+    public List<User> getAllUsers() throws SQLException {
+        return matchManager.getAllUsers();
     }
 
     public Match getMatchById(Long matchId) throws SQLException, MatchDoesntExistException {
@@ -77,23 +99,16 @@ public class MatchFacade {
         return matchManager.searchUsersByEmail(searchTerm);
     }
 
-    public List<Team> getTeamsForMatch(Long matchId) throws SQLException {
-        return matchManager.getTeamsForMatch(matchId);
-    }
-
     public boolean deleteMatch(Long matchId) throws SQLException, MatchDoesntExistException {
         return matchManager.deleteMatch(matchId);
     }
 
-    public List<User> getAllUsers() throws SQLException {
-        return matchManager.getAllUsers();
+    public Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate, 
+                                     int gameId, User referee) throws SQLException {
+        return matchManager.createCompleteMatch(team1, team2, matchDate, gameId, referee);
     }
 
-
-
-
-
-
-
-    
+    public List<Team> getTeamsForMatch(Long matchId) throws SQLException {
+        return matchManager.getTeamsForMatch(matchId);
+    }
 }

@@ -3,116 +3,63 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" 
-      fx:controller="ry.ms.view.match.CreateMatchController"
-      spacing="20" 
-      alignment="CENTER" 
-      prefHeight="750" 
-      prefWidth="900">
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="ry.ms.view.match.CreateMatchController"
+      spacing="20" styleClass="create-match-container">
     
     <padding>
-        <Insets top="30" right="30" bottom="30" left="30"/>
+        <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
 
-    <!-- Titre -->
-    <Label text="Créer un Match" styleClass="title">
-        <font>
-            <Font name="System Bold" size="24"/>
-        </font>
-    </Label>
+    <Label text="Créer un nouveau match" styleClass="title"/>
 
-    <Separator/>
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Équipe 1" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="team1SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
+        </HBox>
+        <ListView fx:id="team1ListView" prefHeight="100" visible="false" managed="false"/>
+        <Label fx:id="team1SelectedLabel" styleClass="selected-label"/>
+    </VBox>
 
-    <!-- Formulaire -->
-    <GridPane hgap="15" vgap="15" alignment="CENTER">
-        <!-- Équipe 1 -->
-        <Label text="Équipe 1 :" GridPane.columnIndex="0" GridPane.rowIndex="0">
-            <font>
-                <Font size="14"/>
-            </font>
-        </Label>
-        <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
-            <TextField fx:id="team1SearchField" 
-                       prefWidth="300" 
-                       promptText="Tapez le nom ou tag de l'équipe..."/>
-            <ListView fx:id="team1ListView" 
-                      prefHeight="100" 
-                      visible="false" 
-                      managed="false"/>
-        </VBox>
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Équipe 2" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="team2SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
+        </HBox>
+        <ListView fx:id="team2ListView" prefHeight="100" visible="false" managed="false"/>
+        <Label fx:id="team2SelectedLabel" styleClass="selected-label"/>
+    </VBox>
 
-        <!-- Équipe 2 -->
-        <Label text="Équipe 2 :" GridPane.columnIndex="0" GridPane.rowIndex="1">
-            <font>
-                <Font size="14"/>
-            </font>
-        </Label>
-        <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
-            <TextField fx:id="team2SearchField" 
-                       prefWidth="300" 
-                       promptText="Tapez le nom ou tag de l'équipe..."/>
-            <ListView fx:id="team2ListView" 
-                      prefHeight="100" 
-                      visible="false" 
-                      managed="false"/>
-        </VBox>
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Date et heure du match" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <DatePicker fx:id="matchDatePicker" promptText="Sélectionner la date" prefWidth="200"/>
+            <TextField fx:id="matchHourField" promptText="HH" prefWidth="60" maxWidth="60"/>
+            <Label text=":"/>
+            <TextField fx:id="matchMinuteField" promptText="MM" prefWidth="60" maxWidth="60"/>
+            <Label text="(format 24h)" styleClass="hint-label"/>
+        </HBox>
+    </VBox>
 
-        <!-- Date -->
-        <Label text="Date du match :" GridPane.columnIndex="0" GridPane.rowIndex="2">
-            <font>
-                <Font size="14"/>
-            </font>
-        </Label>
-        <DatePicker fx:id="matchDatePicker" 
-                    prefWidth="300" 
-                    promptText="Sélectionner une date"
-                    GridPane.columnIndex="1" 
-                    GridPane.rowIndex="2"/>
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Jeu" styleClass="section-label"/>
+        <ComboBox fx:id="gameComboBox" promptText="Sélectionner un jeu" prefWidth="300"/>
+    </VBox>
 
-        <!-- Game ID -->
-        <Label text="ID du jeu :" GridPane.columnIndex="0" GridPane.rowIndex="3">
-            <font>
-                <Font size="14"/>
-            </font>
-        </Label>
-        <TextField fx:id="gameIdField" 
-                   prefWidth="300" 
-                   text="1"
-                   promptText="1 = Rocket League, 2 = Valorant, 3 = LoL"
-                   GridPane.columnIndex="1" 
-                   GridPane.rowIndex="3"/>
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Arbitre(s)" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="refereeSearchField" promptText="Rechercher un arbitre par email..." prefWidth="300"/>
+        </HBox>
+        <ListView fx:id="refereeListView" prefHeight="100" visible="false" managed="false"/>
+        <VBox fx:id="selectedRefereesContainer" spacing="5"/>
+    </VBox>
 
-        <!-- Utilisateur (arbitre) -->
-        <Label text="Utilisateur (arbitre) :" GridPane.columnIndex="0" GridPane.rowIndex="4">
-            <font>
-                <Font size="14"/>
-            </font>
-        </Label>
-        <VBox GridPane.columnIndex="1" GridPane.rowIndex="4">
-            <TextField fx:id="userSearchField" 
-                       prefWidth="300" 
-                       promptText="Tapez l'email ou nom d'utilisateur..."/>
-            <ListView fx:id="userListView" 
-                      prefHeight="100" 
-                      visible="false" 
-                      managed="false"/>
-        </VBox>
-    </GridPane>
-
-    <!-- Boutons -->
     <HBox spacing="15" alignment="CENTER">
-        <Button text="Créer le match" 
-                prefWidth="150"
-                style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold;"
-                onAction="#handleCreateMatch"/>
-        <Button text="Annuler" 
-                prefWidth="150"
-                style="-fx-background-color: #f44336; -fx-text-fill: white;"
-                onAction="#handleCancel"/>
+        <Button fx:id="createButton" text="Créer le match" styleClass="primary-button" onAction="#handleCreateMatch"/>
+        <Button text="Annuler" styleClass="secondary-button" onAction="#handleCancel"/>
     </HBox>
 
-    <!-- Message -->
-    <Label fx:id="messageLabel" wrapText="true" prefWidth="500"/>
+    <Label fx:id="messageLabel" styleClass="message-label"/>
 </VBox>
