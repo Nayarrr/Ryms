@@ -452,29 +452,6 @@ public class MatchController {
         }
     }
 
-    public Team getTeamForMatch(Match match, int teamNumber) {
-        try {
-            List<Team> teams = matchFacade.getTeamsForMatch((long) match.getMatchId());
-            
-            if (teams == null || teams.isEmpty()) {
-                return null;
-            }
-            
-            if (teamNumber == 1 && teams.size() >= 1) {
-                return teams.get(0);
-            } else if (teamNumber == 2 && teams.size() >= 2) {
-                return teams.get(1);
-            }
-            
-            return null;
-            
-        } catch (Exception e) {
-            System.err.println("Erreur lors de la récupération de l'équipe: " + e.getMessage());
-            e.printStackTrace();
-            return null;
-        }
-    }
-
     public boolean deleteMatch(long matchId) {
         try {
             return matchFacade.deleteMatch(matchId);
@@ -516,6 +493,25 @@ public class MatchController {
         }
     }
 
+    public Team getTeamForMatch(Match match, int teamNumber) {
+    if (match == null || match.getMatchId() == null) {
+        return null;
+    }
+
+    try {
+        List<Team> teams = matchFacade.getTeamsForMatch(match.getMatchId());
+        
+        if (teams != null && teams.size() > teamNumber - 1) {
+            return teams.get(teamNumber - 1); // teamNumber = 1 ou 2
+        }
+        
+        return null;
+    } catch (Exception e) {
+        System.err.println("❌ Erreur lors de la récupération de l'équipe " + teamNumber + " : " + e.getMessage());
+        e.printStackTrace();
+        return null;
+    }
+}
 
 
 

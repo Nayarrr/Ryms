@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<ScrollPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ry.ms.view.match.MatchDetailsController"
+            fitToWidth="true">
+    
+    <VBox fx:id="rootContainer" 
+          spacing="20"
+          style="-fx-background-color: #f5f5f5;">
+        
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <!-- Bouton Retour -->
+        <HBox alignment="CENTER_LEFT">
+            <Button text="← Retour à la liste" 
+                    onAction="#handleBackToList"
+                    style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px;"/>
+        </HBox>
+
+        <!-- Titre : Team1 vs Team2 -->
+        <Label fx:id="matchTitleLabel" 
+               text="Chargement..."
+               style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+
+        <!-- Date -->
+        <Label fx:id="matchDateLabel" 
+               text="📅 Date : ..."
+               style="-fx-font-size: 18px; -fx-text-fill: #34495e;"/>
+
+        <Separator/>
+
+        <!-- Section Arbitres -->
+        <VBox spacing="10" 
+              style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10;">
+            <padding>
+                <Insets top="15" right="15" bottom="15" left="15"/>
+            </padding>
+
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <Label text="👨‍⚖️ Arbitres" 
+                       style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="addRefereeButton" 
+                        text="+ Ajouter Arbitre"
+                        onAction="#handleAddReferee"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white;"
+                        visible="false"
+                        managed="false"/>
+            </HBox>
+
+            <VBox fx:id="refereesListContainer" spacing="5">
+                <padding>
+                    <Insets top="10" left="15"/>
+                </padding>
+            </VBox>
+        </VBox>
+
+        <Separator/>
+
+        <!-- Section Équipes -->
+        <HBox spacing="20" alignment="CENTER">
+            <!-- Team 1 -->
+            <VBox fx:id="team1Box" 
+                  spacing="10" 
+                  prefWidth="450"
+                  style="-fx-border-color: #3498db; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+                
+                <Label fx:id="team1NameLabel" 
+                       text="Équipe 1"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+                
+                <Separator/>
+                
+                <Label fx:id="team1CoachLabel" 
+                       text="⭐ Coach : ..."
+                       style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                
+                <Separator/>
+                
+                <Label text="Roster :" 
+                       style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                
+                <VBox fx:id="team1RosterContainer" spacing="5">
+                    <padding>
+                        <Insets top="5" left="15"/>
+                    </padding>
+                </VBox>
+                
+                <Button fx:id="team1UpdateButton" 
+                        text="🔄 Update Roster"
+                        onAction="#handleUpdateRosterTeam1"
+                        style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;"
+                        visible="false"
+                        managed="false"/>
+            </VBox>
+
+            <!-- Team 2 -->
+            <VBox fx:id="team2Box" 
+                  spacing="10" 
+                  prefWidth="450"
+                  style="-fx-border-color: #3498db; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10; -fx-background-color: white;">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+                
+                <Label fx:id="team2NameLabel" 
+                       text="Équipe 2"
+                       style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
+                
+                <Separator/>
+                
+                <Label fx:id="team2CoachLabel" 
+                       text="⭐ Coach : ..."
+                       style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                
+                <Separator/>
+                
+                <Label text="Roster :" 
+                       style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                
+                <VBox fx:id="team2RosterContainer" spacing="5">
+                    <padding>
+                        <Insets top="5" left="15"/>
+                    </padding>
+                </VBox>
+                
+                <Button fx:id="team2UpdateButton" 
+                        text="🔄 Update Roster"
+                        onAction="#handleUpdateRosterTeam2"
+                        style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;"
+                        visible="false"
+                        managed="false"/>
+            </VBox>
+        </HBox>
+    </VBox>
+</ScrollPane>

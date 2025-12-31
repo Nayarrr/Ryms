@@ -3,7 +3,6 @@ ry/ms/businessLogic/match/MatchFacade.class
 ry/ms/view/team/InvitationsController$1.class
 ry/ms/PostgresFactory.class
 ry/ms/models/Match.class
-ry/ms/view/match/AssignTeamFrame$1.class
 ry/ms/models/User.class
 ry/ms/view/team/InvitationsController.class
 ry/ms/businessLogic/team/TeamFacade.class
@@ -23,7 +22,6 @@ ry/ms/view/match/MatchListViewController.class
 ry/ms/businessLogic/match/MatchManager.class
 ry/ms/persistLogic/match/postgres/MatchDAOPostgres.class
 ry/ms/models/Invitation.class
-ry/ms/view/team/MainLayoutController.class
 ry/ms/view/match/CreateMatchFrame.class
 ry/ms/view/user/UserSession.class
 ry/ms/view/user/login/LoginFrame.class
@@ -33,9 +31,7 @@ ry/ms/persistLogic/team/dao/InvitationDAO.class
 ry/ms/view/team/TeamDashboardController.class
 ry/ms/models/TeamResult.class
 ry/ms/businessLogic/match/exceptions/MatchDoesntExistException.class
-ry/ms/view/match/MatchFrame.class
 ry/ms/persistLogic/DBConfig.class
-ry/ms/view/match/AssignTeamFrame.class
 ry/ms/App.class
 ry/ms/view/match/MatchController.class
 ry/ms/view/match/CreateMatchController.class
@@ -43,9 +39,9 @@ ry/ms/view/user/login/LoginController.class
 ry/ms/persistLogic/team/postgres/TeamDAOPostgres.class
 ry/ms/businessLogic/team/TeamManager.class
 ry/ms/businessLogic/user/login/SessionFacade.class
+ry/ms/view/match/MatchDetailsController.class
+ry/ms/view/main/MainLayoutController.class
 ry/ms/view/match/MatchListViewController$1.class
 ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.class
-ry/ms/view/match/AssignTeamFrame$2.class
 ry/ms/persistLogic/team/postgres/InvitationDAOPostgres.class
 ry/ms/view/team/TeamController.class
-ry/ms/view/match/MatchDetailsFrame.class

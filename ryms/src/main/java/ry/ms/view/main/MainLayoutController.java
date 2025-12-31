@@ -1,7 +1,10 @@
-package ry.ms.view.team;
+package ry.ms.view.main;
+
+import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -10,37 +13,41 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ry.ms.view.user.UserSession;
 
-import java.io.IOException;
-
 public class MainLayoutController {
+
+    // ✅ Singleton pour accès global
+    private static MainLayoutController instance;
 
     @FXML
     private StackPane contentArea;
 
     @FXML
     public void initialize() {
+        instance = this; // ✅ Enregistrer l'instance
         loadTeamDashboard();
     }
 
-    /**
-     * Bouton "Équipes"
-     */
+    // ✅ Getter pour l'instance singleton
+    public static MainLayoutController getInstance() {
+        return instance;
+    }
+
+    // ✅ Méthode pour charger un contenu dans contentArea
+    public void loadContent(Node content) {
+        contentArea.getChildren().clear();
+        contentArea.getChildren().add(content);
+    }
+
     @FXML
     private void handleTeamsClick() {
         loadTeamDashboard();
     }
 
-    /**
-     * Bouton "Matchs"
-     */
     @FXML
     private void handleMatchsClick() {
         loadMatchList();
     }
 
-    /**
-     * Bouton "Invitations"
-     */
     @FXML
     private void handleOpenInvitations() {
         try {
@@ -61,9 +68,6 @@ public class MainLayoutController {
         }
     }
 
-    /**
-     * Bouton "Déconnexion"
-     */
     @FXML
     private void handleLogout() {
         try {
@@ -79,17 +83,13 @@ public class MainLayoutController {
         }
     }
 
-    /**
-     * Charge TeamDashboard.fxml
-     */
     private void loadTeamDashboard() {
         try {
             FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/ry/ms/view/team/fxml/TeamDashboard.fxml")
             );
             Parent teamView = loader.load();
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(teamView);
+            loadContent(teamView);
             
             System.out.println("✅ TeamDashboard chargé dans MainLayout");
             
@@ -99,28 +99,13 @@ public class MainLayoutController {
         }
     }
 
-    /**
-     * Charge MatchListView.fxml
-     */
     private void loadMatchList() {
         try {
             FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/ry/ms/view/match/fxml/MatchListView.fxml")
             );
             Parent matchView = loader.load();
-            
-            Object controller = loader.getController();
-            try {
-                Stage stage = (Stage) contentArea.getScene().getWindow();
-                controller.getClass()
-                    .getMethod("setOwnerStage", Stage.class)
-                    .invoke(controller, stage);
-            } catch (Exception e) {
-                // OK
-            }
-            
-            contentArea.getChildren().clear();
-            contentArea.getChildren().add(matchView);
+            loadContent(matchView);
             
             System.out.println("✅ MatchListView chargé dans MainLayout");
             
