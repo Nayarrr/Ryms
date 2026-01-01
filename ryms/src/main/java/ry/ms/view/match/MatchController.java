@@ -107,6 +107,15 @@ public class MatchController {
         );
     }
 
+    public boolean updateMatchDate(Long matchId, Date newDate, Label messageLabel) {
+    return executeWithExceptionHandling(
+        () -> matchFacade.addDate(matchId, newDate),
+        messageLabel,
+        "✅ Date du match mise à jour avec succès !",
+        "❌ Erreur lors de la mise à jour de la date."
+    );
+}
+
     public boolean handleAddTeamButtonAction(TextField matchIdField, TextField teamIdField, Label messageLabel) {
         Long matchId = parseMatchId(matchIdField.getText(), messageLabel);
         Long teamId = parseTeamId(teamIdField.getText(), messageLabel);
