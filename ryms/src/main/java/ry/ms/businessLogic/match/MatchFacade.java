@@ -11,8 +11,10 @@ import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
 import ry.ms.models.Match;
 import ry.ms.models.Team;
+import ry.ms.models.TeamResult;
 import ry.ms.models.User;
 import ry.ms.persistLogic.match.dao.MatchDAO;
+import ry.ms.persistLogic.match.dao.MatchResultDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
@@ -23,12 +25,14 @@ public class MatchFacade {
     private final MatchDAO matchDAO;
     private final TeamDAO teamDAO;
     private final UserDAO userDAO;
+    private final MatchResultDAO matchResultDAO;
 
     private MatchFacade() {
         AbsFactory factory = AbsFactory.getInstance();
         this.matchDAO = factory.createMatchDAO();
         this.teamDAO = factory.createTeamDAO();
         this.userDAO = factory.createUserDAO();
+        this.matchResultDAO = factory.createMatchResultDAO();
         this.matchManager = MatchManager.getMatchManager(matchDAO, userDAO, teamDAO);
     }
 
@@ -74,12 +78,11 @@ public class MatchFacade {
     }
 
     public boolean updateRoaster(Long teamId, String currentEmail, String newEmail)
-            throws UserDoesntExistException, TeamDoesntExistException, SQLException {
+            throws UserDoesntExistException,SQLException {
         return matchManager.updateRoaster(teamId, currentEmail, newEmail);
     }
 
-    public List<User> getTeamMembers(Long teamId) 
-            throws TeamDoesntExistException, SQLException {
+    public List<User> getTeamMembers(Long teamId) throws SQLException {
         return matchManager.getTeamMembers(teamId);
     }
 
@@ -110,5 +113,17 @@ public class MatchFacade {
 
     public List<Team> getTeamsForMatch(Long matchId) throws SQLException {
         return matchManager.getTeamsForMatch(matchId);
+    }
+
+    public boolean updateScore(Long matchId, Long teamId, int score) throws SQLException{
+        return matchResultDAO.updateScore(matchId, teamId, score);
+    }
+
+    public List<TeamResult> getMatchResults(Long matchId) throws SQLException {
+        return matchResultDAO.getMatchResults(matchId);
+    }
+
+    public boolean finalizeMatch(Long matchId) throws SQLException {
+        return matchResultDAO.finalizeMatchResults(matchId);
     }
 }

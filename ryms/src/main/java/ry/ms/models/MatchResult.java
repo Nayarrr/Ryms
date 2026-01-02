@@ -1,7 +1,7 @@
 package ry.ms.models;
 
 public enum MatchResult {
-    Win,  
+    WIN,  
     LOSS,
     DRAW
 }

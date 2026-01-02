@@ -23,6 +23,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ry.ms.models.Match;
 import ry.ms.models.Team;
+import ry.ms.models.TeamResult;
 import ry.ms.models.User;
 import ry.ms.view.main.MainLayoutController;
 import ry.ms.view.user.UserSession;
@@ -43,6 +44,7 @@ public class MatchDetailsController {
     @FXML private Label team2CoachLabel;
     @FXML private VBox team2RosterContainer;
     @FXML private Button team2UpdateButton;
+    @FXML private VBox scoresContainer;
 
     private MatchController matchController;
     private String currentUserEmail;
@@ -54,6 +56,10 @@ public class MatchDetailsController {
     public void initialize() {
         matchController = new MatchController();
         currentUserEmail = UserSession.getInstance().getUserEmail();
+    }
+
+    private boolean isAdminOrReferee(){
+        return currentUserEmail != null && currentUserEmail.equalsIgnoreCase("admin@ryms.com");
     }
 
     public void loadMatchDetails(Long matchId) {
@@ -87,6 +93,9 @@ public class MatchDetailsController {
         loadTeamDetails(team1, team1NameLabel, team1CoachLabel, team1RosterContainer, team1UpdateButton);
         loadTeamDetails(team2, team2NameLabel, team2CoachLabel, team2RosterContainer, team2UpdateButton);
 
+        //Score
+        loadScores(matchId);
+
         // Visibilité du bouton "Ajouter Arbitre"
         boolean isAdmin = currentUserEmail != null && currentUserEmail.equalsIgnoreCase("admin@ryms.com");
         addRefereeButton.setVisible(isAdmin);
@@ -108,6 +117,167 @@ public class MatchDetailsController {
             Label noRefLabel = new Label("Aucun arbitre assigné");
             noRefLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic;");
             refereesListContainer.getChildren().add(noRefLabel);
+        }
+    }
+
+    private void loadScores(Long matchId) {
+        if (scoresContainer == null) {
+            System.err.println("⚠️ scoresContainer non défini dans le FXML");
+            return;
+        }
+
+        scoresContainer.getChildren().clear();
+
+        List<TeamResult> results = matchController.getMatchResults(matchId);
+
+        // Si aucun score n'existe encore
+        if (results == null || results.isEmpty()) {
+            Label titleLabel = new Label("📊 Scores");
+            titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+            scoresContainer.getChildren().add(titleLabel);
+
+            Label noScoresLabel = new Label("Les scores n'ont pas encore été initialisés pour ce match.");
+            noScoresLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic; -fx-padding: 10 0 10 0;");
+            scoresContainer.getChildren().add(noScoresLabel);
+
+            // Bouton pour initialiser les scores (admin/arbitre uniquement)
+            if (isAdminOrReferee()) {
+                Button initButton = new Button("🎮 Initialiser les scores");
+                initButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
+                initButton.setOnAction(e -> handleInitializeScores(matchId));
+                scoresContainer.getChildren().add(initButton);
+            }
+            
+            return;
+        }
+
+        // Titre
+        Label titleLabel = new Label("📊 Scores");
+        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
+        scoresContainer.getChildren().add(titleLabel);
+
+        // Afficher chaque résultat
+        for (TeamResult result : results) {
+            HBox scoreBox = createScoreBox(matchId, result);
+            scoresContainer.getChildren().add(scoreBox);
+        }
+
+        // Bouton "Finaliser le match" (admin/arbitre uniquement)
+        if (isAdminOrReferee()) {
+            boolean isFinalized = results.stream().anyMatch(r -> r.getResult() != null);
+            
+            if (!isFinalized) {
+                Button finalizeButton = new Button("🏁 Finaliser le match");
+                finalizeButton.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-margin-top: 10;");
+                finalizeButton.setOnAction(e -> handleFinalizeMatch(matchId));
+                
+                VBox.setMargin(finalizeButton, new javafx.geometry.Insets(10, 0, 0, 0));
+                scoresContainer.getChildren().add(finalizeButton);
+            } else {
+                Label finalizedLabel = new Label("✅ Match finalisé");
+                finalizedLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold; -fx-padding: 10 0 0 0;");
+                scoresContainer.getChildren().add(finalizedLabel);
+            }
+        }
+    }
+
+    private HBox createScoreBox(Long matchId, TeamResult result) {
+        HBox box = new HBox(15);
+        box.setStyle("-fx-alignment: center-left; -fx-padding: 10; -fx-background-color: white; " +
+                    "-fx-border-radius: 5; -fx-background-radius: 5;");
+
+        // Nom de l'équipe
+        Label teamLabel = new Label(result.getTeam().getName() + " [" + result.getTeam().getTag() + "]");
+        teamLabel.setPrefWidth(200);
+        teamLabel.setStyle("-fx-font-weight: bold;");
+
+        // Score actuel
+        Label scoreLabel = new Label("Score: " + result.getScore());
+        scoreLabel.setPrefWidth(100);
+
+        // Résultat (WIN/Loss/Draw ou "En cours")
+        String resultText = result.getResult() != null ? result.getResult().toString() : "En cours";
+        Label resultLabel = new Label(resultText);
+        resultLabel.setStyle(getResultStyle(result.getResult()));
+
+        box.getChildren().addAll(teamLabel, scoreLabel, resultLabel);
+
+        // Si admin/arbitre ET match non finalisé : permettre la modification du score
+        if (isAdminOrReferee() && result.getResult() == null) {
+            TextField scoreField = new TextField(String.valueOf(result.getScore()));
+            scoreField.setPrefWidth(60);
+            scoreField.setPromptText("Score");
+
+            Button updateButton = new Button("✓");
+            updateButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white;");
+            updateButton.setOnAction(e -> {
+                try {
+                    int newScore = Integer.parseInt(scoreField.getText());
+                    Label messageLabel = new Label();
+                    boolean success = matchController.updateScore(matchId, result.getTeam().getTeamId(), newScore, messageLabel);
+                    
+                    if (success) {
+                        loadMatchDetails(matchId); // Recharger les détails
+                    }
+                } catch (NumberFormatException ex) {
+                    System.err.println("❌ Score invalide");
+                }
+            });
+
+            box.getChildren().addAll(scoreField, updateButton);
+        }
+
+        return box;
+    }
+
+    private String getResultStyle(ry.ms.models.MatchResult result) {
+        if (result == null) {
+            return "-fx-text-fill: gray;";
+        }
+        
+        switch(result) {
+            case WIN:
+                return "-fx-text-fill: green; -fx-font-weight: bold;";
+            case LOSS:
+                return "-fx-text-fill: red;";
+            case DRAW:
+                return "-fx-text-fill: orange;";
+            default:
+                return "-fx-text-fill: gray;";
+        }
+    }
+
+    private void handleFinalizeMatch(Long matchId) {
+        Label tempLabel = new Label();
+        boolean success = matchController.finalizeMatch(matchId, tempLabel);
+        
+        if (success) {
+            loadMatchDetails(matchId); // Recharger pour afficher les résultats
+        } else {
+            System.err.println("❌ Erreur finalisation : " + tempLabel.getText());
+        }
+    }
+
+    private void handleInitializeScores(Long matchId) {
+        // Récupérer les équipes du match
+        if (team1 == null || team2 == null) {
+            System.err.println("❌ Impossible d'initialiser les scores : équipes non chargées");
+            return;
+        }
+
+        Label messageLabel = new Label();
+        
+        // Initialiser score équipe 1
+        boolean success1 = matchController.updateScore(matchId, team1.getTeamId(), 0, messageLabel);
+        
+        // Initialiser score équipe 2
+        boolean success2 = matchController.updateScore(matchId, team2.getTeamId(), 0, messageLabel);
+        
+        if (success1 && success2) {
+            System.out.println("✅ Scores initialisés pour le match " + matchId);
+            loadMatchDetails(matchId); // Recharger pour afficher les scores
+        } else {
+            System.err.println("❌ Erreur lors de l'initialisation des scores");
         }
     }
 
@@ -427,4 +597,9 @@ public class MatchDetailsController {
                 (Stage) rootContainer.getScene().getWindow());
         }
     }
+
+
+
+
+
 }

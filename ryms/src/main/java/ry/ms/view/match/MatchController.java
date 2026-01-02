@@ -23,6 +23,7 @@ import ry.ms.businessLogic.team.TeamFacade;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
 import ry.ms.models.Match;
 import ry.ms.models.Team;
+import ry.ms.models.TeamResult;
 import ry.ms.models.User;
 
 public class MatchController {
@@ -201,9 +202,6 @@ public class MatchController {
             combo.setPromptText("Sélectionner un joueur");
             showSuccess(messageLabel, members.size() + " membre(s) chargé(s).");
             
-        } catch (TeamDoesntExistException e) {
-            showError(messageLabel, "❌ Équipe introuvable.");
-            updateButton.setDisable(true);
         } catch (SQLException e) {
             showError(messageLabel, "❌ Erreur base de données.");
             e.printStackTrace();
@@ -373,6 +371,33 @@ public class MatchController {
         button.setOnAction(action);
         return button;
     }
+
+    public boolean updateScore(Long matchId, Long teamId, int score, Label messageLabel) {
+        return executeWithExceptionHandling(
+            () -> matchFacade.updateScore(matchId, teamId, score),
+            messageLabel,
+            "✅ Score mis à jour !",
+            "❌ Erreur lors de la mise à jour du score."
+        );
+    }
+
+
+    public List<TeamResult> getMatchResults(Long matchId) {
+        return executeWithFallback(
+            () -> matchFacade.getMatchResults(matchId), 
+            "résultats"
+        );
+    }
+
+    public boolean finalizeMatch(Long matchId, Label messageLabel) {
+        return executeWithExceptionHandling(
+            () -> matchFacade.finalizeMatch(matchId),
+            messageLabel,
+            "✅ Match finalisé avec succès !",
+            "❌ Erreur lors de la finalisation."
+        );
+    }
+
 
     //Interface avec une seule méthode abstraite (utilisable dans les lambdas) pour eviter les duplications de catch, message label, etc etc
     @FunctionalInterface

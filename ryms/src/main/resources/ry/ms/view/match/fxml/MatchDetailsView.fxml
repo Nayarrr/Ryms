@@ -29,6 +29,18 @@
                text="Chargement..."
                style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
+
+        <Separator/>
+
+            <VBox fx:id="scoresContainer"
+                spacing="10" 
+                style="-fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 2; -fx-border-radius: 10; -fx-background-radius: 10;">
+                <padding>
+                    <Insets top="15" right="15" bottom="15" left="15"/>
+                </padding>
+            </VBox>
+
+
         <!-- Date -->
         <HBox spacing="15" alignment="CENTER_LEFT">
             <Label fx:id="matchDateLabel" 
@@ -144,7 +156,7 @@
                 </VBox>
                 
                 <Button fx:id="team2UpdateButton" 
-                        text="🔄 Update Roster"
+                        text="Update Roster"
                         onAction="#handleUpdateRosterTeam2"
                         style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;"
                         visible="false"

@@ -14,6 +14,7 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/MatchManager.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/match/postgres/MatchDAOPostgres.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/UserDoesntExistException.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/match/postgres/MatchResultDAOPostgres.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/dao/UserDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/TeamManager.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/Invitation.java
@@ -24,6 +25,7 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/user/UserSession.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/dao/TeamDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/Match.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/match/dao/MatchResultDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/Team.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/MatchFacade.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/InvitationStatus.java
@@ -31,6 +33,7 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/TeamFacade.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/CreateMatchController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/exceptions/MatchDoesntExistException.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/MatchResult.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/App.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/team/TeamDashboardController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/postgres/InvitationDAOPostgres.java
