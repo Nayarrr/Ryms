@@ -41,7 +41,7 @@ public class UserDAOPostgres extends UserDAO {
      */
     @Override
     public User getUserById(String identifier) throws SQLException {
-        String sql = "SELECT email, username, password, avatar FROM users WHERE email = ? OR username = ?";
+        String sql = "SELECT email, username, password, avatar, role FROM users WHERE email = ? OR username = ?";
         
         // Using try-with-resources to ensure PreparedStatement and ResultSet are closed automatically.
         try (PreparedStatement stmt = this.conn.prepareStatement(sql)) {
@@ -54,7 +54,8 @@ public class UserDAOPostgres extends UserDAO {
                         rs.getString("email"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getBytes("avatar")
+                        rs.getBytes("avatar"),
+                        rs.getString("role")
                     );
                 }
             }

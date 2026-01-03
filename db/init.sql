@@ -49,3 +49,6 @@ CREATE TABLE IF NOT EXISTS products (
 INSERT INTO users (email, username, password) VALUES
 ('admin@ryms.com', 'admin', 'password_123'),
 ('test@ryms.com', 'testuser', 'password_456');
+
+ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'USER';
+UPDATE users SET role = 'ADMIN' WHERE email = 'admin@ryms.com';

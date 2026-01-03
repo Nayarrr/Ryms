@@ -10,7 +10,7 @@
     <top>
         <HBox spacing="20" style="-fx-background-color: #333; -fx-padding: 10;" alignment="CENTER_LEFT">
             <Label text="RYMS - Team Manager" textFill="WHITE" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-            <Button text="Products" onAction="#handleOpenProducts" />
+            <Button fx:id="productsButton" text="Products" onAction="#handleOpenProducts" />
             <Region HBox.hgrow="ALWAYS" />
             <Button text="Invitations / Notifs" onAction="#handleOpenInvitations"/>
             <Button text="Déconnexion" onAction="#handleLogout" style="-fx-background-color: #d9534f; -fx-text-fill: white;"/>
