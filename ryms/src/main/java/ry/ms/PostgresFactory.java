@@ -8,6 +8,8 @@ import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.team.postgres.InvitationDAOPostgres;
 import ry.ms.persistLogic.team.postgres.TeamDAOPostgres;
+import ry.ms.persistLogic.product.dao.ProductDAO;
+import ry.ms.persistLogic.product.postgres.ProductDAOPostgres;
 /**
  * A concrete factory that creates instances of DAOs.
  * This implementation of {@link AbsFactory} is responsible for instantiating
@@ -34,5 +36,10 @@ public class PostgresFactory extends AbsFactory {
     @Override
     public InvitationDAO createInvitationDAO() {
         return new InvitationDAOPostgres();
+    }
+
+    @Override
+    public ProductDAO createProductDAO() {
+        return new ProductDAOPostgres();
     }
 }
