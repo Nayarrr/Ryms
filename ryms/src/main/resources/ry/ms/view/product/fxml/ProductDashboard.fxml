@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ry.ms.view.product.ProductDashboardController"
+      spacing="10" style="-fx-padding: 20;">
+
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <Label text="Produits" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+        <Region HBox.hgrow="ALWAYS" />
+        <Button text="Ajouter" onAction="#handleAddProduct" />
+        <Button fx:id="deleteButton" text="Supprimer" onAction="#handleDeleteProduct" />
+        <Button text="Rafraîchir" onAction="#handleRefresh" />
+    </HBox>
+
+    <TableView fx:id="productsTable" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="180" />
+            <TableColumn fx:id="categoryColumn" text="Catégorie" prefWidth="140" />
+            <TableColumn fx:id="priceColumn" text="Prix" prefWidth="120" />
+            <TableColumn fx:id="stockColumn" text="Stock" prefWidth="100" />
+        </columns>
+    </TableView>
+
+    <Label fx:id="messageLabel" textFill="RED" />
+</VBox>

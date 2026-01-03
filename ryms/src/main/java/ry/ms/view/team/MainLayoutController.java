@@ -48,6 +48,11 @@ public class MainLayoutController {
     }
 
     @FXML
+    private void handleOpenProducts() {
+        loadView("/ry/ms/view/product/fxml/ProductDashboard.fxml");
+    }
+
+    @FXML
     private void handleOpenInvitations() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/team/fxml/InvitationsModal.fxml"));
