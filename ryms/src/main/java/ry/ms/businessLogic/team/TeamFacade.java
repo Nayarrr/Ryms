@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ry.ms.AbsFactory;
-import ry.ms.models.Invitation;
-import ry.ms.models.Team;
+import ry.ms.models.team.Invitation;
+import ry.ms.models.team.Team;
 
 public final class TeamFacade {
 

@@ -15,7 +15,6 @@ import ry.ms.view.user.UserSession;
 
 public class MainLayoutController {
 
-    // ✅ Singleton pour accès global
     private static MainLayoutController instance;
 
     @FXML
@@ -23,16 +22,15 @@ public class MainLayoutController {
 
     @FXML
     public void initialize() {
-        instance = this; // ✅ Enregistrer l'instance
+        instance = this;
         loadTeamDashboard();
     }
 
-    // ✅ Getter pour l'instance singleton
     public static MainLayoutController getInstance() {
         return instance;
     }
 
-    // ✅ Méthode pour charger un contenu dans contentArea
+    // Méthode pour charger un contenu dans contentArea
     public void loadContent(Node content) {
         contentArea.getChildren().clear();
         contentArea.getChildren().add(content);

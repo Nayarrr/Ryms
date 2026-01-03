@@ -42,10 +42,16 @@ INSERT INTO users (email, username, password) VALUES
 ('test@ryms.com', 'testuser', 'password_456'),
 ('ra@ryms.com', 'randomuser', 'password_789');
 
+INSERT INTO teams (team_id, name, tag, avatar, captain_email) VALUES
+(1, 'GentleMates', 'M16','https://liquipedia.net/commons/images/thumb/c/c0/Gentle_Mates_2024_lightmode.png/600px-Gentle_Mates_2024_lightmode.png', 'admin@ryms.com'),
+(2, 'Karmine Corp', 'KCB', 'https://liquipedia.net/commons/images/thumb/e/e1/Karmine_Corp_full_lightmode.png/600px-Karmine_Corp_full_lightmode.png', 'test@ryms.com'),
+(3, 'Vitality', 'Vita', 'https://liquipedia.net/commons/images/thumb/e/e4/Team_Vitality_2023_lightmode.png/494px-Team_Vitality_2023_lightmode.png', 'ra@ryms.com');
+
 CREATE TABLE IF NOT EXISTS matchs(
     match_id SERIAL PRIMARY KEY,
     match_date TIMESTAMP NOT NULL,
-    game_id INT NOT NULL
+    game_id INT NOT NULL, 
+    status VARCHAR(20) DEFAULT 'SCHEDULED'
 );
 
 CREATE TABLE IF NOT EXISTS match_referees(
@@ -62,4 +68,12 @@ CREATE TABLE IF NOT EXISTS match_teams (
     PRIMARY KEY (match_id, team_id),
     FOREIGN KEY (match_id) REFERENCES matchs(match_id) ON DELETE CASCADE,
     FOREIGN KEY (team_id) REFERENCES teams(team_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS match_results (
+    match_id BIGINT REFERENCES matchs(match_id) ON DELETE CASCADE,
+    team_id INT REFERENCES teams(team_id) ON DELETE CASCADE,
+    score INT NOT NULL DEFAULT 0,
+    result VARCHAR(10) CHECK (result IN ('WIN', 'LOSS', 'DRAW')),
+    PRIMARY KEY (match_id, team_id)
 );

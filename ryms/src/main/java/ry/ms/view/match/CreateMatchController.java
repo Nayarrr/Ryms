@@ -18,8 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ry.ms.models.Team;
 import ry.ms.models.User;
+import ry.ms.models.team.Team;
 
 public class CreateMatchController {
 
@@ -71,8 +71,24 @@ public class CreateMatchController {
         setupRefereeSearch();
         setupTimeFields();
         setupValidationListeners();
+
+        //Pour désactiver les dates passées
+        matchDatePicker.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+        @Override
+        public void updateItem(LocalDate date, boolean empty) {
+            super.updateItem(date, empty);
+            
+            LocalDate today = LocalDate.now();
+            
+            // Désactiver les dates passées
+            if (date.isBefore(today)) {
+                setDisable(true);
+            }
+        }
+    });
     }
 
+    // En dur pour le moment en attendant le useCase adequat
     private void setupGameComboBox() {
         gameComboBox.getItems().addAll(
             "League of Legends",
@@ -103,7 +119,7 @@ public class CreateMatchController {
         });
     }
 
-    // ✅ NOUVELLE MÉTHODE : Écouter TOUS les champs pour activer/désactiver le bouton
+    // Écouter TOUS les champs pour activer/désactiver le bouton pour créer
     private void setupValidationListeners() {
         // Écouter les changements de date
         matchDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> validateForm());
@@ -211,7 +227,7 @@ public class CreateMatchController {
                 refereeSearchField.clear();
                 refereeListView.setVisible(false);
                 refereeListView.setManaged(false);
-                validateForm(); // ✅ Revalider après ajout d'arbitre
+                validateForm(); // Revalider après ajout d'arbitre
             }
         });
     }
@@ -221,15 +237,13 @@ public class CreateMatchController {
         
         for (User referee : selectedReferees) {
             HBox refereeBox = new HBox(10);
-            refereeBox.setStyle("-fx-alignment: center-left;");
             
             Label refereeLabel = new Label("• " + referee.getEmail());
             Button removeButton = new Button("✕");
-            removeButton.setStyle("-fx-background-color: transparent; -fx-text-fill: red; -fx-cursor: hand;");
             removeButton.setOnAction(e -> {
                 selectedReferees.remove(referee);
                 updateSelectedRefereesDisplay();
-                validateForm(); // ✅ Revalider après suppression d'arbitre
+                validateForm(); // Revalider après suppression d'arbitre
             });
             
             refereeBox.getChildren().addAll(refereeLabel, removeButton);
@@ -237,71 +251,7 @@ public class CreateMatchController {
         }
     }
 
-    @FXML
-    private void handleCreateMatch() {
-        if (!validateInputs()) {
-            return;
-        }
-
-        try {
-            LocalDate localDate = matchDatePicker.getValue();
-            int hour = Integer.parseInt(matchHourField.getText());
-            int minute = Integer.parseInt(matchMinuteField.getText());
-
-            if (hour < 0 || hour > 23) {
-                showError("L'heure doit être entre 0 et 23");
-                return;
-            }
-
-            if (minute < 0 || minute > 59) {
-                showError("Les minutes doivent être entre 0 et 59");
-                return;
-            }
-
-            LocalDateTime localDateTime = localDate.atTime(hour, minute);
-            Date matchDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-
-            int gameId = gameComboBox.getSelectionModel().getSelectedIndex() + 1;
-
-            boolean success = matchController.createMatch(
-                selectedTeam1, 
-                selectedTeam2, 
-                matchDate, 
-                gameId, 
-                selectedReferees
-            );
-
-            if (success) {
-                showSuccess("✅ Match créé avec succès !");
-                
-                if (onMatchCreated != null) {
-                    onMatchCreated.run();
-                }
-                
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(1000);
-                        javafx.application.Platform.runLater(() -> {
-                            if (modalStage != null) {
-                                modalStage.close();
-                            }
-                        });
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            } else {
-                showError("❌ Erreur lors de la création du match");
-            }
-
-        } catch (NumberFormatException e) {
-            showError("❌ Heure ou minute invalide");
-        } catch (Exception e) {
-            showError("❌ Erreur : " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
-
+    
     private boolean validateInputs() {
         if (selectedTeam1 == null) {
             showError("Veuillez sélectionner l'équipe 1");
@@ -341,7 +291,6 @@ public class CreateMatchController {
         return true;
     }
 
-    // ✅ MÉTHODE AMÉLIORÉE : Vérifie TOUS les champs
     private void validateForm() {
         boolean isValid = selectedTeam1 != null && 
                          selectedTeam2 != null && 
@@ -355,19 +304,97 @@ public class CreateMatchController {
     }
 
     @FXML
-    private void handleCancel() {
+    private void handleCreateMatch() { //Appelée dans le fxml
+        if (!validateInputs()) {
+            return;
+        }
+
+        try {
+            LocalDate localDate = matchDatePicker.getValue();
+            int hour = Integer.parseInt(matchHourField.getText());
+            int minute = Integer.parseInt(matchMinuteField.getText());
+
+            LocalDate today = LocalDate.now();
+            if (localDate.isBefore(today)) {
+                showError("❌ La date du match ne peut pas être dans le passé !");
+                return;
+            }
+
+            // Si la date est aujourd'hui, vérifier l'heure
+            if (localDate.isEqual(today)) {
+                java.time.LocalTime now = java.time.LocalTime.now();
+                java.time.LocalTime matchTime = java.time.LocalTime.of(hour, minute);
+                
+                if (matchTime.isBefore(now)) {
+                    showError("❌ L'heure du match ne peut pas être dans le passé !");
+                    return;
+                }
+            }
+
+            if (hour < 0 || hour > 23) {
+                showError("❌ L'heure doit être entre 0 et 23");
+                return;
+            }
+
+            if (minute < 0 || minute > 59) {
+                showError("❌ Les minutes doivent être entre 0 et 59");
+                return;
+            }
+
+            LocalDateTime localDateTime = localDate.atTime(hour, minute);
+            Date matchDate = Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+
+            int gameId = gameComboBox.getSelectionModel().getSelectedIndex() + 1;
+
+            boolean success = matchController.createMatch(
+                selectedTeam1, 
+                selectedTeam2, 
+                matchDate, 
+                gameId, 
+                selectedReferees
+            );
+
+            if (success) {
+                showSuccess("✅ Match créé avec succès !");
+                
+                // Fermer la modale après 1 seconde
+                javafx.application.Platform.runLater(() -> {
+                    try {
+                        Thread.sleep(1000);
+                        if (modalStage != null) {
+                            modalStage.close();
+                        }
+                        if (onMatchCreated != null) {
+                            onMatchCreated.run();
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+            } else {
+                showError("❌ Erreur lors de la création du match");
+            }
+
+        } catch (NumberFormatException e) {
+            showError("❌ Heure ou minute invalide");
+        } catch (Exception e) {
+            showError("❌ Erreur : " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleCancel() { //Appelée dans le fxml
         if (modalStage != null) {
             modalStage.close();
         }
     }
 
-    private void showSuccess(String message) {
-        messageLabel.setStyle("-fx-text-fill: green;");
+    private void showSuccess(String message) { //Appelée dans le fxml
         messageLabel.setText(message);
     }
 
-    private void showError(String message) {
-        messageLabel.setStyle("-fx-text-fill: red;");
+    private void showError(String message) { //Appelée dans le fxml
         messageLabel.setText(message);
     }
 }
