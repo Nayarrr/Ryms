@@ -59,7 +59,10 @@ public class ProductDAOPostgres implements ProductDAO {
             stmt.setInt(4, product.getStock());
             stmt.setString(5, product.getCategory());
             stmt.setLong(6, product.getProductId());
-            stmt.executeUpdate();
+            int rows = stmt.executeUpdate();
+            if (rows == 0) {
+                throw new SQLException("Update failed, product ID not found.");
+            }
         }
     }
 
