@@ -81,7 +81,7 @@ package "Data Access (DAO)" {
         - connection: Connection
     }
 
-    ' --- INVITATION DAO (Nouveau DAO séparé) ---
+    ' --- INVITATION DAO (DAO séparé) ---
     interface InvitationDAO {
         + saveInvitation(invitation: Invitation): void
         + getInvitationById(id: Long): Invitation

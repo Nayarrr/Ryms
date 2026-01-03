@@ -1,0 +1,99 @@
+@startuml
+
+package "View / Controller" {
+    class ProductController {
+        ' Creation
+        + createProduct(name: String, description: String, price: double, stock: int, category: String): void
+        
+        ' Modification
+        + editProduct(productId: Long, name: String, description: String, price: double, stock: int): void
+        + categorizeProduct(productId: Long, category: String): void
+        
+        ' Deletion
+        + deleteProduct(productId: Long): void
+        
+        ' View
+        + getAllProducts(): List<Product>
+        + getProductById(productId: Long): Product
+    }
+}
+
+package "Business Logic" {
+    class SessionFacade {
+        + createProduct(name: String, description: String, price: double, stock: int, category: String): Product
+        + editProduct(productId: Long, name: String, description: String, price: double, stock: int): void
+        + categorizeProduct(productId: Long, category: String): void
+        + deleteProduct(productId: Long): void
+        + getProductById(productId: Long): Product
+    }
+
+    class ProductManager {
+        ' Logic & Validation
+        + createProduct(product: Product): Product
+        + updateProduct(product: Product): void
+        + deleteProduct(productId: Long): void
+        + validateProductData(product: Product): boolean
+        
+        ' Helper
+        - checkStock(stock: int): boolean
+    }
+    
+    abstract class AbsFactory {
+        {static} + getFactory(type: int): AbsFactory
+        {abstract} + createProductDAO(): ProductDAO
+    }
+
+    class PostgresFactory extends AbsFactory {
+        + createProductDAO(): ProductDAO
+    }
+}
+
+package "Data Access (DAO)" {
+    
+    ' --- PRODUCT DAO ---
+    interface ProductDAO {
+        + saveProduct(product: Product): Product
+        + updateProduct(product: Product): void
+        + deleteProduct(id: Long): void
+        + getProductById(id: Long): Product
+        + getAllProducts(): List<Product>
+    }
+
+    class ProductPostgres implements ProductDAO {
+        - connection: Connection
+    }
+}
+
+package "Model" {
+    class Product {
+        - productId: Long
+        - name: String
+        - description: String
+        - price: double
+        - stock: int
+        - category: String
+    }
+}
+
+' --- RELATIONS ---
+
+' Controller -> Facade
+ProductController .down.> SessionFacade : uses
+
+' Facade -> Manager
+SessionFacade .down.> ProductManager : uses
+
+' Factory Pattern
+ProductManager ..> AbsFactory : uses
+PostgresFactory .up.> ProductPostgres : creates
+
+' Manager utilises DAO
+ProductManager .down.> ProductDAO : uses
+
+' DAOs read/write Models
+ProductPostgres .down.> Product : reads/writes
+
+' Manager creates Model objects
+ProductManager .right.> Product : creates
+
+@enduml
