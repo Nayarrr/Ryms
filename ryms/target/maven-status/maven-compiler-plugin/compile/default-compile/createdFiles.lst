@@ -7,7 +7,6 @@ ry/ms/models/Match.class
 ry/ms/models/User.class
 ry/ms/view/team/InvitationsController.class
 ry/ms/businessLogic/team/TeamFacade.class
-ry/ms/view/match/MatchDetailsController$2.class
 ry/ms/persistLogic/match/dao/MatchResultDAO.class
 ry/ms/view/match/CreateMatchController$2.class
 ry/ms/models/InvitationStatus.class
@@ -46,9 +45,11 @@ ry/ms/persistLogic/team/postgres/TeamDAOPostgres.class
 ry/ms/businessLogic/team/TeamManager.class
 ry/ms/businessLogic/user/login/SessionFacade.class
 ry/ms/view/match/MatchDetailsController.class
+ry/ms/models/MatchStatus.class
 ry/ms/view/main/MainLayoutController.class
 ry/ms/view/match/MatchDetailsController$1.class
 ry/ms/view/match/MatchListViewController$1.class
+ry/ms/view/match/CreateMatchController$3.class
 ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.class
 ry/ms/persistLogic/team/postgres/InvitationDAOPostgres.class
 ry/ms/view/team/TeamController.class

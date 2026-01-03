@@ -17,7 +17,7 @@ public class UserManager {
     }
     
     /** The Data Access Object for handling user persistence. */
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
     
     /**
      * Authenticates a user based on their email and password.

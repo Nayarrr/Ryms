@@ -11,20 +11,24 @@ public class Match {
     public List<Team> teams;
     protected List<TeamResult> teamResults;
     public Long gameId;
+    private MatchStatus status;
 
     public Match(){
         this.referees = new ArrayList<>();
         this.teams = new ArrayList<>();
         this.teamResults = new ArrayList<>();
+        this.status = MatchStatus.SCHEDULED;
     }
 
-    public Match(Long matchid, Date matchDate, Long gameId){
+    public Match(Long matchid, Date matchDate, Long gameId, MatchStatus status){
         this.matchId = matchid;
         this.matchDate = matchDate;
         this.gameId = gameId;
+        this.status = status;
         this.referees = new ArrayList<>();
         this.teams = new ArrayList<>();
         this.teamResults = new ArrayList<>();
+        this.status = status;
     }
 
     public Long getMatchId(){
@@ -77,5 +81,12 @@ public class Match {
         this.teamResults = teamResults;
     }
 
+    public MatchStatus getStatus() {
+        return this.status;
+    }
+
+    public void setStatus(MatchStatus status) {
+        this.status = status;
+    }
 
 }

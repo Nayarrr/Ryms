@@ -4,6 +4,7 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/MatchDetailsController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/AbsFactory.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/models/MatchStatus.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/team/InvitationsController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/MatchController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/main/MainLayoutController.java

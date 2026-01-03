@@ -11,7 +11,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -22,6 +24,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ry.ms.models.Match;
+import ry.ms.models.MatchStatus;
 import ry.ms.models.Team;
 import ry.ms.models.TeamResult;
 import ry.ms.models.User;
@@ -45,30 +48,54 @@ public class MatchDetailsController {
     @FXML private VBox team2RosterContainer;
     @FXML private Button team2UpdateButton;
     @FXML private VBox scoresContainer;
+    @FXML private Button startMatchButton;
 
     private MatchController matchController;
     private String currentUserEmail;
     private Long matchId;
     private Team team1;
     private Team team2;
+    private List<User> matchReferees;
 
+    /**
+     * Initialise le controller en chargeant les dépendances nécessaires
+     */
     @FXML
     public void initialize() {
         matchController = new MatchController();
         currentUserEmail = UserSession.getInstance().getUserEmail();
     }
 
+    /**
+     * Vérifie si l'utilisateur connecté est un administrateur ou un arbitre
+     */
     private boolean isAdminOrReferee(){
-        return currentUserEmail != null && currentUserEmail.equalsIgnoreCase("admin@ryms.com");
+        if (currentUserEmail != null && currentUserEmail.equalsIgnoreCase("admin@ryms.com")) {
+            return true;
+        }
+
+        if (matchReferees != null && currentUserEmail != null) {
+            for (User referee : matchReferees) {
+                if (referee.getEmail().equalsIgnoreCase(currentUserEmail)) {
+                    return true;
+                }
+            }
+        return false;
+        }
+
+        return false;
     }
 
+    /**
+     * Charge et affiche tous les détails d'un match spécifique
+     */
     public void loadMatchDetails(Long matchId) {
         this.matchId = matchId;
         
         Match match = matchController.getMatchById(matchId);
         
         if (match == null) {
-            matchTitleLabel.setText("Match introuvable");
+            System.err.println("❌ Match introuvable");
             return;
         }
 
@@ -84,42 +111,60 @@ public class MatchDetailsController {
         // Date
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy 'à' HH:mm");
         String dateStr = match.getMatchDate() != null ? dateFormat.format(match.getMatchDate()) : "Date non définie";
-        matchDateLabel.setText("Date : " + dateStr);
+        matchDateLabel.setText("📅 Date : " + dateStr);
 
         // Arbitres
         loadReferees(match);
+        this.matchReferees = match.getReferees();
 
         // Équipes
         loadTeamDetails(team1, team1NameLabel, team1CoachLabel, team1RosterContainer, team1UpdateButton);
         loadTeamDetails(team2, team2NameLabel, team2CoachLabel, team2RosterContainer, team2UpdateButton);
 
-        //Score
+        // Scores
         loadScores(matchId);
 
-        // Visibilité du bouton "Ajouter Arbitre"
+        // ✅ NOUVEAU : Gestion du bouton "Commencer le match"
         boolean isAdmin = currentUserEmail != null && currentUserEmail.equalsIgnoreCase("admin@ryms.com");
+        boolean isReferee = matchReferees != null && currentUserEmail != null && 
+                        matchReferees.stream().anyMatch(ref -> ref.getEmail().equalsIgnoreCase(currentUserEmail));
+        
+        // Visible uniquement si admin/arbitre ET match pas encore commencé
+        if ((isAdmin || isReferee) && match.getStatus() == MatchStatus.SCHEDULED) {
+            startMatchButton.setVisible(true);
+            startMatchButton.setManaged(true);
+        } else {
+            startMatchButton.setVisible(false);
+            startMatchButton.setManaged(false);
+        }
+
+        // Visibilité des autres boutons admin
         addRefereeButton.setVisible(isAdmin);
         addRefereeButton.setManaged(isAdmin);
         editDateButton.setVisible(isAdmin);
         editDateButton.setManaged(isAdmin);
     }
 
+    /**
+     * Charge et affiche la liste des arbitres assignés au match
+     */
     private void loadReferees(Match match) {
         refereesListContainer.getChildren().clear();
 
         if (match.getReferees() != null && !match.getReferees().isEmpty()) {
             for (User referee : match.getReferees()) {
                 Label refLabel = new Label("• " + referee.getUsername());
-                refLabel.setStyle("-fx-font-size: 14px;");
                 refereesListContainer.getChildren().add(refLabel);
             }
         } else {
             Label noRefLabel = new Label("Aucun arbitre assigné");
-            noRefLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic;");
             refereesListContainer.getChildren().add(noRefLabel);
         }
     }
 
+    /**
+     * Charge et affiche les scores des équipes avec possibilité de modification
+     */
     private void loadScores(Long matchId) {
         if (scoresContainer == null) {
             System.err.println("⚠️ scoresContainer non défini dans le FXML");
@@ -133,17 +178,14 @@ public class MatchDetailsController {
         // Si aucun score n'existe encore
         if (results == null || results.isEmpty()) {
             Label titleLabel = new Label("📊 Scores");
-            titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
             scoresContainer.getChildren().add(titleLabel);
 
             Label noScoresLabel = new Label("Les scores n'ont pas encore été initialisés pour ce match.");
-            noScoresLabel.setStyle("-fx-text-fill: gray; -fx-font-style: italic; -fx-padding: 10 0 10 0;");
             scoresContainer.getChildren().add(noScoresLabel);
 
             // Bouton pour initialiser les scores (admin/arbitre uniquement)
             if (isAdminOrReferee()) {
-                Button initButton = new Button("🎮 Initialiser les scores");
-                initButton.setStyle("-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20;");
+                Button initButton = new Button("Initialiser les scores");
                 initButton.setOnAction(e -> handleInitializeScores(matchId));
                 scoresContainer.getChildren().add(initButton);
             }
@@ -153,7 +195,6 @@ public class MatchDetailsController {
 
         // Titre
         Label titleLabel = new Label("📊 Scores");
-        titleLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold;");
         scoresContainer.getChildren().add(titleLabel);
 
         // Afficher chaque résultat
@@ -167,29 +208,27 @@ public class MatchDetailsController {
             boolean isFinalized = results.stream().anyMatch(r -> r.getResult() != null);
             
             if (!isFinalized) {
-                Button finalizeButton = new Button("🏁 Finaliser le match");
-                finalizeButton.setStyle("-fx-background-color: #9b59b6; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-margin-top: 10;");
+                Button finalizeButton = new Button("Finaliser le match");
                 finalizeButton.setOnAction(e -> handleFinalizeMatch(matchId));
                 
                 VBox.setMargin(finalizeButton, new javafx.geometry.Insets(10, 0, 0, 0));
                 scoresContainer.getChildren().add(finalizeButton);
             } else {
                 Label finalizedLabel = new Label("✅ Match finalisé");
-                finalizedLabel.setStyle("-fx-text-fill: green; -fx-font-weight: bold; -fx-padding: 10 0 0 0;");
                 scoresContainer.getChildren().add(finalizedLabel);
             }
         }
     }
 
+    /**
+     * Crée une boîte d'affichage de score pour une équipe avec contrôles de modification
+     */
     private HBox createScoreBox(Long matchId, TeamResult result) {
         HBox box = new HBox(15);
-        box.setStyle("-fx-alignment: center-left; -fx-padding: 10; -fx-background-color: white; " +
-                    "-fx-border-radius: 5; -fx-background-radius: 5;");
 
         // Nom de l'équipe
         Label teamLabel = new Label(result.getTeam().getName() + " [" + result.getTeam().getTag() + "]");
         teamLabel.setPrefWidth(200);
-        teamLabel.setStyle("-fx-font-weight: bold;");
 
         // Score actuel
         Label scoreLabel = new Label("Score: " + result.getScore());
@@ -198,7 +237,6 @@ public class MatchDetailsController {
         // Résultat (WIN/Loss/Draw ou "En cours")
         String resultText = result.getResult() != null ? result.getResult().toString() : "En cours";
         Label resultLabel = new Label(resultText);
-        resultLabel.setStyle(getResultStyle(result.getResult()));
 
         box.getChildren().addAll(teamLabel, scoreLabel, resultLabel);
 
@@ -206,10 +244,10 @@ public class MatchDetailsController {
         if (isAdminOrReferee() && result.getResult() == null) {
             TextField scoreField = new TextField(String.valueOf(result.getScore()));
             scoreField.setPrefWidth(60);
+            scoreField.setMaxWidth(60);
             scoreField.setPromptText("Score");
 
             Button updateButton = new Button("✓");
-            updateButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white;");
             updateButton.setOnAction(e -> {
                 try {
                     int newScore = Integer.parseInt(scoreField.getText());
@@ -230,23 +268,9 @@ public class MatchDetailsController {
         return box;
     }
 
-    private String getResultStyle(ry.ms.models.MatchResult result) {
-        if (result == null) {
-            return "-fx-text-fill: gray;";
-        }
-        
-        switch(result) {
-            case WIN:
-                return "-fx-text-fill: green; -fx-font-weight: bold;";
-            case LOSS:
-                return "-fx-text-fill: red;";
-            case DRAW:
-                return "-fx-text-fill: orange;";
-            default:
-                return "-fx-text-fill: gray;";
-        }
-    }
-
+    /**
+     * Finalise le match en calculant automatiquement les résultats Win/Loss/Draw
+     */
     private void handleFinalizeMatch(Long matchId) {
         Label tempLabel = new Label();
         boolean success = matchController.finalizeMatch(matchId, tempLabel);
@@ -258,6 +282,9 @@ public class MatchDetailsController {
         }
     }
 
+    /**
+     * Initialise les scores à 0 pour les deux équipes du match
+     */
     private void handleInitializeScores(Long matchId) {
         // Récupérer les équipes du match
         if (team1 == null || team2 == null) {
@@ -281,6 +308,9 @@ public class MatchDetailsController {
         }
     }
 
+    /**
+     * Charge et affiche les informations détaillées d'une équipe (nom, coach, roster)
+     */
     private void loadTeamDetails(Team team, Label nameLabel, Label coachLabel, VBox rosterContainer, Button updateButton) {
         if (team == null) {
             nameLabel.setText("En attente");
@@ -321,6 +351,9 @@ public class MatchDetailsController {
         updateButton.setManaged(canUpdate);
     }
 
+    /**
+     * Retourne à la vue liste des matchs
+     */
     @FXML
     private void handleBackToList() {
         try {
@@ -336,6 +369,9 @@ public class MatchDetailsController {
         }
     }
 
+    /**
+     * Ouvre une modale pour modifier la date et l'heure du match
+     */
     @FXML
     private void handleEditDate() {
         Stage modal = new Stage();
@@ -347,7 +383,6 @@ public class MatchDetailsController {
         layout.setPadding(new Insets(20));
 
         Label titleLabel = new Label("Nouvelle date et heure du match :");
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         // Date picker
         DatePicker datePicker = new DatePicker();
@@ -369,7 +404,6 @@ public class MatchDetailsController {
         minuteField.setMaxWidth(60);
 
         Label format24h = new Label("(format 24h)");
-        format24h.setStyle("-fx-text-fill: gray;");
 
         timeBox.getChildren().addAll(hourField, separator, minuteField, format24h);
 
@@ -394,17 +428,14 @@ public class MatchDetailsController {
 
         Label messageLabel = new Label();
 
-        Button saveButton = new Button("💾 Enregistrer");
-        saveButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;");
+        Button saveButton = new Button("Enregistrer");
         saveButton.setOnAction(e -> {
             if (datePicker.getValue() == null) {
-                messageLabel.setStyle("-fx-text-fill: red;");
                 messageLabel.setText("❌ Veuillez sélectionner une date");
                 return;
             }
 
             if (hourField.getText().isBlank() || minuteField.getText().isBlank()) {
-                messageLabel.setStyle("-fx-text-fill: red;");
                 messageLabel.setText("❌ Veuillez spécifier l'heure");
                 return;
             }
@@ -414,13 +445,11 @@ public class MatchDetailsController {
                 int minute = Integer.parseInt(minuteField.getText());
 
                 if (hour < 0 || hour > 23) {
-                    messageLabel.setStyle("-fx-text-fill: red;");
                     messageLabel.setText("❌ L'heure doit être entre 0 et 23");
                     return;
                 }
 
                 if (minute < 0 || minute > 59) {
-                    messageLabel.setStyle("-fx-text-fill: red;");
                     messageLabel.setText("❌ Les minutes doivent être entre 0 et 59");
                     return;
                 }
@@ -432,7 +461,6 @@ public class MatchDetailsController {
                 boolean updated = matchController.updateMatchDate(matchId, newDate, messageLabel);
 
                 if (updated) {
-                    messageLabel.setStyle("-fx-text-fill: green;");
                     messageLabel.setText("✅ Date mise à jour avec succès !");
 
                     new Thread(() -> {
@@ -449,7 +477,6 @@ public class MatchDetailsController {
                 }
 
             } catch (NumberFormatException ex) {
-                messageLabel.setStyle("-fx-text-fill: red;");
                 messageLabel.setText("❌ Heure ou minute invalide");
             }
         });
@@ -476,6 +503,9 @@ public class MatchDetailsController {
         modal.show();
     }
 
+    /**
+     * Ouvre une modale pour ajouter un arbitre au match
+     */
     @FXML
     private void handleAddReferee() {
         Stage modal = new Stage();
@@ -487,7 +517,6 @@ public class MatchDetailsController {
         layout.setPadding(new Insets(20));
 
         Label titleLabel = new Label("Sélectionner un arbitre :");
-        titleLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 14px;");
 
         TextField emailSearchField = new TextField();
         emailSearchField.setPromptText("Rechercher un arbitre par email...");
@@ -528,7 +557,6 @@ public class MatchDetailsController {
 
         Button addButton = new Button("Ajouter");
         addButton.setDisable(true);
-        addButton.setStyle("-fx-background-color: #27ae60; -fx-text-fill: white;");
 
         userListView.setOnMouseClicked(event -> {
             User selected = userListView.getSelectionModel().getSelectedItem();
@@ -541,7 +569,6 @@ public class MatchDetailsController {
         addButton.setOnAction(e -> {
             User selected = userListView.getSelectionModel().getSelectedItem();
             if (selected == null) {
-                messageLabel.setStyle("-fx-text-fill: red;");
                 messageLabel.setText("❌ Veuillez sélectionner un arbitre");
                 return;
             }
@@ -582,6 +609,9 @@ public class MatchDetailsController {
             modal.show();
     }
 
+    /**
+     * Ouvre la modale de mise à jour du roster pour l'équipe 1
+     */
     @FXML
     private void handleUpdateRosterTeam1() {
         if (team1 != null) {
@@ -590,6 +620,9 @@ public class MatchDetailsController {
         }
     }
 
+    /**
+     * Ouvre la modale de mise à jour du roster pour l'équipe 2
+     */
     @FXML
     private void handleUpdateRosterTeam2() {
         if (team2 != null) {
@@ -598,8 +631,43 @@ public class MatchDetailsController {
         }
     }
 
+    @FXML
+private void handleStartMatch() {
+    if (matchId == null) {
+        System.err.println("❌ Aucun match sélectionné");
+        return;
+    }
 
+    Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+    confirmAlert.setTitle("Confirmer le démarrage");
+    confirmAlert.setHeaderText("Commencer le match ?");
+    confirmAlert.setContentText("Le match passera en statut 'EN COURS' et les scores pourront être mis à jour en temps réel.");
 
-
-
+    confirmAlert.showAndWait().ifPresent(response -> {
+        if (response == ButtonType.OK) {
+            Label tempLabel = new Label();
+            boolean success = matchController.startMatch(matchId, tempLabel);
+            
+            if (success) {
+                System.out.println("✅ Match démarré avec succès !");
+                
+                // Rafraîchir la vue
+                loadMatchDetails(matchId);
+                
+                // Afficher une notification
+                Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+                infoAlert.setTitle("Match démarré");
+                infoAlert.setHeaderText(null);
+                infoAlert.setContentText("Le match est maintenant EN COURS. Les scores peuvent être mis à jour.");
+                infoAlert.show();
+            } else {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Erreur");
+                errorAlert.setHeaderText("Impossible de démarrer le match");
+                errorAlert.setContentText(tempLabel.getText());
+                errorAlert.show();
+            }
+        }
+    });
+}
 }

@@ -16,7 +16,7 @@ public class SessionFacade {
     /** The single instance of the SessionFacade. */
     private static SessionFacade sessionFacade;
     /** The manager responsible for user-related business logic. */
-    private UserManager userManager;
+    private final UserManager userManager;
 
     /**
      * Private constructor to prevent direct instantiation and enforce the Singleton pattern.

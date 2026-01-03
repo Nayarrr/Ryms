@@ -132,12 +132,17 @@ public class MatchResultDAOPostgres implements MatchResultDAO {
             int updated = stmt.executeUpdate();
             
             if (updated > 0) {
-                System.out.println("✅ Match " + matchId + " finalisé avec succès (" + updated + " résultats mis à jour)");
+                String updateStatusSql = "UPDATE matchs SET status = 'FINISHED' WHERE match_id = ?";
+                try (PreparedStatement statusStmt = conn.prepareStatement(updateStatusSql)) {
+                    statusStmt.setLong(1, matchId);
+                    statusStmt.executeUpdate();
+                }
+                
+                System.out.println("✅ Match " + matchId + " finalisé et statut mis à FINISHED");
                 return true;
-            } else {
-                System.err.println("⚠️ Aucun résultat trouvé pour le match " + matchId);
-                return false;
             }
+            
+            return false;
         }
     }
 }

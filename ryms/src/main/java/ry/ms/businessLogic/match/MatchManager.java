@@ -171,5 +171,22 @@ public class MatchManager {
         return matchDAO.delete(matchId);
     }
 
+    /**
+     * Démarre un match en changeant son statut à IN_PROGRESS
+     */
+    public boolean startMatch(Long matchId) throws SQLException, MatchDoesntExistException {
+        Match match = getMatchById(matchId);
+        
+        if (match == null) {
+            throw new MatchDoesntExistException("Le match n'existe pas.");
+        }
+        
+        if (match.getStatus() != ry.ms.models.MatchStatus.SCHEDULED) {
+            throw new IllegalStateException("Le match a déjà commencé ou est terminé.");
+        }
+        
+        return matchDAO.updateMatchStatus(matchId, ry.ms.models.MatchStatus.IN_PROGRESS);
+    }
+
 
 }

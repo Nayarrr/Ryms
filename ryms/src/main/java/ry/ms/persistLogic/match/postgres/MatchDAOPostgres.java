@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import ry.ms.models.Match;
+import ry.ms.models.MatchStatus;
 import ry.ms.models.Team;
 import ry.ms.models.User;
 import ry.ms.persistLogic.DBConfig;
@@ -21,29 +22,32 @@ public class MatchDAOPostgres implements MatchDAO{
 
     @Override
     public Match getMatchById(Long matchId) throws SQLException {
-        String query = "SELECT match_id, match_date, game_id FROM matchs WHERE match_id = ?";
+        String query = "SELECT match_id, match_date, game_id, status FROM matchs WHERE match_id = ?";
         
         try (Connection conn = DBConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)){
+            PreparedStatement stmt = conn.prepareStatement(query)){
             
             stmt.setLong(1, matchId);
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                Match match = new Match(
-                    rs.getLong("match_id"),
-                    rs.getTimestamp("match_date"),
-                    rs.getLong("game_id")
-                );
-
-                match.setReferees(getRefereesForMatch(matchId));
-
-                match.setTeams(getTeamsForMatch(matchId));
-
+                Long id = rs.getLong("match_id");
+                Date date = rs.getTimestamp("match_date");
+                Long gameId = rs.getLong("game_id");
+                String statusStr = rs.getString("status");
+                
+                Match match = new Match(id, date, gameId, ry.ms.models.MatchStatus.fromString(statusStr));
+                
+                // Charger les équipes
+                match.setTeams(getTeamsForMatch(id));
+                
+                // Charger les arbitres
+                match.setReferees(getRefereesForMatch(id));
+                
                 return match;
             }
-
-        } return null;
+        }
+        return null;
     }
 
     @Override
@@ -256,24 +260,23 @@ public class MatchDAOPostgres implements MatchDAO{
     @Override
     public List<Match> getAllMatches() throws SQLException {
         List<Match> matches = new ArrayList<>();
-        String sql = "SELECT match_id, match_date, game_id FROM matchs ORDER BY match_date ASC";
+        String sql = "SELECT match_id, match_date, game_id, status FROM matchs ORDER BY match_date ASC";
         
         try (Connection conn = DBConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
-                Long matchId = rs.getLong("match_id");
-                Date matchDate = rs.getTimestamp("match_date");
+                Long id = rs.getLong("match_id");
+                Date date = rs.getTimestamp("match_date");
                 Long gameId = rs.getLong("game_id");
+                String statusStr = rs.getString("status");
                 
-                Match match = new Match(matchId, matchDate, gameId);
+                Match match = new Match(id, date, gameId, ry.ms.models.MatchStatus.fromString(statusStr));
                 
-                // Charger les équipes pour ce match
-                match.setTeams(getTeamsForMatch(matchId));
-                
-                // Charger les arbitres pour ce match
-                match.setReferees(getRefereesForMatch(matchId));
+                // Charger les équipes et arbitres
+                match.setTeams(getTeamsForMatch(id));
+                match.setReferees(getRefereesForMatch(id));
                 
                 matches.add(match);
             }
@@ -433,7 +436,8 @@ public class MatchDAOPostgres implements MatchDAO{
             Match match = new Match(
                 matchId,
                 new java.util.Date(sqlTimestamp.getTime()),
-                (long) gameId
+                (long) gameId,
+                MatchStatus.SCHEDULED
             );
             
             match.getTeams().add(team1);
@@ -444,6 +448,27 @@ public class MatchDAOPostgres implements MatchDAO{
             
         } catch (SQLException e) {
             throw e;
+        }
+    }
+
+    @Override
+    public boolean updateMatchStatus(Long matchId, ry.ms.models.MatchStatus status) throws SQLException {
+        String sql = "UPDATE matchs SET status = ? WHERE match_id = ?";
+        
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            
+            stmt.setString(1, status.name());
+            stmt.setLong(2, matchId);
+            
+            int rowsAffected = stmt.executeUpdate();
+            
+            if (rowsAffected > 0) {
+                System.out.println("✅ Statut du match #" + matchId + " mis à jour : " + status.name());
+                return true;
+            }
+            
+            return false;
         }
     }
 }

@@ -126,4 +126,8 @@ public class MatchFacade {
     public boolean finalizeMatch(Long matchId) throws SQLException {
         return matchResultDAO.finalizeMatchResults(matchId);
     }
+
+    public boolean startMatch(Long matchId) throws SQLException, MatchDoesntExistException {
+        return matchManager.startMatch(matchId);
+    }
 }
