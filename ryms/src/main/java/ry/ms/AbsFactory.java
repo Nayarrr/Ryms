@@ -3,6 +3,7 @@ package ry.ms;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
+import ry.ms.persistLogic.product.dao.ProductDAO;
 
 /**
  * Abstract Factory for creating Data Access Object DAO instances.
@@ -30,4 +31,10 @@ public abstract class AbsFactory {
      * @return An implementation of InvitationDAO.
      */
     public abstract InvitationDAO createInvitationDAO();
+
+    /**
+     * Abstract method to create a ProductDAO instance.
+     * @return An implementation of ProductDAO.
+     */
+    public abstract ProductDAO createProductDAO();
 }

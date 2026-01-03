@@ -14,10 +14,22 @@ import java.io.IOException;
 public class MainLayoutController {
 
     @FXML private StackPane contentArea;
+    @FXML private javafx.scene.control.Button productsButton;
     private final TeamController controller = new TeamController();
 
     public void initialize() {
+        applyProductAccess();
         checkUserTeamStatus();
+    }
+
+    private void applyProductAccess() {
+        String role = UserSession.getInstance().getRole();
+        boolean isAdmin = role != null && role.equalsIgnoreCase("ADMIN");
+        if (productsButton != null) {
+            productsButton.setVisible(isAdmin);
+            productsButton.setManaged(isAdmin);
+            productsButton.setDisable(!isAdmin);
+        }
     }
 
     // Décide quelle vue afficher (Création ou Dashboard)
@@ -45,6 +57,11 @@ public class MainLayoutController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void handleOpenProducts() {
+        loadView("/ry/ms/view/product/fxml/ProductDashboard.fxml");
     }
 
     @FXML

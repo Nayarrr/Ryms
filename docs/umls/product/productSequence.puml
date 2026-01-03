@@ -1,0 +1,53 @@
+@startuml
+title Sequence Diagram: Edit Product
+
+participant ProductController
+participant SessionFacade
+participant ProductManager
+participant "AbsFactory" as Factory
+participant "PostgresFactory" as PFactory
+participant ProductPostgres
+participant Database
+
+ProductController -> SessionFacade : editProduct(id, name, price, stock)
+SessionFacade -> ProductManager : editProduct(id, name, price, stock)
+
+' Factory setup (Same pattern as Team)
+ProductManager -> Factory : getFactory(type)
+Factory -> PFactory : create()
+ProductManager <-- PFactory : return PostgresFactory
+ProductManager -> PFactory : createProductDAO()
+PFactory -> ProductPostgres : new ProductPostgres()
+ProductManager <-- PFactory : return ProductDAO
+
+' Logic Start
+ProductManager -> ProductPostgres : getProductById(id)
+ProductPostgres -> Database : SELECT * FROM products WHERE id = ?
+
+alt Product Found (Succès)
+
+    ProductPostgres <-- Database : Product details
+    ProductManager <-- ProductPostgres : Product object
+
+    ' Update logic
+    ProductManager -> ProductManager : update fields (name, price...)
+    ProductManager -> ProductPostgres : updateProduct(updatedProduct)
+    
+    ProductPostgres -> Database : UPDATE products SET name=?, price=?... WHERE id=?
+    ProductPostgres <-- Database : success
+    
+    ProductManager <-- ProductPostgres : void
+    SessionFacade <-- ProductManager : void
+    ProductController <-- SessionFacade : void (Success)
+
+else Product Not Found (Erreur)
+
+    ProductPostgres <-- Database : null
+    ProductManager <-- ProductPostgres : null
+    
+    SessionFacade <-- ProductManager : Throw ProductNotFoundException
+    ProductController <-- SessionFacade : Throw ProductNotFoundException
+
+end
+
+@enduml

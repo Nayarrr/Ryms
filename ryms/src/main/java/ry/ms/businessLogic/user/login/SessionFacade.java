@@ -50,13 +50,11 @@ public class SessionFacade {
      * @throws IncorrectPasswordException if the password does not match.
      * @throws SQLException if a database access error occurs.
      */
+    public User loginUser(String mail, String password) throws UserDoesntExistException, SQLException, IncorrectPasswordException {
+        return userManager.login(mail, password);
+    }
+
     public boolean login(String mail, String password) throws UserDoesntExistException, SQLException, IncorrectPasswordException {
-        User user =  userManager.login(mail, password);
-        if (user != null){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return loginUser(mail, password) != null;
     }
 }

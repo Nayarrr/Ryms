@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="ry.ms.view.product.EditProductController"
+      alignment="CENTER" spacing="12" style="-fx-padding: 24;">
+
+    <Label text="Modifier un produit" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <TextField fx:id="nameField" promptText="Nom" maxWidth="320" />
+    <TextField fx:id="descriptionField" promptText="Description" maxWidth="320" />
+    <TextField fx:id="categoryField" promptText="Catégorie" maxWidth="320" />
+
+    <TextField fx:id="priceField" promptText="Prix" maxWidth="320" />
+    <TextField fx:id="stockField" promptText="Stock" maxWidth="320" />
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Enregistrer" onAction="#handleSave" />
+        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" />
+    </HBox>
+
+    <Label fx:id="errorLabel" textFill="RED" />
+</VBox>
