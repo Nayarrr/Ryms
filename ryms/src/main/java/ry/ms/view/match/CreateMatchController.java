@@ -18,8 +18,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ry.ms.models.Team;
 import ry.ms.models.User;
+import ry.ms.models.team.Team;
 
 public class CreateMatchController {
 
@@ -88,7 +88,7 @@ public class CreateMatchController {
     });
     }
 
-    //En dur pour le moment en attendant le useCase adequat
+    // En dur pour le moment en attendant le useCase adequat
     private void setupGameComboBox() {
         gameComboBox.getItems().addAll(
             "League of Legends",

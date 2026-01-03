@@ -1,4 +1,4 @@
-package ry.ms.models;
+package ry.ms.models.team;
 
 import java.util.ArrayList;
 import java.util.Collections;

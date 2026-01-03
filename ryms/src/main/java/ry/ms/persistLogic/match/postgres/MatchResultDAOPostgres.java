@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ry.ms.models.MatchResult;
-import ry.ms.models.Team;
-import ry.ms.models.TeamResult;
+import ry.ms.models.match.MatchResult;
+import ry.ms.models.match.TeamResult;
+import ry.ms.models.team.Team;
 import ry.ms.persistLogic.DBConfig;
 import ry.ms.persistLogic.match.dao.MatchResultDAO;
 

@@ -30,7 +30,7 @@
         <ListView fx:id="team2ListView" prefHeight="100" visible="false" managed="false"/>
         <Label fx:id="team2SelectedLabel" styleClass="selected-label"/>
     </VBox>
-
+ 
     <VBox spacing="10" styleClass="form-section">
         <Label text="Date et heure du match" styleClass="section-label"/>
         <HBox spacing="10" alignment="CENTER_LEFT">

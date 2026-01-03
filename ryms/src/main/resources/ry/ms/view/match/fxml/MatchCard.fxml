@@ -5,7 +5,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<!-- Carte de match cliquable (Style Dark Esport) -->
+<!-- Carte de match cliquable -->
 <VBox xmlns:fx="http://javafx.com/fxml"
       fx:id="matchCard"
       spacing="12"
@@ -40,8 +40,11 @@
         
         <Region HBox.hgrow="ALWAYS"/>
         
-        <Label fx:id="matchStatusLabel" 
-               text="À VENIR" 
+        <!-- Badge SCHEDULED (Jaune - À VENIR) -->
+        <Label fx:id="statusScheduled" 
+               text="À VENIR"
+               visible="true"
+               managed="true"
                style="-fx-font-size: 12px; 
                       -fx-font-weight: bold; 
                       -fx-text-fill: #ffc857; 
@@ -49,6 +52,36 @@
                       -fx-background-radius: 8; 
                       -fx-padding: 5 15 5 15; 
                       -fx-border-color: #ffc857; 
+                      -fx-border-width: 1; 
+                      -fx-border-radius: 8;"/>
+        
+        <!-- Badge IN_PROGRESS (Rouge - EN COURS) -->
+        <Label fx:id="statusInProgress" 
+               text="🔴 EN COURS"
+               visible="false"
+               managed="false"
+               style="-fx-font-size: 12px; 
+                      -fx-font-weight: bold; 
+                      -fx-text-fill: #ff6b6b; 
+                      -fx-background-color: rgba(255,107,107,0.15); 
+                      -fx-background-radius: 8; 
+                      -fx-padding: 5 15 5 15; 
+                      -fx-border-color: #ff6b6b; 
+                      -fx-border-width: 1; 
+                      -fx-border-radius: 8;"/>
+        
+        <!-- Badge FINISHED (Vert - TERMINÉ) -->
+        <Label fx:id="statusFinished" 
+               text="✅ TERMINÉ"
+               visible="false"
+               managed="false"
+               style="-fx-font-size: 12px; 
+                      -fx-font-weight: bold; 
+                      -fx-text-fill: #4ecca3; 
+                      -fx-background-color: rgba(78,204,163,0.15); 
+                      -fx-background-radius: 8; 
+                      -fx-padding: 5 15 5 15; 
+                      -fx-border-color: #4ecca3; 
                       -fx-border-width: 1; 
                       -fx-border-radius: 8;"/>
         
@@ -146,7 +179,7 @@
         
         <!-- Pour l'instant fix je n'ai pas cela en place, donc full BO1--> 
         <Label fx:id="formatLabel" 
-               text="BO1" 
+               text="BO1"  
                style="-fx-font-size: 11px; 
                       -fx-text-fill: #8b95a5; 
                       -fx-background-color: rgba(139,149,165,0.15); 

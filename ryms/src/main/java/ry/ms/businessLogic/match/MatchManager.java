@@ -7,9 +7,9 @@ import java.util.List;
 import ry.ms.businessLogic.match.exceptions.MatchDoesntExistException;
 import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.models.Match;
-import ry.ms.models.Team;
 import ry.ms.models.User;
+import ry.ms.models.match.Match;
+import ry.ms.models.team.Team;
 import ry.ms.persistLogic.match.dao.MatchDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
@@ -181,11 +181,11 @@ public class MatchManager {
             throw new MatchDoesntExistException("Le match n'existe pas.");
         }
         
-        if (match.getStatus() != ry.ms.models.MatchStatus.SCHEDULED) {
+        if (match.getStatus() != ry.ms.models.match.MatchStatus.SCHEDULED) {
             throw new IllegalStateException("Le match a déjà commencé ou est terminé.");
         }
         
-        return matchDAO.updateMatchStatus(matchId, ry.ms.models.MatchStatus.IN_PROGRESS);
+        return matchDAO.updateMatchStatus(matchId, ry.ms.models.match.MatchStatus.IN_PROGRESS);
     }
 
 

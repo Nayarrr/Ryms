@@ -1,34 +1,43 @@
-package ry.ms.models;
+package ry.ms.models.match;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import ry.ms.models.User;
+import ry.ms.models.team.Team;
+
 public class Match {
     private Long matchId;
-    public List<User> referees;
-    public Date matchDate;
-    public List<Team> teams;
+    private List<User> referees;
+    private Date matchDate;
+    private List<Team> teams;
     protected List<TeamResult> teamResults;
-    public Long gameId;
-    private MatchStatus status;
+    private Long gameId;
+    
+    // Observable property pour le statut
+    private final ObjectProperty<MatchStatus> status = new SimpleObjectProperty<>(MatchStatus.SCHEDULED);
 
     public Match(){
         this.referees = new ArrayList<>();
         this.teams = new ArrayList<>();
         this.teamResults = new ArrayList<>();
-        this.status = MatchStatus.SCHEDULED;
     }
 
-    public Match(Long matchid, Date matchDate, Long gameId, MatchStatus status){
+    public Match(Long matchid, Date matchDate, Long gameId){
         this.matchId = matchid;
         this.matchDate = matchDate;
         this.gameId = gameId;
-        this.status = status;
         this.referees = new ArrayList<>();
         this.teams = new ArrayList<>();
         this.teamResults = new ArrayList<>();
-        this.status = status;
+    }
+
+    public Match(Long matchid, Date matchDate, Long gameId, MatchStatus status){
+        this(matchid, matchDate, gameId);
+        this.status.set(status);
     }
 
     public Long getMatchId(){
@@ -82,11 +91,15 @@ public class Match {
     }
 
     public MatchStatus getStatus() {
-        return this.status;
+        return this.status.get();
     }
 
     public void setStatus(MatchStatus status) {
-        this.status = status;
+        this.status.set(status);
+    }
+    
+    public ObjectProperty<MatchStatus> statusProperty() {
+        return this.status;
     }
 
 }

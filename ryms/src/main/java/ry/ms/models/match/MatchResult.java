@@ -1,4 +1,4 @@
-package ry.ms.models;
+package ry.ms.models.match;
 
 public enum MatchResult {
     WIN,  

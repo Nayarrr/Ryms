@@ -30,7 +30,7 @@
                 style="-fx-background-color: linear-gradient(to bottom right, #4ecca3, #3a9b7f); 
                        -fx-text-fill: white; 
                        -fx-font-size: 15px; 
-                       -fx-font-weight: bold; 
+                       -fx-font-weight: bold;  
                        -fx-padding: 14 28 14 28; 
                        -fx-background-radius: 8; 
                        -fx-cursor: hand; 
@@ -54,8 +54,6 @@
             <padding>
                 <Insets top="15" right="10" bottom="15" left="10"/>
             </padding>
-            
-            <!-- Les cartes seront injectées dynamiquement ici par le Controller -->
         </VBox>
     </ScrollPane>
 </VBox>

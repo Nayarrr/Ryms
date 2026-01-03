@@ -15,11 +15,12 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
-import ry.ms.models.Match;
-import ry.ms.models.MatchStatus;
-import ry.ms.models.Team;
-import ry.ms.models.TeamResult;
+import ry.ms.models.match.Match;
+import ry.ms.models.match.MatchStatus;
+import ry.ms.models.match.TeamResult;
+import ry.ms.models.team.Team;
 import ry.ms.view.main.MainLayoutController;
+import ry.ms.view.match.matchDetail.MatchDetailsController;
 import ry.ms.view.user.UserSession;
 
 public class MatchListViewController {
@@ -30,8 +31,8 @@ public class MatchListViewController {
     private MatchController matchController;
     private String currentUserEmail;
     
-    // 🎨 Logo par défaut
-    private static final String DEFAULT_LOGO_URL = "https://cibe.fr/wp-content/uploads/2017/01/logo-google.png";
+    // Logo par défaut
+    private static final String DEFAULT_LOGO_URL = "https://i.imgur.com/BMRAx9w.png";
     private Image defaultLogoImage;
 
     @FXML
@@ -68,9 +69,15 @@ public class MatchListViewController {
             return;
         }
 
+        // UTILISER LE CACHE pour partager les mêmes instances
+        MatchCache cache = MatchCache.getInstance();
+        
         // Générer une carte pour chaque match
         for (Match match : matches) {
-            VBox matchCard = createMatchCard(match);
+            // Récupérer l'instance cachée (ou l'ajouter)
+            Match cachedMatch = cache.getOrPut(match);
+            
+            VBox matchCard = createMatchCard(cachedMatch);
             if (matchCard != null) {
                 matchesContainer.getChildren().add(matchCard);
             }
@@ -88,7 +95,11 @@ public class MatchListViewController {
             // Récupérer tous les éléments du template
             Label matchTimeLabel = (Label) card.lookup("#matchTimeLabel");
             Label matchDateLabel = (Label) card.lookup("#matchDateLabel");
-            Label matchStatusLabel = (Label) card.lookup("#matchStatusLabel");
+            
+            // Labels de statut (au lieu d'un seul)
+            Label statusScheduled = (Label) card.lookup("#statusScheduled");
+            Label statusInProgress = (Label) card.lookup("#statusInProgress");
+            Label statusFinished = (Label) card.lookup("#statusFinished");
             
             ImageView team1Logo = (ImageView) card.lookup("#team1Logo");
             Label team1NameLabel = (Label) card.lookup("#team1NameLabel");
@@ -121,72 +132,15 @@ public class MatchListViewController {
             populateTeamInfo(team1, team1Logo, team1NameLabel, team1TagLabel);
             populateTeamInfo(team2, team2Logo, team2NameLabel, team2TagLabel);
 
-            // STATUS DU MATCH
-            MatchStatus status = match.getStatus();
-            
-            if (null == status) {
-                // SCHEDULED par défaut
-                matchStatusLabel.setText("📅 À VENIR");
-                matchStatusLabel.setStyle(
-                        "-fx-font-size: 12px; " +
-                                "-fx-font-weight: bold; " +
-                                "-fx-text-fill: #ffc857; " +
-                                "-fx-background-color: rgba(255,200,87,0.15); " +
-                                "-fx-background-radius: 8; " +
-                                "-fx-padding: 5 15 5 15; " +
-                                "-fx-border-color: #ffc857; " +
-                                "-fx-border-width: 1; " +
-                                "-fx-border-radius: 8;"
-                );
-            } else switch (status) {
-                case IN_PROGRESS:
-                    matchStatusLabel.setText("🔴 EN COURS");
-                    matchStatusLabel.setStyle(
-                            "-fx-font-size: 12px; " +
-                                    "-fx-font-weight: bold; " +
-                                    "-fx-text-fill: #ff6b6b; " +
-                                    "-fx-background-color: rgba(255,107,107,0.15); " +
-                                    "-fx-background-radius: 8; " +
-                                    "-fx-padding: 5 15 5 15; " +
-                                    "-fx-border-color: #ff6b6b; " +
-                                    "-fx-border-width: 1; " +
-                                    "-fx-border-radius: 8;"
-                    );  break;
-                case FINISHED:
-                    matchStatusLabel.setText("✅ TERMINÉ");
-                    matchStatusLabel.setStyle(
-                            "-fx-font-size: 12px; " +
-                                    "-fx-font-weight: bold; " +
-                                    "-fx-text-fill: #4ecca3; " +
-                                    "-fx-background-color: rgba(78,204,163,0.15); " +
-                                    "-fx-background-radius: 8; " +
-                                    "-fx-padding: 5 15 5 15; " +
-                                    "-fx-border-color: #4ecca3; " +
-                                    "-fx-border-width: 1; " +
-                                    "-fx-border-radius: 8;"
-                    );  break;
-                default:
-                    // SCHEDULED par défaut
-                    matchStatusLabel.setText("📅 À VENIR");
-                    matchStatusLabel.setStyle(
-                            "-fx-font-size: 12px; " +
-                                    "-fx-font-weight: bold; " +
-                                    "-fx-text-fill: #ffc857; " +
-                                    "-fx-background-color: rgba(255,200,87,0.15); " +
-                                    "-fx-background-radius: 8; " +
-                                    "-fx-padding: 5 15 5 15; " +
-                                    "-fx-border-color: #ffc857; " +
-                                    "-fx-border-width: 1; " +
-                                    "-fx-border-radius: 8;"
-                    );  break;
-            }
+            // Gérer la visibilité des badges selon le statut
+            bindMatchStatusVisibility(match, statusScheduled, statusInProgress, statusFinished);
 
             // SCORES (affichés uniquement si EN COURS ou TERMINÉ)
+            MatchStatus status = match.getStatus();
             List<TeamResult> results = matchController.getMatchResults(match.getMatchId());
             
             if (results != null && !results.isEmpty() && 
-                (status == MatchStatus.IN_PROGRESS || 
-                status == MatchStatus.FINISHED)) {
+                (status == MatchStatus.IN_PROGRESS || status == MatchStatus.FINISHED)) {
                 
                 int score1 = results.size() > 0 ? results.get(0).getScore() : 0;
                 int score2 = results.size() > 1 ? results.get(1).getScore() : 0;
@@ -222,8 +176,54 @@ public class MatchListViewController {
 
         } catch (IOException e) {
             System.err.println("❌ Erreur lors de la création de la carte : " + e.getMessage());
-            e.printStackTrace();
             return null;
+        }
+    }
+
+    /**
+     * Affiche/masque automatiquement le bon badge selon le statut
+     */
+    private void bindMatchStatusVisibility(Match match, Label statusScheduled, Label statusInProgress, Label statusFinished) {
+        // Listener qui observe les changements de statut
+        match.statusProperty().addListener((observable, oldStatus, newStatus) -> {
+            updateStatusVisibility(newStatus, statusScheduled, statusInProgress, statusFinished);
+        });
+
+        // Initialiser avec le statut actuel
+        updateStatusVisibility(match.getStatus(), statusScheduled, statusInProgress, statusFinished);
+    }
+
+    /**
+     *  Affiche uniquement le bon badge
+     */
+    private void updateStatusVisibility(MatchStatus status, Label statusScheduled, Label statusInProgress, Label statusFinished) {
+        // Masquer tous les badges
+        statusScheduled.setVisible(false);
+        statusScheduled.setManaged(false);
+        statusInProgress.setVisible(false);
+        statusInProgress.setManaged(false);
+        statusFinished.setVisible(false);
+        statusFinished.setManaged(false);
+
+        // Afficher le bon badge selon le statut
+        if (status == null || status == MatchStatus.SCHEDULED) {
+            statusScheduled.setVisible(true);
+            statusScheduled.setManaged(true);
+        } else {
+            switch (status) {
+                case IN_PROGRESS -> {
+                    statusInProgress.setVisible(true);
+                    statusInProgress.setManaged(true);
+                }
+                case FINISHED -> {
+                    statusFinished.setVisible(true);
+                    statusFinished.setManaged(true);
+                }
+                default -> {
+                    statusScheduled.setVisible(true);
+                    statusScheduled.setManaged(true);
+                }
+            }
         }
     }
 

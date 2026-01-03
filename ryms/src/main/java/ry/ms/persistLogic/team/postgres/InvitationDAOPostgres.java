@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ry.ms.models.Invitation;
-import ry.ms.models.InvitationStatus;
+import ry.ms.models.team.Invitation;
+import ry.ms.models.team.InvitationStatus;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.DBConfig;
 

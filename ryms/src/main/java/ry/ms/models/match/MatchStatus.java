@@ -1,4 +1,4 @@
-package ry.ms.models;
+package ry.ms.models.match;
 
 /**
  * Statut d'un match dans le système

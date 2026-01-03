@@ -3,8 +3,8 @@ package ry.ms.persistLogic.team.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import ry.ms.models.Invitation;
-import ry.ms.models.InvitationStatus;
+import ry.ms.models.team.Invitation;
+import ry.ms.models.team.InvitationStatus;
 
 public interface InvitationDAO {
 

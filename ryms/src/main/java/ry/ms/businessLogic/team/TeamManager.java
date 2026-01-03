@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Objects;
 
 import ry.ms.AbsFactory;
-import ry.ms.models.Invitation;
-import ry.ms.models.InvitationStatus;
-import ry.ms.models.Team;
+import ry.ms.models.team.Invitation;
+import ry.ms.models.team.InvitationStatus;
+import ry.ms.models.team.Team;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;

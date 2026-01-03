@@ -3,7 +3,7 @@ package ry.ms.persistLogic.match.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import ry.ms.models.TeamResult;
+import ry.ms.models.match.TeamResult;
 
 /**
  * Interface DAO pour la gestion des résultats de matchs

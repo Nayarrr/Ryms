@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Objects;
 
 import ry.ms.businessLogic.team.TeamFacade;
-import ry.ms.models.Invitation;
-import ry.ms.models.Team;
+import ry.ms.models.team.Invitation;
+import ry.ms.models.team.Team;
 
 public class TeamController {
 

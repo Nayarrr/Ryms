@@ -7,7 +7,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ry.ms.models.Team;
+import ry.ms.models.team.Team;
 import ry.ms.view.user.UserSession;
 
 import java.util.ArrayList;

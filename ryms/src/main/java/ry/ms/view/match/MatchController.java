@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,10 +22,10 @@ import ry.ms.businessLogic.match.exceptions.MatchDoesntExistException;
 import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
 import ry.ms.businessLogic.team.TeamFacade;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.models.Match;
-import ry.ms.models.Team;
-import ry.ms.models.TeamResult;
 import ry.ms.models.User;
+import ry.ms.models.match.Match;
+import ry.ms.models.match.TeamResult;
+import ry.ms.models.team.Team;
 
 public class MatchController {
 
@@ -431,7 +432,7 @@ public class MatchController {
     /**
      * Crée un bouton avec un texte et une action associée
      */
-    private Button createButton(String text, javafx.event.EventHandler<javafx.event.ActionEvent> action) {
+    private Button createButton(String text, EventHandler<javafx.event.ActionEvent> action) {
         Button button = new Button(text);
         button.setOnAction(action);
         return button;
@@ -492,9 +493,6 @@ public class MatchController {
         );
     }
     
-    /**
-     * Interface fonctionnelle pour gérer les exceptions dans les lambdas
-     */
     //Interface avec une seule méthode abstraite (utilisable dans les lambdas) pour eviter les duplications de catch, message label, etc etc
     @FunctionalInterface
     private interface SupplierWithException<T> {
