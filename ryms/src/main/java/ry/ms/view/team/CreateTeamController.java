@@ -1,11 +1,9 @@
 package ry.ms.view.team;
 
-import java.io.IOException;
-
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
+import ry.ms.view.user.UserSession;
 
 public class CreateTeamController {
 
@@ -15,27 +13,70 @@ public class CreateTeamController {
     @FXML private Label errorLabel;
 
     private final TeamController teamController = new TeamController();
+    private Runnable onTeamCreated;
+
+    /**
+     * Callback à exécuter après création réussie
+     */
+    public void setOnTeamCreated(Runnable callback) {
+        this.onTeamCreated = callback;
+    }
 
     @FXML
     private void handleCreateTeam() {
         String name = nameField.getText();
         String tag = tagField.getText();
         String avatar = avatarField.getText();
+
+        // Validations
+        if (name == null || name.trim().isEmpty()) {
+            errorLabel.setText("Le nom de l'équipe est obligatoire.");
+            return;
+        }
+
+        if (tag == null || tag.trim().isEmpty()) {
+            errorLabel.setText("Le tag de l'équipe est obligatoire.");
+            return;
+        }
+
+        if (tag.length() < 3 || tag.length() > 5) {
+            errorLabel.setText("Le tag doit contenir entre 3 et 5 caractères.");
+            return;
+        }
+
+        // Avatar par défaut si vide
+        if (avatar == null || avatar.trim().isEmpty()) {
+            avatar = "/images/default-team-avatar.png";
+        }
+
         String userEmail = UserSession.getInstance().getUserEmail();
+        if (userEmail == null) {
+            errorLabel.setText("Erreur : utilisateur non connecté.");
+            return;
+        }
 
         try {
-            teamController.createTeam(name, tag, avatar, userEmail);
-            var scene = nameField.getScene();
-            if (scene != null) {
-                try {
-                    Parent root = FXMLLoader.load(getClass().getResource("/ry/ms/view/team/fxml/MainLayout.fxml"));
-                    scene.setRoot(root);
-                } catch (IOException ioEx) {
-                    errorLabel.setText("Erreur : " + ioEx.getMessage());
-                }
+            // Créer l'équipe
+            teamController.createTeam(name.trim(), tag.trim().toUpperCase(), avatar.trim(), userEmail);
+
+            // Afficher confirmation
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Succès");
+            alert.setHeaderText("Équipe créée !");
+            alert.setContentText("L'équipe " + name + " [" + tag.toUpperCase() + "] a été créée avec succès.");
+            alert.showAndWait();
+
+            // Callback pour rafraîchir la liste
+            if (onTeamCreated != null) {
+                onTeamCreated.run();
             }
 
+            // Fermer la modale
+            Stage stage = (Stage) nameField.getScene().getWindow();
+            stage.close();
+
         } catch (Exception e) {
+            e.printStackTrace();
             errorLabel.setText("Erreur : " + e.getMessage());
         }
     }

@@ -2,7 +2,8 @@ package ry.ms.view.team;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import ry.ms.businessLogic.team.models.Invitation;
+import ry.ms.models.Invitation;
+import ry.ms.view.user.UserSession;
 
 import java.util.List;
 

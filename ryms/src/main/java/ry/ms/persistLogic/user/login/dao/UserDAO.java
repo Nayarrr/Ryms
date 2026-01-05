@@ -3,7 +3,9 @@ package ry.ms.persistLogic.user.login.dao;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import ry.ms.businessLogic.user.login.models.User;
+import java.util.List;
+
+import ry.ms.models.User;
 
 /**
  * Abstract Data Access Object (DAO) for User entities.
@@ -30,4 +32,6 @@ public abstract class UserDAO {
      * @throws SQLException if a database access error occurs.
      */
     public abstract User getUserById(String email) throws SQLException;
+
+    public abstract List<User> getAllUsers() throws SQLException;
 }

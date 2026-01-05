@@ -1,9 +1,9 @@
 package ry.ms;
-
-import ry.ms.persistLogic.user.login.dao.UserDAO;
+import ry.ms.persistLogic.match.dao.MatchDAO;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.product.dao.ProductDAO;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
  * Abstract Factory for creating Data Access Object DAO instances.
@@ -11,12 +11,26 @@ import ry.ms.persistLogic.product.dao.ProductDAO;
  */
 public abstract class AbsFactory {
 
+    private static AbsFactory absFactory;
+
+    public static AbsFactory getInstance(){
+        if(absFactory == null){
+            return new PostgresFactory();
+        }
+        else{
+            return absFactory;
+        }
+    }
+    
     /**
      * Abstract method to create a UserDAO instance.
      * Subclasses will provide the specific implementation for a database.
      * @return An implementation of UserDAO.
      */
     public abstract UserDAO createUserDAO();
+
+    public abstract MatchDAO createMatchDAO();
+
 
     /**
      * Abstract method to create a TeamDAO instance.

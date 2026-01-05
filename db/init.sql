@@ -52,3 +52,27 @@ INSERT INTO users (email, username, password) VALUES
 
 ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'USER';
 UPDATE users SET role = 'ADMIN' WHERE email = 'admin@ryms.com';
+('test@ryms.com', 'testuser', 'password_456'),
+('ra@ryms.com', 'randomuser', 'password_789');
+
+CREATE TABLE IF NOT EXISTS matchs(
+    match_id SERIAL PRIMARY KEY,
+    match_date TIMESTAMP NOT NULL,
+    game_id INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS match_referees(
+    match_id INTEGER NOT NULL,
+    referee_email VARCHAR(100) NOT NULL,
+    PRIMARY KEY (match_id, referee_email),
+    FOREIGN KEY (match_id) REFERENCES matchs(match_id) ON DELETE CASCADE,
+    FOREIGN KEY (referee_email) REFERENCES users(email) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS match_teams (
+    match_id BIGINT NOT NULL,
+    team_id BIGINT NOT NULL,
+    PRIMARY KEY (match_id, team_id),
+    FOREIGN KEY (match_id) REFERENCES matchs(match_id) ON DELETE CASCADE,
+    FOREIGN KEY (team_id) REFERENCES teams(team_id) ON DELETE CASCADE
+);

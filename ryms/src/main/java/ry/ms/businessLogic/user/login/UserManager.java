@@ -3,7 +3,7 @@ import java.sql.SQLException;
 
 import ry.ms.businessLogic.user.login.exceptions.IncorrectPasswordException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.models.User;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
@@ -39,7 +39,8 @@ public class UserManager {
                 throw new IncorrectPasswordException("Incorrect Password");
             }
             return user;
-        } catch (UserDoesntExistException e) {
+        } 
+        catch (UserDoesntExistException e) {
             throw new UserDoesntExistException("User does not exist.");
         }
         catch (IncorrectPasswordException pass){

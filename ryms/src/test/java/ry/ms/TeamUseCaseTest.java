@@ -3,9 +3,8 @@ package ry.ms;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import ry.ms.businessLogic.team.models.Invitation;
-import ry.ms.businessLogic.team.models.Team;
+import ry.ms.models.Invitation;
+import ry.ms.models.Team;
 import ry.ms.persistLogic.DBConfig;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.postgres.InvitationDAOPostgres;

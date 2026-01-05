@@ -1,0 +1,402 @@
+@startuml
+' --- CONFIGURATION VISUELLE ---
+' skinparam style strict
+' skinparam class {
+'   BackgroundColor White
+'   BorderColor Black
+' }
+
+' ==================================================================================
+' 1. DOMAINE : UTILISATEURS & RÔLES
+' ==================================================================================
+' CLASSES
+class User {
+    - name: String
+    - email: String
+    - password: String
+    - avatar : Image
+    - favTeams: List<Team>
+    - roles: List<Role>
+    - invitations: List<Invitation>
+}
+
+abstract class Role {
+}
+
+class Admin {
+    - name: String
+    - email: String
+    - password: String
+    - avatar : Image
+}
+
+class Player extends Role {
+    - teams: List<Team>
+    __
+    + getTeams(): List<Team>
+    + setTeams(teams: List<Team>): void
+}
+
+class Organizer extends Role {
+    - tournamentsOrganized: List<Tournament>
+}
+
+class Coach extends Role {
+    - teams: List<Team>
+    __
+    + getTeams(): List<Team>
+    + setTeams(teams: List<Team>): void
+}
+
+' RELATIONS
+User *-- "0..*" Role : roles >
+User *-- "0..*" Team : favTeams >
+Organizer *-- "0..*" Tournament : tournamentsOrganized >
+
+' ==================================================================================
+' 2. DOMAINE : ÉQUIPES, JOUEURS & STATISTIQUES
+' ==================================================================================
+' CLASSES
+class Team {
+    - name: String
+    - avatar: Image
+    - tag: String
+}
+
+class Statistics {
+    - totalGamesPlayed: Integer 
+    - wins: Integer 
+    - losses: Integer 
+    - draws: Integer
+}
+
+' RELATIONS
+Team "1..*" o-down- Player : < members
+Team "1" -down-> "0..1" Coach : coached by >
+Team "1" -down-> "1" Player : captain >
+Statistics "1" -left- "1" Player
+
+' ==================================================================================
+' 3. DOMAINE : JEUX & CATALOGUES
+' ==================================================================================
+' CLASSES
+class Game {
+    - name: String
+    - editor: String
+    - releaseDate: Date
+    - banner: Image
+}
+
+class GameCatalog {
+    - gameList: Game[]
+}
+
+' RELATIONS
+GameCatalog "1" *-down- "*" Game
+
+' ==================================================================================
+' 4. DOMAINE : TOURNOIS & STRUCTURE (Matchs, Phases)
+' ==================================================================================
+' ENUMERATIONS
+enum TournamentStatus {
+    PLANNING
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+}
+
+enum BracketType {
+    SingleElim
+    DoubleElim
+}
+
+enum SideEnum {
+    Winners
+    Losers
+    GrandFinal
+}
+
+enum MatchResult {
+    WIN
+    LOSS
+    DRAW
+}
+
+' CLASSES
+class Tournament {
+    - name: String
+    - game: List<GameCatalog>
+    - location: String
+    - dates: DateRange
+    - stages: List<Stage>    
+    - maxTeams: int
+    - teams: List<Team> 
+    - status: TournamentStatus
+}
+
+abstract class Stage {
+    - name: String (ex: "Group Stage", "Playoffs")
+    - order: int
+}
+
+class GroupStage extends Stage {
+    - groups: List<Group>
+    - scoringSystem: Enum
+}
+
+class BracketStage extends Stage {
+    - type: BracketType (SingleElim, DoubleElim)
+    - rounds: List<Round>
+}
+
+class Group {
+    - name: String (ex: "Group A")
+    - teams: List<Team>
+    - matches: List<Match>
+    - results: Map<Team, Integer>      (ex: points or wins)
+}
+
+class Round {
+    - name: String (ex: "Quarter Finals", "Lower Bracket R1")
+    - order: int
+    - matches: List<Match>
+    - bracketSide: SideEnum (Winners, Losers, GrandFinal)
+    - bestOf: int
+}
+
+class Match {
+    - Referees: String[]
+    - matchDate: Date
+}
+
+class TeamResult {
+    - score: Integer
+    - status: MatchResult
+}
+
+' RELATIONS
+Tournament *-- "1..*" Stage : contains >
+Tournament *-- "1..*" GameCatalog : contains >
+TournamentStatus -- Tournament
+
+GroupStage *-- "1..*" Group
+BracketStage *-- "1..*" Round
+
+Group o-- "0..*" Match : organizes >
+Round o-- "0..*" Match : organizes >
+Group o-- "4..*" Team
+
+Game "1" --down- "*" Match
+Match "1" *--down- "2" TeamResult : details >
+TeamResult "*" -right-> "1" Team : for >
+MatchResult -- TeamResult
+
+' ==================================================================================
+' 5. DOMAINE : NOTIFICATIONS
+' ==================================================================================
+' ENUMERATIONS
+enum Action{
+    Accept
+    Decline
+}
+enum TypeOfNotification{
+    Game_Catalog
+    Player_Profile
+    Team 
+    Match 
+    Basket 
+    Tournament
+}
+
+' CLASSES
+class Notification{
+    - sender : String
+    - title : TypeOfNotification
+    - message : String
+    - timestamp : Date
+    - readStatus : Boolean
+    - recipient : User
+}
+
+class NotificationWithAction extends Notification{
+    - action : Action
+}
+
+' RELATIONS
+Notification --> User : recipient
+NotificationWithAction --> Action : action
+Notification --> TypeOfNotification : title
+
+
+' ==================================================================================
+' 6. DOMAINE : PRODUIT & CATALOGUE (RÉORGANISÉ)
+' ==================================================================================
+' ENUMERATIONS
+enum PublicacyStatus {
+    ENABLED
+    DISABLED
+}
+
+' CLASSES
+class Product {
+    Long productId
+    String name
+    Category[] categories
+    String description 
+    Double price 
+    Integer stock
+    PublicacyStatus status
+}
+
+class Category {
+    categoryId: int
+    categoryDescription: string
+    categoryLabel: string
+}
+
+class ProductCatalog {
+    Long catalogId
+    Product[] products 
+}
+
+class Offer {
+    offerId: int
+    description: string
+}
+
+' RELATIONS
+PublicacyStatus -up- Product
+Product -down- Category
+ProductCatalog -up- Product 
+Offer -up- Product
+
+' ==================================================================================
+' 7. DOMAINE : PANIER (BASKET DOMAIN - CONSERVÉ)
+' ==================================================================================
+' ENUMERATIONS
+enum BasketStatus {
+    ACTIVE
+    EMPTY
+    SAVED
+}
+
+' CLASSES
+class Basket {
+    basketId: int
+    BasketStatus status
+    BasketItem[] products
+    ---
+    getProducts()
+    addToBasket()
+}
+
+class BasketItem {
+    basketItemId: int
+    quantity: int
+    Product product
+}
+
+' RELATIONS
+Basket "1" -- "0..*" BasketItem
+BasketItem "1" -- "1" Product
+BasketStatus -- Basket
+
+' ==================================================================================
+' 8. DOMAINE : COMMANDE (ORDER DOMAIN - CONSERVÉ)
+' ==================================================================================
+' ENUMERATIONS
+enum OrderStatus {
+    ACTIVE
+    COMPLETED
+    CANCELLED
+}
+
+' CLASSES
+class Order {
+    Long orderId
+    OrderItem[] products
+    OrderStatus orderStatus
+}
+
+class OrderItem {
+    orderItemId: int
+    quantity: int
+    Product product
+}
+
+' RELATIONS
+Order "1" -- "0..*" OrderItem
+OrderItem "1" -- "1" Product
+OrderStatus -right- Order
+
+' ==================================================================================
+' 9. DOMAINE : PAIEMENT (PAYMENT DOMAIN - CONSERVÉ)
+' ==================================================================================
+' ENUMERATIONS
+enum PaymentType {
+    CREDIT_CARD
+    DEBIT_CARD
+    PAYPAL
+    BANK_TRANSFER
+}
+
+enum PaymentStatus {
+    PENDING
+    CONFIRMED
+    DECLINED
+}
+
+' CLASSES
+class PromoCode {
+    String code
+    Double discountValue
+    Date expiryDate
+    Boolean isValid
+}
+
+class PaymentMethod {
+    Long methodId
+    PaymentType type
+    String details
+}
+
+class PaymentTransaction {
+    Long transactionId
+    Double amount
+    PromoCode promoCode
+    PaymentStatus status
+    Date timestamp
+    PaymentMethod method
+}
+
+class Receipt {
+    Long receiptId
+    PaymentTransaction transaction
+    Date issuedDate
+    String details
+}
+
+class PaymentGateway {
+    Int gatewayId
+    String providerName
+    String APIEndpoint
+}
+
+' RELATIONS
+PaymentTransaction "0..1" -- "1" PromoCode
+PaymentTransaction "1" -- "1" PaymentMethod
+PaymentTransaction "1" -- "1" Receipt
+PaymentTransaction "1" -- "1" PaymentGateway
+PaymentType -- PaymentMethod
+PaymentStatus -- PaymentTransaction
+
+
+' ==================================================================================
+' 10. RELATIONS TRANSVERSALES (CROSS-DOMAIN RELATIONSHIPS - CONSERVÉES)
+' ==================================================================================
+User "1" --right-- "0..1" Basket
+Basket "0..1" -down-* "1" Order
+Order "0..n" -up- "1" User
+Order "1" -down- "1" PaymentTransaction
+
+@enduml

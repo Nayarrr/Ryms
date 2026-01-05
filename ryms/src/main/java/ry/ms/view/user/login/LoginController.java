@@ -42,7 +42,6 @@ public class LoginController {
                 passField.clear(); // Sécurité : on efface le mot de passe incorrect
                 return false;
             }
-
         } catch (Exception e) {
             e.printStackTrace();
             messageLabel.setText("Erreur de connexion serveur.");

@@ -1,4 +1,4 @@
-package ry.ms.businessLogic.team.models;
+package ry.ms.models;
 
 public enum InvitationStatus {
     PENDING,

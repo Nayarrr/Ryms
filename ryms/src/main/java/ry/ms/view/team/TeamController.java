@@ -4,19 +4,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
-import ry.ms.businessLogic.team.SessionFacade;
-import ry.ms.businessLogic.team.models.Invitation;
-import ry.ms.businessLogic.team.models.Team;
+import ry.ms.businessLogic.team.TeamFacade;
+import ry.ms.models.Invitation;
+import ry.ms.models.Team;
 
 public class TeamController {
 
-    private final SessionFacade sessionFacade;
+    private final TeamFacade sessionFacade;
 
     public TeamController() {
-        this(SessionFacade.getInstance());
+        this(TeamFacade.getInstance());
     }
 
-    public TeamController(SessionFacade sessionFacade) {
+    public TeamController(TeamFacade sessionFacade) {
         this.sessionFacade = Objects.requireNonNull(sessionFacade);
     }
 

@@ -4,24 +4,23 @@ import java.sql.SQLException;
 import java.util.List;
 
 import ry.ms.AbsFactory;
-import ry.ms.PostgresFactory;
-import ry.ms.businessLogic.team.models.Invitation;
-import ry.ms.businessLogic.team.models.Team;
+import ry.ms.models.Invitation;
+import ry.ms.models.Team;
 
-public final class SessionFacade {
+public final class TeamFacade {
 
-    private static SessionFacade instance;
+    private static TeamFacade instance;
 
     private final TeamManager teamManager;
 
-    private SessionFacade() {
-        AbsFactory factory = new PostgresFactory();
+    private TeamFacade() {
+        AbsFactory factory = AbsFactory.getInstance();
         this.teamManager = new TeamManager(factory);
     }
 
-    public static synchronized SessionFacade getInstance() {
+    public static synchronized TeamFacade getInstance() {
         if (instance == null) {
-            instance = new SessionFacade();
+            instance = new TeamFacade();
         }
         return instance;
     }
@@ -64,5 +63,13 @@ public final class SessionFacade {
 
     public List<Invitation> getMyInvitations(String userEmail) throws SQLException {
         return teamManager.getMyInvitations(userEmail);
+    }
+
+    public List<Team> getAllTeams() throws SQLException {
+        return teamManager.getAllTeams();
+    }
+
+    public List<Team> searchTeamsByName(String searchTerm) throws SQLException {
+        return teamManager.searchTeamsByName(searchTerm);
     }
 }

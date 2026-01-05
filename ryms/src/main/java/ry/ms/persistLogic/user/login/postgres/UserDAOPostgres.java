@@ -1,14 +1,15 @@
 package ry.ms.persistLogic.user.login.postgres;
 
-import ry.ms.businessLogic.user.login.models.User;
-import ry.ms.persistLogic.user.login.dao.UserDAO;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+import ry.ms.models.User;
 import ry.ms.persistLogic.DBConfig;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
  * PostgreSQL implementation of the UserDAO.
@@ -16,6 +17,10 @@ import ry.ms.persistLogic.DBConfig;
  * for a PostgreSQL database.
  */
 public class UserDAOPostgres extends UserDAO {
+
+    public static Connection getConnection() throws SQLException {
+        return DBConfig.getConnection();
+    }
 
     /**
      * Constructs a UserPostgres DAO with the given database connection.
@@ -61,5 +66,27 @@ public class UserDAOPostgres extends UserDAO {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<User> getAllUsers() throws SQLException {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT email, username, password, avatar FROM users ORDER BY username";
+        
+        try (PreparedStatement stmt = this.conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                User user = new User(
+                    rs.getString("email"),
+                    rs.getString("username"),
+                    rs.getString("password"),
+                    rs.getBytes("avatar")
+                );
+                users.add(user);
+            }
+        }
+        
+        return users;
     }
 }

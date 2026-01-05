@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Objects;
 
 import ry.ms.AbsFactory;
-import ry.ms.businessLogic.team.models.Invitation;
-import ry.ms.businessLogic.team.models.InvitationStatus;
-import ry.ms.businessLogic.team.models.Team;
+import ry.ms.models.Invitation;
+import ry.ms.models.InvitationStatus;
+import ry.ms.models.Team;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
@@ -192,5 +192,19 @@ public class TeamManager {
         if (captainEmail == null || captainEmail.trim().isEmpty()) {
             throw new IllegalArgumentException("Captain email is required.");
         }
+    }
+
+    public List<Team> getAllTeams() throws SQLException {
+        List<Team> teams = teamDAO.getAllTeams();
+
+        if(teams == null){
+            throw new IllegalArgumentException("No team found.");
+        }
+
+        return teams;
+    }
+
+    public List<Team> searchTeamsByName(String searchTerm) throws SQLException {
+        return teamDAO.searchTeamsByName(searchTerm);
     }
 }

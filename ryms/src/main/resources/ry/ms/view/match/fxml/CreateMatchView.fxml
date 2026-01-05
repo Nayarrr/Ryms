@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="ry.ms.view.match.CreateMatchController"
+      spacing="20" styleClass="create-match-container">
+    
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="Créer un nouveau match" styleClass="title"/>
+
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Équipe 1" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="team1SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
+        </HBox>
+        <ListView fx:id="team1ListView" prefHeight="100" visible="false" managed="false"/>
+        <Label fx:id="team1SelectedLabel" styleClass="selected-label"/>
+    </VBox>
+
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Équipe 2" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="team2SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
+        </HBox>
+        <ListView fx:id="team2ListView" prefHeight="100" visible="false" managed="false"/>
+        <Label fx:id="team2SelectedLabel" styleClass="selected-label"/>
+    </VBox>
+
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Date et heure du match" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <DatePicker fx:id="matchDatePicker" promptText="Sélectionner la date" prefWidth="200"/>
+            <TextField fx:id="matchHourField" promptText="HH" prefWidth="60" maxWidth="60"/>
+            <Label text=":"/>
+            <TextField fx:id="matchMinuteField" promptText="MM" prefWidth="60" maxWidth="60"/>
+            <Label text="(format 24h)" styleClass="hint-label"/>
+        </HBox>
+    </VBox>
+
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Jeu" styleClass="section-label"/>
+        <ComboBox fx:id="gameComboBox" promptText="Sélectionner un jeu" prefWidth="300"/>
+    </VBox>
+
+    <VBox spacing="10" styleClass="form-section">
+        <Label text="Arbitre(s)" styleClass="section-label"/>
+        <HBox spacing="10" alignment="CENTER_LEFT">
+            <TextField fx:id="refereeSearchField" promptText="Rechercher un arbitre par email..." prefWidth="300"/>
+        </HBox>
+        <ListView fx:id="refereeListView" prefHeight="100" visible="false" managed="false"/>
+        <VBox fx:id="selectedRefereesContainer" spacing="5"/>
+    </VBox>
+
+    <HBox spacing="15" alignment="CENTER">
+        <Button fx:id="createButton" text="Créer le match" styleClass="primary-button" onAction="#handleCreateMatch"/>
+        <Button text="Annuler" styleClass="secondary-button" onAction="#handleCancel"/>
+    </HBox>
+
+    <Label fx:id="messageLabel" styleClass="message-label"/>
+</VBox>
