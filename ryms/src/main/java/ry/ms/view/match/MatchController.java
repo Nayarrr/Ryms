@@ -20,12 +20,12 @@ import javafx.stage.Stage;
 import ry.ms.businessLogic.match.MatchFacade;
 import ry.ms.businessLogic.match.exceptions.MatchDoesntExistException;
 import ry.ms.businessLogic.match.exceptions.TeamDoesntExistException;
+import ry.ms.businessLogic.match.models.Match;
+import ry.ms.businessLogic.match.models.TeamResult;
 import ry.ms.businessLogic.team.TeamFacade;
+import ry.ms.businessLogic.team.models.Team;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.models.User;
-import ry.ms.models.match.Match;
-import ry.ms.models.match.TeamResult;
-import ry.ms.models.team.Team;
+import ry.ms.businessLogic.user.models.User;
 
 public class MatchController {
 

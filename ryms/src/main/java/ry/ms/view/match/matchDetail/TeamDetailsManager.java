@@ -5,8 +5,8 @@ import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import ry.ms.models.User;
-import ry.ms.models.team.Team;
+import ry.ms.businessLogic.team.models.Team;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.view.match.MatchController;
 
 /**

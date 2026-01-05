@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS invitations (
 INSERT INTO users (email, username, password) VALUES
 ('admin@ryms.com', 'admin', 'password_123'),
 ('test@ryms.com', 'testuser', 'password_456'),
-('ra@ryms.com', 'randomuser', 'password_789');
+('raja@ryms.com', 'randomuser', 'password_789');
 
 INSERT INTO teams (team_id, name, tag, avatar, captain_email) VALUES
 (1, 'GentleMates', 'M16','https://liquipedia.net/commons/images/thumb/c/c0/Gentle_Mates_2024_lightmode.png/600px-Gentle_Mates_2024_lightmode.png', 'admin@ryms.com'),

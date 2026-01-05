@@ -1,6 +1,6 @@
-package ry.ms.models.match;
+package ry.ms.businessLogic.match.models;
 
-import ry.ms.models.team.Team;
+import ry.ms.businessLogic.team.models.Team;
 
 public class TeamResult {
     int score;
