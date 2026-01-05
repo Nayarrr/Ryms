@@ -6,6 +6,8 @@ import ry.ms.persistLogic.match.dao.MatchDAO;
 import ry.ms.persistLogic.match.dao.MatchResultDAO;
 import ry.ms.persistLogic.match.postgres.MatchDAOPostgres;
 import ry.ms.persistLogic.match.postgres.MatchResultDAOPostgres;
+import ry.ms.persistLogic.basket.dao.BasketDAO;
+import ry.ms.persistLogic.basket.postgres.BasketDAOPostgres;
 import ry.ms.persistLogic.product.dao.ProductDAO;
 import ry.ms.persistLogic.product.postgres.ProductDAOPostgres;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
@@ -50,6 +52,11 @@ public class PostgresFactory extends AbsFactory {
     @Override
     public ProductDAO createProductDAO() {
         return new ProductDAOPostgres();
+    }
+
+    @Override
+    public BasketDAO createBasketDAO() {
+        return new BasketDAOPostgres();
     }
 
     @Override

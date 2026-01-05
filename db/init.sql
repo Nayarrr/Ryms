@@ -51,6 +51,14 @@ CREATE TABLE IF NOT EXISTS products (
     category VARCHAR(50)
 );
 
+CREATE TABLE IF NOT EXISTS basket_items (
+    user_email VARCHAR(255) REFERENCES users(email) ON DELETE CASCADE,
+    product_id INT REFERENCES products(product_id) ON DELETE CASCADE,
+    quantity INT NOT NULL DEFAULT 1,
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (user_email, product_id)
+);
+
 -- WARNING: These seed users contain plain text passwords for development/testing only.
 -- In production, passwords MUST be hashed using a strong algorithm (bcrypt, scrypt, or Argon2)
 -- before storage. The application layer should implement password hashing.

@@ -4,6 +4,7 @@ import ry.ms.persistLogic.match.dao.MatchResultDAO;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.product.dao.ProductDAO;
+import ry.ms.persistLogic.basket.dao.BasketDAO;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
@@ -52,6 +53,8 @@ public abstract class AbsFactory {
      * @return An implementation of ProductDAO.
      */
     public abstract ProductDAO createProductDAO();
+
+    public abstract BasketDAO createBasketDAO();
     
 
     public abstract MatchResultDAO createMatchResultDAO();
