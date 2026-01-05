@@ -1,0 +1,60 @@
+@startuml
+title Sequence Diagram: Add Item to Basket
+
+participant BasketController
+participant SessionFacade
+participant BasketManager
+participant "AbsFactory" as Factory
+participant "PostgresFactory" as PFactory
+participant BasketPostgres
+participant "ProductDAO" as ProductDAO
+participant Database
+
+BasketController -> SessionFacade : addItem(userId, productId, qty)
+SessionFacade -> BasketManager : addItem(userId, productId, qty)
+
+' Factory setup
+BasketManager -> Factory : getFactory(type)
+Factory -> PFactory : create()
+BasketManager <-- PFactory : return PostgresFactory
+BasketManager -> PFactory : createBasketDAO()
+PFactory -> BasketPostgres : new BasketPostgres()
+BasketManager <-- PFactory : return BasketDAO
+
+' Logic Start: Check Stock Availability (Implied use of ProductDAO for validation)
+BasketManager -> ProductDAO : getProductById(productId)
+ProductDAO -> Database : SELECT stock FROM products WHERE id = ?
+ProductDAO <-- Database : Product (stock)
+BasketManager <-- ProductDAO : Product
+
+alt Stock Sufficient (Success)
+
+    BasketManager -> BasketManager : validate(qty <= stock)
+    
+    BasketManager -> BasketPostgres : getItem(userId, productId)
+    BasketPostgres -> Database : SELECT * FROM basket_items WHERE...
+    BasketPostgres <-- Database : existingItem (or null)
+
+    alt Item Already in Basket
+        BasketManager -> BasketPostgres : updateItemQuantity(userId, productId, newQty)
+        BasketPostgres -> Database : UPDATE basket_items SET quantity = ? ...
+        BasketPostgres <-- Database : success
+    else New Item
+        BasketManager -> BasketPostgres : saveItem(newItem)
+        BasketPostgres -> Database : INSERT INTO basket_items...
+        BasketPostgres <-- Database : success
+    end
+    
+    BasketManager <-- BasketPostgres : void
+    SessionFacade <-- BasketManager : void
+    BasketController <-- SessionFacade : void (Success)
+
+else Stock Insufficient (Item Out of Stock)
+
+    BasketManager -> BasketManager : validate failed
+    SessionFacade <-- BasketManager : Throw InvalidQuantityException
+    BasketController <-- SessionFacade : Throw InvalidQuantityException
+
+end
+
+@enduml
