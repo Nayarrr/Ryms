@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="ry.ms.view.product.ShopController"
+            prefHeight="800.0" prefWidth="1200.0"
+            style="-fx-background-color: #ecf0f1;">
+    <top>
+        <VBox spacing="6" style="-fx-padding: 18 20 12 20;">
+            <Label text="Boutique" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <Label text="Ajoutez des produits à votre panier" style="-fx-text-fill: #7f8c8d;"/>
+        </VBox>
+    </top>
+
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+            <content>
+                <FlowPane fx:id="productsGrid" hgap="18" vgap="18" prefWrapLength="900" style="-fx-padding: 0 20 20 20;" />
+            </content>
+        </ScrollPane>
+    </center>
+
+    <right>
+        <VBox spacing="12" prefWidth="360" style="-fx-padding: 16; -fx-background-color: white; -fx-border-color: #dfe6e9; -fx-border-width: 0 0 0 1;">
+            <Label text="Mon panier" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+            <TableView fx:id="basketTable" prefHeight="400" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="productCol" text="Produit" prefWidth="140" />
+                    <TableColumn fx:id="qtyCol" text="Qté" prefWidth="60" />
+                    <TableColumn fx:id="priceCol" text="Prix" prefWidth="80" />
+                    <TableColumn fx:id="subtotalCol" text="Sous-total" prefWidth="100" />
+                </columns>
+            </TableView>
+            <HBox spacing="8" alignment="CENTER_RIGHT">
+                <Label text="Total:" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                <Label fx:id="totalLabel" text="0.00 €" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #27ae60;" />
+            </HBox>
+            <Button text="Vider le panier" onAction="#handleClearBasket" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+            <Label fx:id="statusLabel" wrapText="true" style="-fx-text-fill: #c0392b;" />
+        </VBox>
+    </right>
+</BorderPane>
