@@ -3,15 +3,17 @@ package ry.ms;
 import java.sql.SQLException;
 
 import ry.ms.persistLogic.match.dao.MatchDAO;
+import ry.ms.persistLogic.match.dao.MatchResultDAO;
 import ry.ms.persistLogic.match.postgres.MatchDAOPostgres;
-import ry.ms.persistLogic.user.login.dao.UserDAO;
-import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
+import ry.ms.persistLogic.match.postgres.MatchResultDAOPostgres;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.team.postgres.InvitationDAOPostgres;
 import ry.ms.persistLogic.team.postgres.TeamDAOPostgres;
 import ry.ms.persistLogic.product.dao.ProductDAO;
 import ry.ms.persistLogic.product.postgres.ProductDAOPostgres;
+import ry.ms.persistLogic.user.login.dao.UserDAO;
+import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 /**
  * A concrete factory that creates instances of DAOs.
  * This implementation of {@link AbsFactory} is responsible for instantiating
@@ -47,5 +49,9 @@ public class PostgresFactory extends AbsFactory {
     @Override
     public ProductDAO createProductDAO() {
         return new ProductDAOPostgres();
+        
+    public MatchResultDAO createMatchResultDAO(){
+        return new MatchResultDAOPostgres() {
+        };
     }
 }

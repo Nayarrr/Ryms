@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ry.ms.models.Invitation;
-import ry.ms.models.InvitationStatus;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
+import ry.ms.businessLogic.team.models.Invitation;
+import ry.ms.businessLogic.team.models.InvitationStatus;
 import ry.ms.persistLogic.DBConfig;
 
 public class InvitationDAOPostgres implements InvitationDAO {

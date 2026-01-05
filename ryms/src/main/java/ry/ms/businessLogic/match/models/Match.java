@@ -1,16 +1,24 @@
-package ry.ms.models;
+package ry.ms.businessLogic.match.models;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import ry.ms.businessLogic.team.models.Team;
+import ry.ms.businessLogic.user.models.User;
+
 public class Match {
     private Long matchId;
-    public List<User> referees;
-    public Date matchDate;
-    public List<Team> teams;
+    private List<User> referees;
+    private Date matchDate;
+    private List<Team> teams;
     protected List<TeamResult> teamResults;
-    public Long gameId;
+    private Long gameId;
+    
+    // Observable property pour le statut
+    private final ObjectProperty<MatchStatus> status = new SimpleObjectProperty<>(MatchStatus.SCHEDULED);
 
     public Match(){
         this.referees = new ArrayList<>();
@@ -25,6 +33,11 @@ public class Match {
         this.referees = new ArrayList<>();
         this.teams = new ArrayList<>();
         this.teamResults = new ArrayList<>();
+    }
+
+    public Match(Long matchid, Date matchDate, Long gameId, MatchStatus status){
+        this(matchid, matchDate, gameId);
+        this.status.set(status);
     }
 
     public Long getMatchId(){
@@ -77,5 +90,16 @@ public class Match {
         this.teamResults = teamResults;
     }
 
+    public MatchStatus getStatus() {
+        return this.status.get();
+    }
+
+    public void setStatus(MatchStatus status) {
+        this.status.set(status);
+    }
+    
+    public ObjectProperty<MatchStatus> statusProperty() {
+        return this.status;
+    }
 
 }

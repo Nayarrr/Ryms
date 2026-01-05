@@ -3,7 +3,7 @@ import java.sql.SQLException;
 
 import ry.ms.businessLogic.user.login.exceptions.IncorrectPasswordException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.models.User;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
 /**
@@ -17,7 +17,7 @@ public class UserManager {
     }
     
     /** The Data Access Object for handling user persistence. */
-    private UserDAO userDAO;
+    private final UserDAO userDAO;
     
     /**
      * Authenticates a user based on their email and password.

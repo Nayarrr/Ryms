@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import ry.ms.models.User;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.persistLogic.DBConfig;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 

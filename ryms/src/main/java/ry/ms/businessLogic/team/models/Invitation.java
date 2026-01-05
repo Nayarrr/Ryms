@@ -1,4 +1,4 @@
-package ry.ms.models;
+package ry.ms.businessLogic.team.models;
 
 import java.util.Date;
 

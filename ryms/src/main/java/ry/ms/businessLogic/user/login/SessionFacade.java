@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import ry.ms.businessLogic.user.login.exceptions.IncorrectPasswordException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.models.User;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 /**
@@ -16,7 +16,7 @@ public class SessionFacade {
     /** The single instance of the SessionFacade. */
     private static SessionFacade sessionFacade;
     /** The manager responsible for user-related business logic. */
-    private UserManager userManager;
+    private final UserManager userManager;
 
     /**
      * Private constructor to prevent direct instantiation and enforce the Singleton pattern.

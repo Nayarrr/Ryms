@@ -5,67 +5,67 @@ import java.util.List;
 import java.util.Objects;
 
 import ry.ms.businessLogic.team.TeamFacade;
-import ry.ms.models.Invitation;
-import ry.ms.models.Team;
+import ry.ms.businessLogic.team.models.Invitation;
+import ry.ms.businessLogic.team.models.Team;
 
 public class TeamController {
 
-    private final TeamFacade sessionFacade;
+    private final TeamFacade teamFacade;
 
     public TeamController() {
         this(TeamFacade.getInstance());
     }
 
-    public TeamController(TeamFacade sessionFacade) {
-        this.sessionFacade = Objects.requireNonNull(sessionFacade);
+    public TeamController(TeamFacade teamFacade) {
+        this.teamFacade = Objects.requireNonNull(teamFacade);
     }
 
     public Team createTeam(String name, String tag, String avatar, String userEmail) {
         try {
-            return sessionFacade.createTeam(name, tag, avatar, userEmail);
+            return teamFacade.createTeam(name, tag, avatar, userEmail);
         } catch (SQLException ex) {
             return handleSqlException("Failed to create team", ex);
         }
     }
 
     public void inviteMember(Long teamId, String senderEmail, String targetEmail) {
-        runWithHandling(() -> sessionFacade.inviteMember(teamId, senderEmail, targetEmail),
+        runWithHandling(() -> teamFacade.inviteMember(teamId, senderEmail, targetEmail),
                 "Failed to invite member");
     }
 
     public void acceptInvitation(Long invitationId) {
-        runWithHandling(() -> sessionFacade.acceptInvitation(invitationId),
+        runWithHandling(() -> teamFacade.acceptInvitation(invitationId),
                 "Failed to accept invitation");
     }
 
     public void rejectInvitation(Long invitationId) {
-        runWithHandling(() -> sessionFacade.rejectInvitation(invitationId),
+        runWithHandling(() -> teamFacade.rejectInvitation(invitationId),
                 "Failed to reject invitation");
     }
 
     public void removeMember(Long teamId, String captainEmail, String targetMemberEmail) {
-        runWithHandling(() -> sessionFacade.removeMember(teamId, captainEmail, targetMemberEmail),
+        runWithHandling(() -> teamFacade.removeMember(teamId, captainEmail, targetMemberEmail),
                 "Failed to remove member");
     }
 
     public void leaveTeam(Long teamId, String userEmail) {
-        runWithHandling(() -> sessionFacade.leaveTeam(teamId, userEmail),
+        runWithHandling(() -> teamFacade.leaveTeam(teamId, userEmail),
                 "Failed to leave team");
     }
 
     public void transferCaptaincy(Long teamId, String currentCaptain, String newCaptain) {
-        runWithHandling(() -> sessionFacade.transferCaptaincy(teamId, currentCaptain, newCaptain),
+        runWithHandling(() -> teamFacade.transferCaptaincy(teamId, currentCaptain, newCaptain),
                 "Failed to transfer captaincy");
     }
 
     public void dissolveTeam(Long teamId, String captainEmail) {
-        runWithHandling(() -> sessionFacade.dissolveTeam(teamId, captainEmail),
+        runWithHandling(() -> teamFacade.dissolveTeam(teamId, captainEmail),
                 "Failed to dissolve team");
     }
 
     public Team getTeamByMemberEmail(String userEmail) {
         try {
-            return sessionFacade.getTeamByMemberEmail(userEmail);
+            return teamFacade.getTeamByMemberEmail(userEmail);
         } catch (SQLException ex) {
             return handleSqlException("Failed to load team by member email", ex);
         }
@@ -73,7 +73,7 @@ public class TeamController {
 
     public List<Invitation> getMyInvitations(String userEmail) {
         try {
-            return sessionFacade.getMyInvitations(userEmail);
+            return teamFacade.getMyInvitations(userEmail);
         } catch (SQLException ex) {
             return handleSqlException("Failed to load invitations", ex);
         }

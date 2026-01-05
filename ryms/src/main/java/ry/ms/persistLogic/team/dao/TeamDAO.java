@@ -3,7 +3,7 @@ package ry.ms.persistLogic.team.dao;
 import java.sql.SQLException;
 import java.util.List;
 
-import ry.ms.models.Team;
+import ry.ms.businessLogic.team.models.Team;
 
 /**
  * Data Access Object for team entities.

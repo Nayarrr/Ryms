@@ -8,34 +8,52 @@
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="ry.ms.view.match.MatchListViewController"
       spacing="20"
-      style="-fx-background-color: #f5f5f5;">
+      style="-fx-background-color: #0a0e27;">
 
     <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
+        <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <!-- En-tête -->
-    <HBox alignment="CENTER_LEFT" spacing="15">
-        <Label text="📋 Gestion des Matchs" 
-               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+    <!-- ========== EN-TÊTE ========== -->
+    <HBox alignment="CENTER_LEFT" spacing="20">
+        <Label text="Prochains Matchs" 
+               style="-fx-font-size: 34px; 
+                      -fx-font-weight: bold; 
+                      -fx-text-fill: white; 
+                      -fx-effect: dropshadow(gaussian, rgba(91,192,235,0.5), 8, 0, 0, 2);"/>
         
         <Region HBox.hgrow="ALWAYS"/>
         
-        <!-- ✅ Bouton "Créer un match" visible uniquement pour admin -->
         <Button fx:id="createMatchButton" 
                 text="+ Créer un match"
                 onAction="#handleCreateMatch"
-                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10px 20px;"/>
+                style="-fx-background-color: linear-gradient(to bottom right, #4ecca3, #3a9b7f); 
+                       -fx-text-fill: white; 
+                       -fx-font-size: 15px; 
+                       -fx-font-weight: bold;  
+                       -fx-padding: 14 28 14 28; 
+                       -fx-background-radius: 8; 
+                       -fx-cursor: hand; 
+                       -fx-effect: dropshadow(gaussian, rgba(78,204,163,0.5), 8, 0, 0, 3);"/>
     </HBox>
 
-    <!-- Table des matchs -->
-    <TableView fx:id="matchTableView" VBox.vgrow="ALWAYS">
-        <columns>
-            <TableColumn fx:id="matchIdColumn" text="ID" prefWidth="60"/>
-            <TableColumn fx:id="team1Column" text="Équipe 1" prefWidth="200"/>
-            <TableColumn fx:id="team2Column" text="Équipe 2" prefWidth="200"/>
-            <TableColumn fx:id="dateColumn" text="Date" prefWidth="150"/>
-            <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="200"/>
-        </columns>
-    </TableView>
+    <!-- Séparateur -->
+    <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2;"/>
+
+    <!-- ========== CONTAINER DES CARTES (avec ScrollPane) ========== -->
+    <ScrollPane fitToWidth="true" 
+                VBox.vgrow="ALWAYS"
+                style="-fx-background-color: transparent; 
+                       -fx-background: transparent;">
+        
+        <VBox fx:id="matchesContainer" 
+              spacing="18" 
+              alignment="TOP_CENTER"
+              style="-fx-background-color: #0a0e27;">
+            
+            <padding>
+                <Insets top="15" right="10" bottom="15" left="10"/>
+            </padding>
+        </VBox>
+    </ScrollPane>
 </VBox>

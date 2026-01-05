@@ -1,4 +1,6 @@
-package ry.ms.models;
+package ry.ms.businessLogic.match.models;
+
+import ry.ms.businessLogic.team.models.Team;
 
 public class TeamResult {
     int score;
@@ -27,6 +29,9 @@ public class TeamResult {
     }
 
     public void setScore(int score){
+        if (score < 0) {
+            throw new IllegalArgumentException("Le score ne peut pas être négatif");
+        }
         this.score = score;
     }
 

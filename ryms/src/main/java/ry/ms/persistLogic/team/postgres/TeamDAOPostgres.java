@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ry.ms.persistLogic.team.dao.TeamDAO;
-import ry.ms.models.Team;
+import ry.ms.businessLogic.team.models.Team;
 import ry.ms.persistLogic.DBConfig;
 
 public class TeamDAOPostgres implements TeamDAO {
