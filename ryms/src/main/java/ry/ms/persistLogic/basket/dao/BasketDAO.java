@@ -15,4 +15,6 @@ public interface BasketDAO {
     void clearBasket(String userEmail) throws SQLException;
 
     List<BasketItem> getBasketByUser(String userEmail) throws SQLException;
+
+    BasketItem getItem(String userEmail, Long productId) throws SQLException;
 }

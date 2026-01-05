@@ -34,6 +34,10 @@ public class BasketDAOPostgres implements BasketDAO {
         "SELECT user_email, product_id, quantity, added_at " +
         "FROM basket_items WHERE user_email = ? ORDER BY added_at DESC";
 
+    private static final String SELECT_ITEM_SQL =
+        "SELECT user_email, product_id, quantity, added_at " +
+        "FROM basket_items WHERE user_email = ? AND product_id = ?";
+
     @Override
     public void saveItem(BasketItem item) throws SQLException {
         try (Connection conn = DBConfig.getConnection();
@@ -88,6 +92,21 @@ public class BasketDAOPostgres implements BasketDAO {
             }
         }
         return items;
+    }
+
+    @Override
+    public BasketItem getItem(String userEmail, Long productId) throws SQLException {
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SELECT_ITEM_SQL)) {
+            stmt.setString(1, userEmail);
+            stmt.setLong(2, productId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapItem(rs);
+                }
+            }
+        }
+        return null;
     }
 
     private BasketItem mapItem(ResultSet rs) throws SQLException {

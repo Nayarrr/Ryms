@@ -27,9 +27,13 @@ public class BasketManager {
         validateQuantity(quantity);
 
         Product product = requireProduct(productId);
-        ensureStock(product, quantity);
 
-        BasketItem item = new BasketItem(userEmail.trim(), productId, quantity, new Timestamp(System.currentTimeMillis()));
+        BasketItem existing = basketDAO.getItem(userEmail.trim(), productId);
+        int totalQuantity = (existing == null ? 0 : existing.getQuantity()) + quantity;
+
+        ensureStock(product, totalQuantity);
+
+        BasketItem item = new BasketItem(userEmail.trim(), productId, totalQuantity, new Timestamp(System.currentTimeMillis()));
         basketDAO.saveItem(item);
     }
 
