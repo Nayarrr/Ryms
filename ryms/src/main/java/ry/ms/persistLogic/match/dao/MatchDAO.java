@@ -21,7 +21,7 @@ public interface MatchDAO {
      * @return Le match trouvé ou null si inexistant
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract Match getMatchById(Long matchid) throws SQLException;
+    Match getMatchById(Long matchid) throws SQLException;
 
     /**
      * Récupère une équipe par son identifiant
@@ -29,7 +29,7 @@ public interface MatchDAO {
      * @return L'équipe trouvée ou null si inexistante
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract Team getTeamById(Long teamid) throws SQLException;
+    Team getTeamById(Long teamid) throws SQLException;
 
     /**
      * Ajoute un arbitre à un match
@@ -38,7 +38,7 @@ public interface MatchDAO {
      * @return true si l'ajout a réussi, false sinon
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract boolean addReferee(Match match, User referee) throws SQLException;
+    boolean addReferee(Match match, User referee) throws SQLException;
 
     /**
      * Définit ou met à jour la date d'un match
@@ -47,7 +47,7 @@ public interface MatchDAO {
      * @return true si la mise à jour a réussi, false sinon
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract boolean addDate(Match match, Date date) throws SQLException;
+    boolean addDate(Match match, Date date) throws SQLException;
 
     /**
      * Ajoute une équipe à un match
@@ -56,7 +56,7 @@ public interface MatchDAO {
      * @return true si l'ajout a réussi, false sinon
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract boolean addTeam(Match match, Team team) throws SQLException;
+    boolean addTeam(Match match, Team team) throws SQLException;
 
     /**
      * Met à jour le roster d'une équipe en remplaçant un joueur par un autre
@@ -66,7 +66,7 @@ public interface MatchDAO {
      * @return true si le remplacement a réussi, false sinon
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract boolean updateRoaster(Long teamId, User currentUser, User newUser) throws SQLException;
+    boolean updateRoaster(Long teamId, User currentUser, User newUser) throws SQLException;
 
     /**
      * Récupère la liste des membres d'une équipe
@@ -74,7 +74,7 @@ public interface MatchDAO {
      * @return La liste des utilisateurs membres de l'équipe
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract List<User> getTeamMembers(Long teamId) throws SQLException;
+    List<User> getTeamMembers(Long teamId) throws SQLException;
 
     /**
      * Crée un nouveau match avec une date et un jeu
@@ -83,14 +83,14 @@ public interface MatchDAO {
      * @return L'identifiant du match créé
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract Long createMatch(Date matchDate, int gameId) throws SQLException;
+    Long createMatch(Date matchDate, int gameId) throws SQLException;
 
     /**
      * Récupère la liste de tous les matchs
      * @return La liste complète des matchs avec leurs équipes et arbitres
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract List<Match> getAllMatches() throws SQLException;
+    List<Match> getAllMatches() throws SQLException;
 
     /**
      * Recherche des utilisateurs par leur email
@@ -98,7 +98,7 @@ public interface MatchDAO {
      * @return La liste des utilisateurs correspondants (maximum 10 résultats)
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract List<User> searchUsersByEmail(String searchTerm) throws SQLException;
+    List<User> searchUsersByEmail(String searchTerm) throws SQLException;
 
     /**
      * Récupère les équipes participant à un match
@@ -106,7 +106,7 @@ public interface MatchDAO {
      * @return La liste des équipes du match
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract List<Team> getTeamsForMatch(Long matchId) throws SQLException;
+    List<Team> getTeamsForMatch(Long matchId) throws SQLException;
 
     /**
      * Supprime un match de la base de données
@@ -114,7 +114,7 @@ public interface MatchDAO {
      * @return true si la suppression a réussi, false sinon
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract boolean delete(Long matchId) throws SQLException;
+    boolean delete(Long matchId) throws SQLException;
 
     /**
      * Crée un match complet avec toutes ses données (équipes, arbitre, date)
@@ -127,7 +127,7 @@ public interface MatchDAO {
      * @return Le match créé avec toutes ses associations
      * @throws SQLException En cas d'erreur de base de données ou de rollback de transaction
      */
-    public abstract Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate, int gameId, User referee) throws SQLException;
+    Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate, int gameId, User referee) throws SQLException;
 
     /**
      * Met à jour le statut d'un match
@@ -136,7 +136,7 @@ public interface MatchDAO {
      * @return true si la mise à jour a réussi, false sinon
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract boolean updateMatchStatus(Long matchId, ry.ms.businessLogic.match.models.MatchStatus status) throws SQLException;
+    boolean updateMatchStatus(Long matchId, ry.ms.businessLogic.match.models.MatchStatus status) throws SQLException;
     
 
 }
