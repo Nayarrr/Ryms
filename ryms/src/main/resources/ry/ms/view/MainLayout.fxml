@@ -19,6 +19,10 @@
             <Button text="Gestion des Matchs" 
                     onAction="#handleMatchsClick"
                     style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px;"/>
+
+            <Button text="Gestion des Jeux" 
+                    onAction="#handleGamesClick"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px;"/>
             
             <Region HBox.hgrow="ALWAYS"/>
             

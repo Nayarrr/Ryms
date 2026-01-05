@@ -47,6 +47,11 @@ public class MainLayoutController {
     }
 
     @FXML
+    private void handleGamesClick() {
+        showGameCatalog();
+    }
+
+    @FXML
     private void handleOpenInvitations() {
         try {
             FXMLLoader loader = new FXMLLoader(
@@ -112,6 +117,23 @@ public class MainLayoutController {
             showError("Erreur lors du chargement de la gestion des matchs.");
         }
     }
+
+    public void showGameCatalog() {
+        try {
+            // 1. Charger le fichier FXML de la liste des jeux
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/game/fxml/gameCatalogLayout.fxml"));
+            Parent catalogRoot = loader.load();
+
+            // 2. Si vous voulez remplacer toute la fenêtre :
+            Scene catalogScene = new Scene(catalogRoot, 900, 700);
+            // primaryStage.setScene(catalogScene);
+            // primaryStage.setTitle("RYMS - Catalogue des jeux");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

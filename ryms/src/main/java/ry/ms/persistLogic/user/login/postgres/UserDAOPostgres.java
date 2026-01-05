@@ -81,7 +81,8 @@ public class UserDAOPostgres extends UserDAO {
                     rs.getString("email"),
                     rs.getString("username"),
                     rs.getString("password"),
-                    rs.getBytes("avatar")
+                    rs.getBytes("avatar"),
+                    rs.getString("role")
                 );
                 users.add(user);
             }

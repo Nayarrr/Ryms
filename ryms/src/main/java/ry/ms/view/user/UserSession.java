@@ -36,4 +36,8 @@ public final class UserSession {
     }
 
     public User getUser() { return user; }
+
+    public void clearSession() {
+        this.userEmail = null;
+    }
 }

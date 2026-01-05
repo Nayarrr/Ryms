@@ -1,5 +1,7 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/product/ProductManager.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/games/models/Game.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/AbsFactory.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/games/EditGameController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/MatchController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/models/TeamResult.java
@@ -23,6 +25,7 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/InvitationStatus.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/matchDetail/RefereeManager.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/team/CreateTeamController.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/games/AddGameController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/Invitation.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/product/SessionFacade.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/postgres/TeamDAOPostgres.java
@@ -30,13 +33,14 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/Team.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/product/dao/ProductDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/matchDetail/ScoreManager.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/games/dao/GameDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/team/InvitationsController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/main/MainLayoutController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/user/login/LoginController.java
-/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/team/MainLayoutController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/models/MatchResult.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/DBConfig.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/MatchManager.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/games/GameCatalogController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/match/postgres/MatchDAOPostgres.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/UserDoesntExistException.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/product/models/Product.java
@@ -45,13 +49,16 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/dao/UserDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/CreateMatchFrame.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/games/GameCatalogFacade.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/user/UserSession.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/product/CreateProductController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/match/dao/MatchResultDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/MatchFacade.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/SessionFacade.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/TeamFacade.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/games/postgres/GameDAOPostgres.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/App.java
+/home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/games/GameCatalogManager.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/team/TeamDashboardController.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/postgres/InvitationDAOPostgres.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/match/dao/MatchDAO.java
@@ -59,38 +66,3 @@
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/businessLogic/match/models/MatchStatus.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/dao/InvitationDAO.java
 /home/ubuntu/Ryms/ryms/src/main/java/ry/ms/view/match/MatchListViewController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/games/GameCatalogFacade.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/models/User.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/postgres/InvitationDAOPostgres.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/team/TeamDashboardController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/user/login/LoginController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/dao/UserDAO.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/games/AddGameController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/team/UserSession.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/UserManager.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/Invitation.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/games/models/Game.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/Team.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/games/GameCatalogManager.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/SessionFacade.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/games/GameCatalogController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/PostgresFactory.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/games/EditGameController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/team/TeamController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/IncorrectPasswordException.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/App.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/AbsFactory.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/models/InvitationStatus.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/TeamManager.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/team/SessionFacade.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/postgres/TeamDAOPostgres.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/DBConfig.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/team/InvitationsController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/games/dao/GameDAO.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/games/postgres/GameDAOPostgres.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/team/MainLayoutController.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/dao/TeamDAO.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/businessLogic/user/login/exceptions/UserDoesntExistException.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/persistLogic/team/dao/InvitationDAO.java
-/mnt/c/Users/sebpi/Documents/Travail/S7/Software design principles/Ryms/ryms/src/main/java/ry/ms/view/team/CreateTeamController.java

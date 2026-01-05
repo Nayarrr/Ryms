@@ -233,7 +233,8 @@ public class MatchDAOPostgres implements MatchDAO{
                         rs.getString("email"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getBytes("avatar")
+                        rs.getBytes("avatar"),
+                        rs.getString("role")        
                     ));
                 }
             }
@@ -333,7 +334,8 @@ public class MatchDAOPostgres implements MatchDAO{
                         rs.getString("email"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getBytes("avatar")
+                        rs.getBytes("avatar"),
+                        rs.getString("role")
                     );
                     referees.add(referee);
                 }
@@ -359,7 +361,8 @@ public class MatchDAOPostgres implements MatchDAO{
                         rs.getString("email"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        rs.getBytes("avatar")
+                        rs.getBytes("avatar"),
+                        rs.getString("role")
                     ));
                 }
             }

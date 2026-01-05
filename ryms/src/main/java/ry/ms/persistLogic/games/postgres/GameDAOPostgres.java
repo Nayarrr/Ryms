@@ -1,7 +1,7 @@
 package ry.ms.persistLogic.games.postgres;
 
 import ry.ms.businessLogic.games.models.Game;
-import ry.ms.businessLogic.user.login.models.User;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.persistLogic.DBConfig;
 import ry.ms.persistLogic.games.dao.GameDAO;
 

@@ -78,13 +78,11 @@ public class App extends Application {
             String email = loginField.getText();
             UserSession.getInstance().setUserEmail(email);
             showMainPage();
-            showGameCatalog(); //A changer mieciubzefiyb
         }
     }
 
     private void showMainPage() {
         try {
-            // ✅ Charger MainLayout.fxml depuis /ry/ms/view/
             FXMLLoader loader = new FXMLLoader(
                 getClass().getResource("/ry/ms/view/MainLayout.fxml")
             );
@@ -101,22 +99,6 @@ public class App extends Application {
             e.printStackTrace();
             messageLabel.setText("Erreur critique : Impossible de charger l'application.");
             messageLabel.setTextFill(Color.RED);
-        }
-    }
-
-    public void showGameCatalog() {
-        try {
-            // 1. Charger le fichier FXML de la liste des jeux
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/game/fxml/gameCatalogLayout.fxml"));
-            Parent catalogRoot = loader.load();
-
-            // 2. Si vous voulez remplacer toute la fenêtre :
-            Scene catalogScene = new Scene(catalogRoot, 900, 700);
-            primaryStage.setScene(catalogScene);
-            primaryStage.setTitle("RYMS - Catalogue des jeux");
-
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
