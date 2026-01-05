@@ -5,8 +5,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import ry.ms.businessLogic.user.login.SessionFacade;
-import ry.ms.businessLogic.user.login.models.User;
-import ry.ms.view.team.UserSession;
+import ry.ms.businessLogic.user.models.User;
+import ry.ms.view.user.UserSession;
 
 public class LoginController {
 
@@ -30,9 +30,10 @@ public class LoginController {
         try {
             // Appel BDD
             User user = sessionFacade.loginUser(username, password);
+            UserSession userSession = UserSession.getInstance();
 
             if (user != null) {
-                UserSession.getInstance().setUser(user);
+                userSession.setUser(user);
                 messageLabel.setText("Connexion réussie !");
                 messageLabel.setTextFill(Color.GREEN);
                 return true; // Indique à App.java qu'on peut changer de page

@@ -1,10 +1,12 @@
 package ry.ms.view.user;
 
+import ry.ms.businessLogic.user.models.User;
+
 public final class UserSession {
     private static volatile UserSession instance;
     private String userEmail;
     private String role;
-    private ry.ms.businessLogic.user.login.models.User user;
+    private User user;
 
     private UserSession() {}
 
@@ -19,15 +21,19 @@ public final class UserSession {
         return instance;
     }
 
-    public void setUserEmail(String email) { 
-        this.userEmail = email; 
-    }
-    
-    public String getUserEmail() { 
-        return userEmail; 
+    public void setUserEmail(String email) { this.userEmail = email; }
+    public String getUserEmail() { return userEmail; }
+
+    public void setRole(String role) { this.role = role; }
+    public String getRole() { return role; }
+
+    public void setUser(User user) {
+        this.user = user;
+        if (user != null) {
+            this.userEmail = user.getEmail();
+            this.role = user.getRole();
+        }
     }
 
-    public void clearSession() {
-        this.userEmail = null;
-    }
+    public User getUser() { return user; }
 }

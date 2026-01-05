@@ -6,12 +6,12 @@ import ry.ms.persistLogic.match.dao.MatchDAO;
 import ry.ms.persistLogic.match.dao.MatchResultDAO;
 import ry.ms.persistLogic.match.postgres.MatchDAOPostgres;
 import ry.ms.persistLogic.match.postgres.MatchResultDAOPostgres;
+import ry.ms.persistLogic.product.dao.ProductDAO;
+import ry.ms.persistLogic.product.postgres.ProductDAOPostgres;
 import ry.ms.persistLogic.team.dao.InvitationDAO;
 import ry.ms.persistLogic.team.dao.TeamDAO;
 import ry.ms.persistLogic.team.postgres.InvitationDAOPostgres;
 import ry.ms.persistLogic.team.postgres.TeamDAOPostgres;
-import ry.ms.persistLogic.product.dao.ProductDAO;
-import ry.ms.persistLogic.product.postgres.ProductDAOPostgres;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 /**
@@ -37,6 +37,7 @@ public class PostgresFactory extends AbsFactory {
         return new MatchDAOPostgres();
     }
 
+    @Override
     public TeamDAO createTeamDAO() {
         return new TeamDAOPostgres();
     }
@@ -49,7 +50,9 @@ public class PostgresFactory extends AbsFactory {
     @Override
     public ProductDAO createProductDAO() {
         return new ProductDAOPostgres();
-        
+    }
+
+    @Override
     public MatchResultDAO createMatchResultDAO(){
         return new MatchResultDAOPostgres() {
         };
