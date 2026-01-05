@@ -14,9 +14,9 @@ public final class DBConfig {
     private static final String PASSWORD_ENV = "RYMS_DB_PASSWORD";
 
     // Fallback values for development/testing only
-    private static final String DEFAULT_URL = "jdbc:postgresql://localhost:5432/ryms_database";
-    private static final String DEFAULT_USER = "ryms";
-    private static final String DEFAULT_PASSWORD = "ryms";
+    private static final String DEFAULT_URL = "jdbc:postgresql://db.qbjdhxggrueklrjdgsfo.supabase.co:5432/postgres";
+    private static final String DEFAULT_USER = "postgres";
+    private static final String DEFAULT_PASSWORD = "Nm7TurbI8961Ki";
 
     private DBConfig() {
         // Utility class
