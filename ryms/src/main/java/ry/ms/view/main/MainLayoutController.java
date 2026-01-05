@@ -52,23 +52,23 @@ public class MainLayoutController {
     }
 
     @FXML
-    private void handleOpenInvitations() {
+    private void handleProductClick(){
+        handleOpenProducts();
+    }
+
+    private void loadView(String fxmlPath) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/ry/ms/view/team/fxml/InvitationsModal.fxml")
-            );
-            Parent root = loader.load();
-
-            Stage modalStage = new Stage();
-            modalStage.initModality(Modality.APPLICATION_MODAL);
-            modalStage.setTitle("Invitations");
-            modalStage.setScene(new Scene(root));
-            modalStage.showAndWait();
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+            loadContent(view);
         } catch (IOException e) {
             e.printStackTrace();
-            showError("Erreur lors de l'ouverture des invitations.");
         }
+    }
+
+    @FXML
+    private void handleOpenInvitations() {
+        loadView("/ry/ms/view/team/fxml/InvitationsModal.fxml");
     }
 
     @FXML
@@ -87,52 +87,24 @@ public class MainLayoutController {
     }
 
     private void loadTeamDashboard() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/ry/ms/view/team/fxml/TeamDashboard.fxml")
-            );
-            Parent teamView = loader.load();
-            loadContent(teamView);
-            
-            System.out.println("✅ TeamDashboard chargé dans MainLayout");
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Erreur lors du chargement de la gestion des équipes.");
-        }
+        loadView("/ry/ms/view/team/fxml/TeamDashboard.fxml");
     }
 
     private void loadMatchList() {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/ry/ms/view/match/fxml/MatchListView.fxml")
-            );
-            Parent matchView = loader.load();
-            loadContent(matchView);
-            
-            System.out.println("✅ MatchListView chargé dans MainLayout");
-            
-        } catch (IOException e) {
-            e.printStackTrace();
-            showError("Erreur lors du chargement de la gestion des matchs.");
-        }
+        loadView("/ry/ms/view/match/fxml/MatchListView.fxml");
     }
+
+    @FXML
+    private void handleOpenProducts() {
+        loadView("/ry/ms/view/product/fxml/ProductDashboard.fxml");
+    }
+
 
     public void showGameCatalog() {
-        try {
-            // 1. Charger le fichier FXML de la liste des jeux
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/game/fxml/gameCatalogLayout.fxml"));
-            Parent catalogRoot = loader.load();
-
-            // 2. Si vous voulez remplacer toute la fenêtre :
-            Scene catalogScene = new Scene(catalogRoot, 900, 700);
-            // primaryStage.setScene(catalogScene);
-            // primaryStage.setTitle("RYMS - Catalogue des jeux");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadView("/ry/ms/view/game/fxml/gameCatalogLayout.fxml");
     }
+
+    
 
     
     private void showError(String message) {
