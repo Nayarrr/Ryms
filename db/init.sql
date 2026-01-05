@@ -34,6 +34,14 @@ CREATE TABLE IF NOT EXISTS invitations (
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS games (
+    game_id SERIAL PRIMARY KEY,
+    name VARCHAR(255)
+    editor VARCHAR(255)
+    releaseDate TIMESTAMP
+    logo BYTEA
+)
+
 CREATE TABLE IF NOT EXISTS products (
     product_id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
@@ -49,6 +57,12 @@ CREATE TABLE IF NOT EXISTS products (
 INSERT INTO users (email, username, password) VALUES
 ('admin@ryms.com', 'admin', 'password_123'),
 ('test@ryms.com', 'testuser', 'password_456');
+
+INSERT INTO games (name, editor) VALUES
+('Rocket League', 'Psyonix'),
+('League of Legends', 'Riot Games'),
+('VALORANT', 'Riot Games');
+
 
 ALTER TABLE users ADD COLUMN role VARCHAR(20) DEFAULT 'USER';
 UPDATE users SET role = 'ADMIN' WHERE email = 'admin@ryms.com';
