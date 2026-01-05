@@ -3,8 +3,8 @@ package ry.ms.view.match;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import ry.ms.models.match.Match;
-import ry.ms.models.match.MatchStatus;
+import ry.ms.businessLogic.match.models.Match;
+import ry.ms.businessLogic.match.models.MatchStatus;
 
 /**
  * Cache singleton pour partager les instances de Match entre toutes les vues.

@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 import ry.ms.businessLogic.user.login.exceptions.IncorrectPasswordException;
 import ry.ms.businessLogic.user.login.exceptions.UserDoesntExistException;
-import ry.ms.models.User;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 import ry.ms.persistLogic.user.login.postgres.UserDAOPostgres;
 /**

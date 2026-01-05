@@ -5,9 +5,9 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-import ry.ms.models.User;
-import ry.ms.models.match.Match;
-import ry.ms.models.team.Team;
+import ry.ms.businessLogic.match.models.Match;
+import ry.ms.businessLogic.team.models.Team;
+import ry.ms.businessLogic.user.models.User;
 
 /**
  * Interface DAO pour la gestion des matchs
@@ -136,7 +136,7 @@ public interface MatchDAO {
      * @return true si la mise à jour a réussi, false sinon
      * @throws SQLException En cas d'erreur de base de données
      */
-    public abstract boolean updateMatchStatus(Long matchId, ry.ms.models.match.MatchStatus status) throws SQLException;
+    public abstract boolean updateMatchStatus(Long matchId, ry.ms.businessLogic.match.models.MatchStatus status) throws SQLException;
     
 
 }

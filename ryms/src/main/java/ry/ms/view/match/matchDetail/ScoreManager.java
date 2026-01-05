@@ -10,8 +10,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import ry.ms.models.match.TeamResult;
-import ry.ms.models.team.Team;
+import ry.ms.businessLogic.match.models.TeamResult;
+import ry.ms.businessLogic.team.models.Team;
 import ry.ms.view.match.MatchCache;
 import ry.ms.view.match.MatchController;
 
@@ -171,7 +171,7 @@ public class ScoreManager {
 
         if (success) {
             // MISE À JOUR DU CACHE (déclenche l'Observable)
-            MatchCache.getInstance().updateStatus(matchId, ry.ms.models.match.MatchStatus.FINISHED);
+            MatchCache.getInstance().updateStatus(matchId, ry.ms.businessLogic.match.models.MatchStatus.FINISHED);
             
             reloadCallback.accept(matchId);
         } else {

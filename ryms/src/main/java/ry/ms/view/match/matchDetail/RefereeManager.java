@@ -13,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ry.ms.models.User;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.view.match.MatchController;
 
 /**

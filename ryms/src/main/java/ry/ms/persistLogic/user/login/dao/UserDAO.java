@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import java.util.List;
 
-import ry.ms.models.User;
+import ry.ms.businessLogic.user.models.User;
 
 /**
  * Abstract Data Access Object (DAO) for User entities.

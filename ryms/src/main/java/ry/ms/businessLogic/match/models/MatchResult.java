@@ -1,4 +1,4 @@
-package ry.ms.models.match;
+package ry.ms.businessLogic.match.models;
 
 public enum MatchResult {
     WIN,  

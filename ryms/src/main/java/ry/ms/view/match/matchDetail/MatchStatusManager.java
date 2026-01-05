@@ -6,7 +6,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import ry.ms.models.match.MatchStatus;
+import ry.ms.businessLogic.match.models.MatchStatus;
 import ry.ms.view.match.MatchCache;
 import ry.ms.view.match.MatchController;
 

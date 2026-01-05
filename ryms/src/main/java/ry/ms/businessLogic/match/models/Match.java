@@ -1,4 +1,4 @@
-package ry.ms.models.match;
+package ry.ms.businessLogic.match.models;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import ry.ms.models.User;
-import ry.ms.models.team.Team;
+import ry.ms.businessLogic.team.models.Team;
+import ry.ms.businessLogic.user.models.User;
 
 public class Match {
     private Long matchId;

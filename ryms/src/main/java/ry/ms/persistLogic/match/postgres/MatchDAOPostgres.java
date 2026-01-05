@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ry.ms.models.User;
-import ry.ms.models.match.Match;
-import ry.ms.models.match.MatchStatus;
-import ry.ms.models.team.Team;
+import ry.ms.businessLogic.match.models.Match;
+import ry.ms.businessLogic.match.models.MatchStatus;
+import ry.ms.businessLogic.team.models.Team;
+import ry.ms.businessLogic.user.models.User;
 import ry.ms.persistLogic.DBConfig;
 import ry.ms.persistLogic.match.dao.MatchDAO;
 
@@ -38,7 +38,7 @@ public class MatchDAOPostgres implements MatchDAO{
                 Long gameId = rs.getLong("game_id");
                 String statusStr = rs.getString("status");
                 
-                Match match = new Match(id, date, gameId, ry.ms.models.match.MatchStatus.fromString(statusStr));
+                Match match = new Match(id, date, gameId, ry.ms.businessLogic.match.models.MatchStatus.fromString(statusStr));
                 
                 // Charger les équipes
                 match.setTeams(getTeamsForMatch(id));
@@ -274,7 +274,7 @@ public class MatchDAOPostgres implements MatchDAO{
                 Long gameId = rs.getLong("game_id");
                 String statusStr = rs.getString("status");
                 
-                Match match = new Match(id, date, gameId, ry.ms.models.match.MatchStatus.fromString(statusStr));
+                Match match = new Match(id, date, gameId, ry.ms.businessLogic.match.models.MatchStatus.fromString(statusStr));
                 
                 // Charger les équipes et arbitres
                 match.setTeams(getTeamsForMatch(id));
@@ -454,7 +454,7 @@ public class MatchDAOPostgres implements MatchDAO{
     }
 
     @Override
-    public boolean updateMatchStatus(Long matchId, ry.ms.models.match.MatchStatus status) throws SQLException {
+    public boolean updateMatchStatus(Long matchId, ry.ms.businessLogic.match.models.MatchStatus status) throws SQLException {
         String sql = "UPDATE matchs SET status = ? WHERE match_id = ?";
         
         try (Connection conn = DBConfig.getConnection();
