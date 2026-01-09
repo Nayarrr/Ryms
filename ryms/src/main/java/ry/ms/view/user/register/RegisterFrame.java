@@ -1,4 +1,4 @@
-package ry.ms.view.user.login;
+package ry.ms.view.user.register;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
@@ -7,19 +7,19 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class LoginFrame {
+public class RegisterFrame {
 
     private VBox view;
-    private LoginController controller;
+    private RegisterController controller;
 
-    public LoginFrame() {
+    public RegisterFrame() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/user/fxml/Login.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/user/fxml/Register.fxml"));
             view = loader.load();
             controller = loader.getController();
         } catch (IOException e) {
             e.printStackTrace();
-            view = new VBox(new Label("Erreur: Impossible de charger l'écran de connexion."));
+            view = new VBox(new Label("Erreur: Impossible de charger l'écran d'inscription."));
         }
     }
 
@@ -27,20 +27,15 @@ public class LoginFrame {
         return view;
     }
 
-    /**
-     * Définit une action à exécuter lorsque la connexion est réussie.
-     * 
-     * @param onSuccess Le Runnable à exécuter.
-     */
     public void setOnSuccess(Runnable onSuccess) {
         if (controller != null) {
             controller.setOnSuccess(onSuccess);
         }
     }
 
-    public void setOnRegisterRequest(Runnable onRegisterRequest) {
+    public void setOnLoginRequest(Runnable onLoginRequest) {
         if (controller != null) {
-            controller.setOnRegisterRequest(onRegisterRequest);
+            controller.setOnLoginRequest(onLoginRequest);
         }
     }
 }

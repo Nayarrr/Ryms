@@ -1,0 +1,42 @@
+@startuml
+
+RegisterController -> SessionFacade : register(u,p,otherData)
+SessionFacade -> userManager : register(u,p,otherData)
+userManager -> userPostgres : getUserById(u)
+userPostgres -> Database : getUserById(u)
+
+alt user already exists
+
+Database --> userPostgres : send existing User
+userPostgres --> userManager : send User
+SessionFacade <-- userManager : Throw user already exists
+RegisterController <-- SessionFacade : Throw user already exists
+
+else user does not exist
+
+Database --> userPostgres : send null
+userPostgres --> userManager : send null
+
+userManager -> userPostgres : createUser(u,p,otherData)
+userPostgres -> Database : insertUser()
+
+alt insert OK
+
+Database --> userPostgres : success
+userPostgres --> userManager : send new User
+SessionFacade <-- userManager : send new User
+RegisterController <-- SessionFacade : send new User
+
+else insert failed
+
+Database --> userPostgres : error
+userPostgres --> userManager : Throw creation error
+SessionFacade <-- userManager : Throw creation error
+RegisterController <-- SessionFacade : Throw creation error
+
+end
+end
+
+note over RegisterController : Handles exceptions
+
+@enduml

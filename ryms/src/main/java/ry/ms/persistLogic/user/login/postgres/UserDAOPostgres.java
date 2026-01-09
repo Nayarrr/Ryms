@@ -1,94 +1,120 @@
 package ry.ms.persistLogic.user.login.postgres;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-
 import ry.ms.businessLogic.user.models.User;
 import ry.ms.persistLogic.DBConfig;
 import ry.ms.persistLogic.user.login.dao.UserDAO;
 
-/**
- * PostgreSQL implementation of the UserDAO.
- * This class handles all database operations related to the {@link User} entity
- * for a PostgreSQL database.
- */
-public class UserDAOPostgres extends UserDAO {
+import java.sql.*;
+import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
-    public static Connection getConnection() throws SQLException {
-        return DBConfig.getConnection();
-    }
+public class UserDAOPostgres implements UserDAO {
 
-    /**
-     * Constructs a UserPostgres DAO with the given database connection.
-     * 
-     * @param conn The database connection to be used for queries.
-     */
-    public UserDAOPostgres() {
-        super(initConnection());
-    }
-
-    private static Connection initConnection() {
-        try {
-            return DBConfig.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException("Can't connect to database", e);
-        }
-    }
-
-    /**
-     * Retrieves a user from the 'users' table by email or username (identifier).
-     * 
-     * @param identifier email or username provided by the user.
-     * @return A {@link User} object if a matching user is found, otherwise null.
-     * @throws SQLException if a database access error occurs.
-     */
     @Override
-    public User getUserById(String identifier) throws SQLException {
-        String sql = "SELECT email, username, password, avatar, role FROM users WHERE email = ? OR username = ?";
-
-        // Using try-with-resources to ensure PreparedStatement and ResultSet are closed
-        // automatically.
-        try (PreparedStatement stmt = this.conn.prepareStatement(sql)) {
-            stmt.setString(1, identifier);
-            stmt.setString(2, identifier);
-
-            try (ResultSet rs = stmt.executeQuery()) {
+    public Optional<User> findByEmail(String email) throws SQLException {
+        String sql = "SELECT email, password, username, role, is_active FROM users WHERE email = ?";
+        try (Connection conn = DBConfig.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    return new User(
-                            rs.getString("email"),
+                    User user = new User(
                             rs.getString("username"),
+                            rs.getString("email"),
                             rs.getString("password"),
-                            rs.getBytes("avatar"),
-                            rs.getString("role"));
+                            rs.getString("role"),
+                            rs.getBoolean("is_active"));
+                    return Optional.of(user);
                 }
             }
         }
-        return null;
+        return Optional.empty();
+    }
+
+    @Override
+    public User createUser(String email, String password, String username) throws SQLException {
+        String sql = "INSERT INTO users (email, password, username, is_active) VALUES (?, ?, ?, ?) RETURNING role";
+        try (Connection conn = DBConfig.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+            pstmt.setString(2, password);
+            pstmt.setString(3, username);
+            pstmt.setBoolean(4, true); // Default active
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String role = rs.getString("role");
+                    return new User(username, email, password, role, true);
+                } else {
+                    throw new SQLException("Creating user failed, no ID obtained.");
+                }
+            }
+        }
     }
 
     @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT email, username, password, avatar, role FROM users ORDER BY username";
-
-        try (PreparedStatement stmt = this.conn.prepareStatement(sql);
-                ResultSet rs = stmt.executeQuery()) {
-
+        String sql = "SELECT email, password, username, role, is_active FROM users";
+        try (Connection conn = DBConfig.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+                ResultSet rs = pstmt.executeQuery()) {
             while (rs.next()) {
-                User user = new User(
-                        rs.getString("email"),
+                users.add(new User(
                         rs.getString("username"),
+                        rs.getString("email"),
                         rs.getString("password"),
-                        rs.getBytes("avatar"),
-                        rs.getString("role"));
-                users.add(user);
+                        rs.getString("role"),
+                        rs.getBoolean("is_active")));
             }
         }
-
         return users;
+    }
+
+    @Override
+    public void updateUser(User user) throws SQLException {
+        String sql = "UPDATE users SET username = ?, password = ?, role = ? WHERE email = ?";
+        try (Connection conn = DBConfig.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, user.getName());
+            pstmt.setString(2, user.getPassword());
+            pstmt.setString(3, user.getRole());
+            pstmt.setString(4, user.getEmail());
+            pstmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void deleteUser(String email) throws SQLException {
+        String sql = "DELETE FROM users WHERE email = ?";
+        try (Connection conn = DBConfig.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, email);
+            pstmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void updatePassword(String email, String newPassword) throws SQLException {
+        String sql = "UPDATE users SET password = ? WHERE email = ?";
+        try (Connection conn = DBConfig.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, newPassword);
+            pstmt.setString(2, email);
+            pstmt.executeUpdate();
+        }
+    }
+
+    @Override
+    public void updateStatus(String email, boolean isActive) throws SQLException {
+        String sql = "UPDATE users SET is_active = ? WHERE email = ?";
+        try (Connection conn = DBConfig.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setBoolean(1, isActive);
+            pstmt.setString(2, email);
+            pstmt.executeUpdate();
+        }
     }
 }

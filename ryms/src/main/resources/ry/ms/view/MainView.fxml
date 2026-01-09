@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane fx:id="mainPane" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.MainViewController">
+   <top>
+      <!-- The fx:id allows the MainViewController to access the Navbar's controller -->
+      <fx:include fx:id="navbar" source="/ry/ms/view/utils/fxml/Navbar.fxml" />
+   </top>
+   <bottom>
+      <fx:include source="/ry/ms/view/utils/fxml/Footer.fxml" />
+   </bottom>
+   <!-- The center region will be populated by the MainViewController -->
+</BorderPane>

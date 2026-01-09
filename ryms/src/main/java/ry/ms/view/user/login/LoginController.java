@@ -1,5 +1,6 @@
 package ry.ms.view.user.login;
 
+import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -10,13 +11,40 @@ import ry.ms.view.user.UserSession;
 
 public class LoginController {
 
-    private SessionFacade sessionFacade = SessionFacade.getSessionFactory();
+    @FXML
+    private TextField loginField;
+    @FXML
+    private PasswordField passField;
+    @FXML
+    private Label messageLabel;
+
+    private final SessionFacade sessionFacade = SessionFacade.getSessionFactory();
+    private Runnable onSuccess;
 
     /**
-     * Vérifie les identifiants via la Facade et met à jour l'interface en conséquence.
-     * @return true si la connexion est réussie, false sinon.
+     * Sets a callback to be run on successful login.
+     * 
+     * @param onSuccess the runnable to execute.
      */
-    public boolean handleLoginButtonAction(TextField loginField, PasswordField passField, Label messageLabel) {
+    public void setOnSuccess(Runnable onSuccess) {
+        this.onSuccess = onSuccess;
+    }
+
+    private Runnable onRegisterRequest;
+
+    public void setOnRegisterRequest(Runnable onRegisterRequest) {
+        this.onRegisterRequest = onRegisterRequest;
+    }
+
+    @FXML
+    private void handleRegisterLinkAction() {
+        if (onRegisterRequest != null) {
+            onRegisterRequest.run();
+        }
+    }
+
+    @FXML
+    private void handleLoginButtonAction() {
         String username = loginField.getText();
         String password = passField.getText();
 
@@ -24,30 +52,30 @@ public class LoginController {
         if (username.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Veuillez saisir le nom et le mot de passe.");
             messageLabel.setTextFill(Color.RED);
-            return false;
+            return;
         }
 
         try {
             // Appel BDD
             User user = sessionFacade.loginUser(username, password);
-            UserSession userSession = UserSession.getInstance();
 
             if (user != null) {
+                UserSession userSession = UserSession.getInstance();
                 userSession.setUser(user);
                 messageLabel.setText("Connexion réussie !");
                 messageLabel.setTextFill(Color.GREEN);
-                return true; // Indique à App.java qu'on peut changer de page
+                if (onSuccess != null) {
+                    onSuccess.run();
+                }
             } else {
                 messageLabel.setText("Email ou mot de passe incorrect.");
                 messageLabel.setTextFill(Color.RED);
                 passField.clear(); // Sécurité : on efface le mot de passe incorrect
-                return false;
             }
         } catch (Exception e) {
             e.printStackTrace();
             messageLabel.setText("Erreur de connexion serveur.");
             messageLabel.setTextFill(Color.RED);
-            return false;
         }
     }
 }

@@ -1,37 +1,22 @@
 package ry.ms.persistLogic.user.login.dao;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import java.util.List;
-
 import ry.ms.businessLogic.user.models.User;
 
-/**
- * Abstract Data Access Object (DAO) for User entities.
- * It defines the standard operations to be performed on a User model,
- * and manages the database connection for its subclasses.
- */
-public abstract class UserDAO {
-    
-    /** The database connection instance, shared by all methods in a DAO implementation. */
-    protected final Connection conn;
+import java.sql.SQLException;
+import java.util.Optional;
 
-    /**
-     * Constructs a UserDAO with a database connection.
-     * @param conn The active database connection.
-     */
-    public UserDAO(Connection conn) {
-        this.conn = conn;
-    }
-    
-    /**
-     * Retrieves a user from the data source by their email address.
-     * @param email The email of the user to retrieve.
-     * @return A {@link User} object if found, otherwise null.
-     * @throws SQLException if a database access error occurs.
-     */
-    public abstract User getUserById(String email) throws SQLException;
+public interface UserDAO {
+    Optional<User> findByEmail(String email) throws SQLException;
 
-    public abstract List<User> getAllUsers() throws SQLException;
+    User createUser(String email, String password, String username) throws SQLException;
+
+    java.util.List<User> getAllUsers() throws SQLException;
+
+    void updateUser(User user) throws SQLException;
+
+    void deleteUser(String email) throws SQLException;
+
+    void updatePassword(String email, String newPassword) throws SQLException;
+
+    void updateStatus(String email, boolean isActive) throws SQLException;
 }

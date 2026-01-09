@@ -1,0 +1,35 @@
+@startuml
+package ry.ms.view.user.register {
+    class RegisterController {
+        - TextField nameField
+        - TextField surnameField
+        - TextField emailField
+        - PasswordField passwordField
+        - PasswordField confirmPasswordField
+        - Label messageLabel
+        - SessionFacade sessionFacade
+        + handleRegisterButtonAction()
+        + handleLoginLinkAction()
+    }
+}
+
+package ry.ms.businessLogic.user.login {
+    class SessionFacade {
+        + registerUser(email, password, name, surname): User
+    }
+    class UserManager {
+        + register(email, password, name, surname): User
+    }
+}
+
+package ry.ms.persistLogic.user.login.dao {
+    interface UserDAO {
+        + createUser(email, password, name, surname): User
+        + findByEmail(email): Optional<User>
+    }
+}
+
+RegisterController --> SessionFacade
+SessionFacade --> UserManager
+UserManager --> UserDAO
+@enduml
