@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ry.ms.view.tournament.ManageRegistrationsController"
+            prefHeight="600.0" prefWidth="800.0"
+            stylesheets="@tournament-styles.css">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Label fx:id="headerLabel" text="Gérer les inscriptions - Tournoi" styleClass="header-title">
+                    <font>
+                        <Font name="System Bold" size="28"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center - Registration Form -->
+    <center>
+        <VBox spacing="20" alignment="TOP_CENTER">
+            <padding>
+                <Insets top="40" right="40" bottom="40" left="40"/>
+            </padding>
+
+            <!-- Message d'information -->
+            <Label fx:id="infoLabel" text="Seuls les chefs d'équipe peuvent inscrire leur équipe" 
+                   styleClass="info-message" wrapText="true">
+                <font>
+                    <Font size="14"/>
+                </font>
+            </Label>
+
+            <!-- Formulaire d'inscription -->
+            <VBox spacing="20" maxWidth="600" styleClass="registration-form">
+                <padding>
+                    <Insets top="30" right="30" bottom="30" left="30"/>
+                </padding>
+
+                <Label text="Inscription de votre équipe" styleClass="form-title">
+                    <font>
+                        <Font name="System Bold" size="20"/>
+                    </font>
+                </Label>
+
+                <GridPane vgap="15" hgap="10">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="150" prefWidth="150"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+
+                    <children>
+                        <Label text="Nom de l'équipe :" GridPane.rowIndex="0"/>
+                        <ComboBox fx:id="teamComboBox" maxWidth="Infinity" 
+                                  promptText="Sélectionner votre équipe" 
+                                  GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+
+                        <Label text="Compétiteurs :" GridPane.rowIndex="1"/>
+                        <VBox fx:id="competitorsBox" spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                            <Label fx:id="competitorsLabel" text="Aucune équipe sélectionnée" 
+                                   styleClass="subtitle" wrapText="true"/>
+                        </VBox>
+                    </children>
+                </GridPane>
+
+                <Label fx:id="errorLabel" text="Message d'erreur" textFill="RED" 
+                       visible="false" wrapText="true"/>
+
+                <HBox spacing="10" alignment="CENTER">
+                    <Button text="Annuler" onAction="#handleCancel" prefWidth="120" 
+                            styleClass="secondary-button"/>
+                    <Button text="Inscrire l'équipe" onAction="#handleRegister" prefWidth="150" 
+                            styleClass="primary-button"/>
+                </HBox>
+            </VBox>
+
+            <!-- Navigation Links -->
+            <HBox spacing="15" alignment="CENTER" styleClass="navigation-links">
+                <padding>
+                    <Insets top="20"/>
+                </padding>
+                <Label text="Retour à la liste des tournois" styleClass="link-label" 
+                       onMouseClicked="#handleBackToList"/>
+                <Label text="Voir le bracket" styleClass="link-label" 
+                       onMouseClicked="#handleViewBracket"/>
+                <Label text="Valider les résultats" styleClass="link-label" 
+                       onMouseClicked="#handleValidateResults"/>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

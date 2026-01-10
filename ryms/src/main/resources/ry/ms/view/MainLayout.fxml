@@ -24,6 +24,10 @@
                     onAction="#handleGamesClick"
                     style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px;"/>
 
+            <Button text="Gestion des Tournois"
+                    onAction="#handleTournamentsClick"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-size: 14px;"/>
+
 
         <Button text="Gestion des Produits" 
                     onAction="#handleProductClick"

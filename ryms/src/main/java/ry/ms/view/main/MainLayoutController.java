@@ -56,6 +56,11 @@ public class MainLayoutController {
         handleOpenProducts();
     }
 
+    @FXML
+    private void handleTournamentsClick() {
+        showTournamentList();
+    }
+
     private void loadView(String fxmlPath) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
@@ -70,6 +75,7 @@ public class MainLayoutController {
     private void handleOpenInvitations() {
         loadView("/ry/ms/view/team/fxml/InvitationsModal.fxml");
     }
+
 
     @FXML
     private void handleLogout() {
@@ -103,6 +109,8 @@ public class MainLayoutController {
     public void showGameCatalog() {
         loadView("/ry/ms/view/game/fxml/gameCatalogLayout.fxml");
     }
+
+    public void showTournamentList() { loadView("/ry/ms/view/tournament/fxml/TournamentList.fxml");}
 
     
 

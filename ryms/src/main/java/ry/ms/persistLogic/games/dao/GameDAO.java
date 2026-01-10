@@ -19,4 +19,5 @@ public abstract class GameDAO {
     public abstract void saveGame(Game game) throws SQLException;
     public abstract void deleteGame(Game game) throws SQLException;
     public abstract void updateGame(Game game) throws SQLException;
+    public abstract Game getGameByName(String name) throws SQLException;
 }

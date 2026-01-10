@@ -24,6 +24,7 @@ public class UserDAOPostgres extends UserDAO {
 
     /**
      * Constructs a UserPostgres DAO with the given database connection.
+     * 
      * @param conn The database connection to be used for queries.
      */
     public UserDAOPostgres() {
@@ -40,6 +41,7 @@ public class UserDAOPostgres extends UserDAO {
 
     /**
      * Retrieves a user from the 'users' table by email or username (identifier).
+     * 
      * @param identifier email or username provided by the user.
      * @return A {@link User} object if a matching user is found, otherwise null.
      * @throws SQLException if a database access error occurs.
@@ -47,21 +49,21 @@ public class UserDAOPostgres extends UserDAO {
     @Override
     public User getUserById(String identifier) throws SQLException {
         String sql = "SELECT email, username, password, avatar, role FROM users WHERE email = ? OR username = ?";
-        
-        // Using try-with-resources to ensure PreparedStatement and ResultSet are closed automatically.
+
+        // Using try-with-resources to ensure PreparedStatement and ResultSet are closed
+        // automatically.
         try (PreparedStatement stmt = this.conn.prepareStatement(sql)) {
             stmt.setString(1, identifier);
             stmt.setString(2, identifier);
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new User(
-                        rs.getString("email"),
-                        rs.getString("username"),
-                        rs.getString("password"),
-                        rs.getBytes("avatar"),
-                        rs.getString("role")
-                    );
+                            rs.getString("email"),
+                            rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getBytes("avatar"),
+                            rs.getString("role"));
                 }
             }
         }
@@ -71,23 +73,22 @@ public class UserDAOPostgres extends UserDAO {
     @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT email, username, password, avatar FROM users ORDER BY username";
-        
+        String sql = "SELECT email, username, password, avatar, role FROM users ORDER BY username";
+
         try (PreparedStatement stmt = this.conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            
+                ResultSet rs = stmt.executeQuery()) {
+
             while (rs.next()) {
                 User user = new User(
-                    rs.getString("email"),
-                    rs.getString("username"),
-                    rs.getString("password"),
-                    rs.getBytes("avatar"),
-                    rs.getString("role")
-                );
+                        rs.getString("email"),
+                        rs.getString("username"),
+                        rs.getString("password"),
+                        rs.getBytes("avatar"),
+                        rs.getString("role"));
                 users.add(user);
             }
         }
-        
+
         return users;
     }
 }

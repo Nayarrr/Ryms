@@ -72,4 +72,8 @@ public final class TeamFacade {
     public List<Team> searchTeamsByName(String searchTerm) throws SQLException {
         return teamManager.searchTeamsByName(searchTerm);
     }
+
+    public Team getTeamById(Long teamId) throws SQLException {
+        return teamManager.getTeamById(teamId);
+    }
 }

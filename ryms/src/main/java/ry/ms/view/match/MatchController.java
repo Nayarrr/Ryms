@@ -40,9 +40,9 @@ public class MatchController {
     /**
      * Crée un nouveau match complet avec deux équipes, une date, un jeu et des arbitres
      */
-    public boolean createMatch(Team team1, Team team2, Date matchDate, int gameId, List<User> referees) {
+    public boolean createMatch(Team team1, Team team2, Date matchDate, int tournamentId, List<User> referees) {
         try {
-            Long matchId = matchFacade.createMatch(team1.getTeamId(), team2.getTeamId(), matchDate, gameId);
+            Long matchId = matchFacade.createMatch(team1.getTeamId(), team2.getTeamId(), matchDate, tournamentId);
             
             if (matchId == null) {
                 System.err.println("❌ Erreur : Match non créé");

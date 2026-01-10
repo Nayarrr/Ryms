@@ -43,15 +43,15 @@ public class MatchFacade {
         return matchfacade;
     }
 
-    public Long createMatch(Date matchDate, int gameId) throws SQLException {
-        return matchManager.createMatch(matchDate, gameId);
+    public Long createMatch(Date matchDate, int tournamentId) throws SQLException {
+        return matchManager.createMatch(matchDate, tournamentId);
     }
 
-    public Long createMatch(Long team1Id, Long team2Id, Date matchDate, int gameId) 
+    public Long createMatch(Long team1Id, Long team2Id, Date matchDate, int tournamentId)
             throws SQLException, TeamDoesntExistException, MatchDoesntExistException {
-        
-        Long matchId = matchManager.createMatch(matchDate, gameId);
-        
+
+        Long matchId = matchManager.createMatch(matchDate, tournamentId);
+
         if (matchId == null) {
             throw new SQLException("Échec de création du match");
         }
@@ -62,23 +62,23 @@ public class MatchFacade {
         return matchId;
     }
 
-    public boolean addReferee(Long matchId, String refereeEmail) 
+    public boolean addReferee(Long matchId, String refereeEmail)
             throws UserDoesntExistException, MatchDoesntExistException, SQLException {
         return matchManager.addReferee(matchId, refereeEmail);
     }
 
-    public boolean addDate(Long matchId, Date date) 
+    public boolean addDate(Long matchId, Date date)
             throws MatchDoesntExistException, SQLException {
         return matchManager.addDate(matchId, date);
     }
 
-    public boolean addTeam(Long matchId, Long teamId) 
+    public boolean addTeam(Long matchId, Long teamId)
             throws TeamDoesntExistException, MatchDoesntExistException, SQLException {
         return matchManager.addTeam(matchId, teamId);
     }
 
     public boolean updateRoaster(Long teamId, String currentEmail, String newEmail)
-            throws UserDoesntExistException,SQLException {
+            throws UserDoesntExistException, SQLException {
         return matchManager.updateRoaster(teamId, currentEmail, newEmail);
     }
 
@@ -106,16 +106,16 @@ public class MatchFacade {
         return matchManager.deleteMatch(matchId);
     }
 
-    public Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate, 
-                                     int gameId, User referee) throws SQLException {
-        return matchManager.createCompleteMatch(team1, team2, matchDate, gameId, referee);
+    public Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate,
+            int gameId, int tournamentId, User referee) throws SQLException {
+        return matchManager.createCompleteMatch(team1, team2, matchDate, gameId, tournamentId, referee);
     }
 
     public List<Team> getTeamsForMatch(Long matchId) throws SQLException {
         return matchManager.getTeamsForMatch(matchId);
     }
 
-    public boolean updateScore(Long matchId, Long teamId, int score) throws SQLException{
+    public boolean updateScore(Long matchId, Long teamId, int score) throws SQLException {
         return matchResultDAO.updateScore(matchId, teamId, score);
     }
 
@@ -129,5 +129,9 @@ public class MatchFacade {
 
     public boolean startMatch(Long matchId) throws SQLException, MatchDoesntExistException {
         return matchManager.startMatch(matchId);
+    }
+
+    public List<Match> getMatchesByTournament(int tournamentId) throws SQLException {
+        return matchManager.getMatchesByTournament(tournamentId);
     }
 }

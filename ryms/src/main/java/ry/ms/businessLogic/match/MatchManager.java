@@ -21,49 +21,53 @@ public class MatchManager {
     private final UserDAO userDAO;
     private final TeamDAO teamDAO;
 
-    private MatchManager(MatchDAO matchDAO, UserDAO userDAO, TeamDAO teamDAO){
+    private MatchManager(MatchDAO matchDAO, UserDAO userDAO, TeamDAO teamDAO) {
         this.matchDAO = matchDAO;
         this.userDAO = userDAO;
         this.teamDAO = teamDAO;
     }
 
-    public static MatchManager getMatchManager(MatchDAO matchDAO,  UserDAO userDAO, TeamDAO teamDAO){
-        if(matchmanager == null){
+    public static MatchManager getMatchManager(MatchDAO matchDAO, UserDAO userDAO, TeamDAO teamDAO) {
+        if (matchmanager == null) {
             matchmanager = new MatchManager(matchDAO, userDAO, teamDAO);
         }
         return matchmanager;
     }
 
-    private User getUserById(String email) throws SQLException, UserDoesntExistException{
+    private User getUserById(String email) throws SQLException, UserDoesntExistException {
         User user = userDAO.getUserById(email);
-        if(user == null){
+        if (user == null) {
             throw new UserDoesntExistException("User does not exist.");
         }
         return user;
     }
 
-    public Match getMatchById(Long matchid) throws SQLException, MatchDoesntExistException{
+    public Match getMatchById(Long matchid) throws SQLException, MatchDoesntExistException {
         Match match = matchDAO.getMatchById(matchid);
-        if(match == null){
+        if (match == null) {
             throw new MatchDoesntExistException("Match does not exist.");
         }
         return match;
     }
 
-    private Team getTeamById(Long teamid) throws SQLException, TeamDoesntExistException{
+    private Team getTeamById(Long teamid) throws SQLException, TeamDoesntExistException {
         Team team = matchDAO.getTeamById(teamid);
-        if(team == null){
+        if (team == null) {
             throw new TeamDoesntExistException("Team does not exist.");
         }
         return team;
     }
 
-    public List<User> getTeamMembers(Long teamId) throws SQLException{
+    public List<User> getTeamMembers(Long teamId) throws SQLException {
         return matchDAO.getTeamMembers(teamId);
     }
 
     public List<Match> getAllMatches() throws SQLException {
         return matchDAO.getAllMatches();
+    }
+
+    public List<Match> getMatchesByTournament(int tournamentId) throws SQLException {
+        return matchDAO.getMatchesByTournament(tournamentId);
     }
 
     public List<User> getAllUsers() throws SQLException {
@@ -78,15 +82,17 @@ public class MatchManager {
         return matchDAO.searchUsersByEmail(searchTerm);
     }
 
-    public Long createMatch(Date matchDate, int gameId) throws SQLException {
+    public Long createMatch(Date matchDate, int tournamentid) throws SQLException {
         if (matchDate == null) {
             throw new IllegalArgumentException("Match date cannot be null");
         }
-        
-        return matchDAO.createMatch(matchDate, gameId);
+
+        return matchDAO.createMatch(matchDate, tournamentid);
     }
 
-    public Match createCompleteMatch(Team team1, Team team2, java.time.LocalDate matchDate, int gameId, User referee) throws SQLException {
+    public Match createCompleteMatch(Team team1, Team team2, java.time.LocalDate matchDate, int gameId,
+            int tournamentId, User referee)
+            throws SQLException {
         if (team1 == null || team2 == null) {
             throw new IllegalArgumentException("Les deux équipes doivent être spécifiées");
         }
@@ -103,56 +109,59 @@ public class MatchManager {
             throw new IllegalArgumentException("Un arbitre doit être spécifié");
         }
 
-        return matchDAO.createCompleteMatch(team1, team2, matchDate, gameId, referee);
+        return matchDAO.createCompleteMatch(team1, team2, matchDate, gameId, tournamentId, referee);
     }
 
-    public boolean addReferee(Long matchid , String email) throws SQLException, UserDoesntExistException, MatchDoesntExistException{
+    public boolean addReferee(Long matchid, String email)
+            throws SQLException, UserDoesntExistException, MatchDoesntExistException {
         User referee = getUserById(email);
         Match match = getMatchById(matchid);
 
         System.out.println("🔍 Match: " + match.getMatchId());
         System.out.println("🔍 Arbitre: " + referee.getEmail());
-        
+
         boolean result = matchDAO.addReferee(match, referee);
-        
+
         System.out.println("🔍 Résultat addReferee: " + result);
-        
+
         return result;
     }
 
-    public boolean addDate(Long matchid, Date date) throws SQLException, MatchDoesntExistException{
+    public boolean addDate(Long matchid, Date date) throws SQLException, MatchDoesntExistException {
         Match match = getMatchById(matchid);
-        if(match == null){
+        if (match == null) {
             throw new MatchDoesntExistException("Match does not exist.");
         }
 
         return matchDAO.addDate(match, date);
     }
 
-    public boolean addTeam(Long matchid, Long teamid) throws SQLException, TeamDoesntExistException, MatchDoesntExistException{
+    public boolean addTeam(Long matchid, Long teamid)
+            throws SQLException, TeamDoesntExistException, MatchDoesntExistException {
         Match match = getMatchById(matchid);
         Team team = getTeamById(teamid);
 
-        if(team == null){
+        if (team == null) {
             throw new TeamDoesntExistException("Team does not exist");
         }
 
-        if(match == null){
+        if (match == null) {
             throw new MatchDoesntExistException("Match does not exist.");
         }
 
         return matchDAO.addTeam(match, team);
     }
 
-    public boolean updateRoaster(Long teamId, String currentUserEmail, String newUserEmail) throws SQLException, UserDoesntExistException {
+    public boolean updateRoaster(Long teamId, String currentUserEmail, String newUserEmail)
+            throws SQLException, UserDoesntExistException {
         User currentUser = getUserById(currentUserEmail);
         User newUser = getUserById(newUserEmail);
 
-        if(currentUser == null){
+        if (currentUser == null) {
             throw new UserDoesntExistException("CurrentUser does not exist");
         }
 
-        if(newUser == null){
+        if (newUser == null) {
             throw new UserDoesntExistException("NewUser does not exist");
         }
 
@@ -176,17 +185,16 @@ public class MatchManager {
      */
     public boolean startMatch(Long matchId) throws SQLException, MatchDoesntExistException {
         Match match = getMatchById(matchId);
-        
+
         if (match == null) {
             throw new MatchDoesntExistException("Le match n'existe pas.");
         }
-        
+
         if (match.getStatus() != ry.ms.businessLogic.match.models.MatchStatus.SCHEDULED) {
             throw new IllegalStateException("Le match a déjà commencé ou est terminé.");
         }
-        
+
         return matchDAO.updateMatchStatus(matchId, ry.ms.businessLogic.match.models.MatchStatus.IN_PROGRESS);
     }
-
 
 }
