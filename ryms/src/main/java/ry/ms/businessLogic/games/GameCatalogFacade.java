@@ -1,6 +1,5 @@
 package ry.ms.businessLogic.games;
 
-
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -10,6 +9,7 @@ import ry.ms.persistLogic.games.postgres.GameDAOPostgres;
 
 import java.sql.SQLException;
 import java.util.List;
+
 //Observable
 public class GameCatalogFacade {
     private static GameCatalogFacade gameCatalogFacade;
@@ -23,7 +23,7 @@ public class GameCatalogFacade {
     }
 
     public static GameCatalogFacade getGameCatalogFactory() {
-        if(gameCatalogFacade == null){
+        if (gameCatalogFacade == null) {
             gameCatalogFacade = new GameCatalogFacade();
         }
         return gameCatalogFacade;
@@ -50,5 +50,9 @@ public class GameCatalogFacade {
                 gameList.set(i, game);
             }
         }
+    }
+
+    public Game getGameByName(String name) {
+        return this.gameCatalogManager.getGameByName(name);
     }
 }

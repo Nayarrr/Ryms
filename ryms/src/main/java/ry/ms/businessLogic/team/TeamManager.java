@@ -197,11 +197,15 @@ public class TeamManager {
     public List<Team> getAllTeams() throws SQLException {
         List<Team> teams = teamDAO.getAllTeams();
 
-        if(teams == null){
+        if (teams == null) {
             throw new IllegalArgumentException("No team found.");
         }
 
         return teams;
+    }
+
+    public Team getTeamById(Long teamId) throws SQLException {
+        return teamDAO.getTeamById(teamId);
     }
 
     public List<Team> searchTeamsByName(String searchTerm) throws SQLException {

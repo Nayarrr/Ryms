@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="700.0" prefWidth="1000.0" style="-fx-background-color: #f4f4f4;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.tournament.TournamentBracketController">
+
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 1 0;">
+            <padding>
+                <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+            </padding>
+            <children>
+                <VBox HBox.hgrow="ALWAYS">
+                    <Label fx:id="tournamentNameLabel" text="Nom du Tournoi">
+                        <font>
+                            <Font name="System Bold" size="22.0" />
+                        </font>
+                    </Label>
+                    <HBox spacing="15.0">
+                        <Label fx:id="tournamentGameLabel" text="Jeu" textFill="#666" />
+                        <Label fx:id="tournamentDateLabel" text="Date" textFill="#666" />
+                        <Label fx:id="tournamentLocationLabel" text="Lieu" textFill="#666" />
+                    </HBox>
+                </VBox>
+                <ComboBox fx:id="statusComboBox" onAction="#handleStatusChange" prefWidth="150.0" style="-fx-background-color: #eee; -fx-background-radius: 15; -fx-padding: 0;" />
+                <Label fx:id="participantsLabel" text="0/0 participants" style="-fx-padding: 5 10; -fx-text-fill: #666;" />
+                <Button onAction="#handleRefresh" text="Actualiser" />
+                <Button fx:id="generateBracketButton" onAction="#handleGenerateBracket" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" text="Générer Bracket" />
+            </children>
+        </HBox>
+    </top>
+
+    <center>
+        <VBox alignment="CENTER" spacing="30">
+            <padding>
+                <Insets top="50" right="50" bottom="50" left="50"/>
+            </padding>
+
+            <!-- Message explicatif -->
+            <VBox fx:id="generateBracketMessage" alignment="CENTER" spacing="15" maxWidth="600">
+                <Label text="Générer le bracket" styleClass="form-title">
+                    <font>
+                        <Font name="System Bold" size="24"/>
+                    </font>
+                </Label>
+                <Label text="Tous les compétiteurs sont inscrits. Appuyez sur le bouton ci-dessous pour générer le bracket à partir de la liste des inscrits." 
+                       wrapText="true" textAlignment="CENTER" styleClass="subtitle">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </Label>
+            </VBox>
+
+            <!-- Bouton Générer -->
+            <Button fx:id="generateBracketButtonCenter" onAction="#handleGenerateBracket" text="Générer le bracket" 
+                    styleClass="primary-button" prefWidth="200" prefHeight="50">
+                <font>
+                    <Font size="16" name="System Bold"/>
+                </font>
+            </Button>
+
+
+            <!-- Container pour le bracket généré -->
+            <ScrollPane fx:id="bracketScrollPane" fitToHeight="true" fitToWidth="true" 
+                        visible="false" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-background: #f4f4f4;">
+                <content>
+                    <VBox fx:id="bracketContainer" alignment="CENTER" spacing="20">
+                        <padding>
+                            <Insets top="30" right="30" bottom="30" left="30"/>
+                        </padding>
+                        <!-- Label pour afficher le vainqueur -->
+                        <Label fx:id="winnerLabel" visible="false" managed="false"
+                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #4CAF50; -fx-padding: 20;">
+                            <font>
+                                <Font name="System Bold" size="24"/>
+                            </font>
+                        </Label>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+            <!-- Navigation Links -->
+            <HBox spacing="15" alignment="CENTER" styleClass="navigation-links">
+                <Label text="Retour à la liste" styleClass="link-label" onMouseClicked="#handleBackToList"/>
+                <Label text="Équipes inscrites" styleClass="link-label" onMouseClicked="#handleViewRegisteredTeams"/>
+                <Label text="Gérer les inscriptions" styleClass="link-label" onMouseClicked="#handleManageRegistrations"/>
+
+            </HBox>
+        </VBox>
+    </center>
+
+    <right>
+        <VBox fx:id="matchDetailsPanel" prefWidth="250.0" spacing="15.0" style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 0 1;" visible="false">
+            <padding>
+                <Insets bottom="20.0" left="15.0" right="15.0" top="20.0" />
+            </padding>
+            <children>
+                <Label text="Détails du Match">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Label>
+                <Separator />
+                <VBox fx:id="matchDetailsContent" spacing="10.0" />
+                <Region VBox.vgrow="ALWAYS" />
+                <Button onAction="#handleEditMatch" maxWidth="Infinity" text="Modifier Scores" />
+                <Button onAction="#handleAddMatch" maxWidth="Infinity" text="Ajouter Match" />
+            </children>
+        </VBox>
+    </right>
+</BorderPane>

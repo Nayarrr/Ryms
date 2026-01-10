@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ry.ms.view.tournament.TournamentListController"
+            prefHeight="600.0" prefWidth="800.0"
+            stylesheets="@tournament-styles.css">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Label text="Gestion des Tournois" styleClass="header-title">
+                    <font>
+                        <Font name="System Bold" size="28"/>
+                    </font>
+                </Label>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Nouveau Tournoi" fx:id="addTournamentBtn"
+                        onAction="#handleAddTournament" styleClass="primary-button">
+                    <font>
+                        <Font size="14"/>
+                    </font>
+                </Button>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center - Tournament Table -->
+    <center>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Search and Filter Bar -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <TextField fx:id="searchField" promptText="Rechercher un tournoi..."
+                           prefWidth="300" styleClass="search-field"/>
+                <ComboBox fx:id="statusFilterCombo" promptText="Filtrer par statut"
+                          prefWidth="200"/>
+                <Button text="Rafraîchir" onAction="#handleRefresh" styleClass="secondary-button"/>
+            </HBox>
+
+            <!-- Tournament TableView -->
+            <TableView fx:id="tournamentTableView" VBox.vgrow="ALWAYS" styleClass="tournament-table">
+                <columns>
+                    <TableColumn fx:id="nameColumn" text="Nom du tournoi" prefWidth="200"/>
+                    <TableColumn fx:id="gameColumn" text="Jeu" prefWidth="150"/>
+                    <TableColumn fx:id="startDateColumn" text="Date de début" prefWidth="120"/>
+                    <TableColumn fx:id="endDateColumn" text="Date de fin" prefWidth="120"/>
+                    <TableColumn fx:id="locationColumn" text="Lieu" prefWidth="150"/>
+                    <TableColumn fx:id="statusColumn" text="Statut" prefWidth="100"/>
+                    <TableColumn fx:id="actionColumn" text="Actions" prefWidth="100"/>
+                </columns>
+                <placeholder>
+                    <Label text="Aucun tournoi trouvé" styleClass="placeholder-text">
+                        <font>
+                            <Font size="16"/>
+                        </font>
+                    </Label>
+                </placeholder>
+            </TableView>
+
+            <!-- Navigation Links -->
+            <HBox spacing="15" alignment="CENTER" styleClass="navigation-links">
+                <padding>
+                    <Insets top="10"/>
+                </padding>
+            </HBox>
+        </VBox>
+    </center>
+
+
+</BorderPane>

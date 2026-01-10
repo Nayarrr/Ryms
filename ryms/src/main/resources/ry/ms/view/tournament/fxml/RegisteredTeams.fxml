@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #f4f4f4;" 
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="ry.ms.view.tournament.RegisteredTeamsController">
+
+    <top>
+        <VBox style="-fx-background-color: white; -fx-border-color: #ddd; -fx-border-width: 0 0 1 0;">
+            <padding>
+                <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+            </padding>
+            <children>
+                <Label fx:id="tournamentNameLabel" text="Équipes inscrites">
+                    <font>
+                        <Font name="System Bold" size="24.0" />
+                    </font>
+                </Label>
+                <Label fx:id="registeredCountLabel" text="0/0 équipes inscrites" textFill="#666">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+    </top>
+
+    <center>
+        <VBox spacing="15.0">
+            <padding>
+                <Insets top="20.0" right="30.0" bottom="20.0" left="30.0" />
+            </padding>
+            <children>
+                <!-- Barre d'actions -->
+                <HBox spacing="10.0" alignment="CENTER_LEFT">
+                    <Button text="Actualiser" onAction="#handleRefresh" />
+                </HBox>
+
+                <!-- Table des équipes inscrites -->
+                <TableView fx:id="registeredTeamsTable" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="teamNameColumn" text="Équipe" prefWidth="150.0" />
+                        <TableColumn fx:id="teamTagColumn" text="Tag" prefWidth="80.0" />
+                        <TableColumn fx:id="captainColumn" text="Capitaine" prefWidth="200.0" />
+                        <TableColumn fx:id="registrationDateColumn" text="Date d'inscription" prefWidth="150.0" />
+                        <TableColumn fx:id="statusColumn" text="Statut" prefWidth="100.0" />
+                    </columns>
+                    <placeholder>
+                        <Label text="Aucune équipe inscrite" textFill="#999" />
+                    </placeholder>
+                </TableView>
+
+                <!-- Navigation Links -->
+                <HBox spacing="15" alignment="CENTER" styleClass="navigation-links">
+                    <Label text="Retour au Bracket" styleClass="link-label" onMouseClicked="#handleBackToBracket" 
+                           style="-fx-text-fill: #2196F3; -fx-cursor: hand; -fx-underline: true;" />
+                    <Label text="Gérer les inscriptions" styleClass="link-label" onMouseClicked="#handleManageRegistrations"
+                           style="-fx-text-fill: #2196F3; -fx-cursor: hand; -fx-underline: true;" />
+                </HBox>
+            </children>
+        </VBox>
+    </center>
+</BorderPane>

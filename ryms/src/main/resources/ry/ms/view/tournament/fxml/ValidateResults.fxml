@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="ry.ms.view.tournament.ValidateResultsController"
+            prefHeight="700.0" prefWidth="1000.0"
+            stylesheets="@tournament-styles.css">
+
+    <!-- Header -->
+    <top>
+        <VBox styleClass="header-section">
+            <HBox alignment="CENTER_LEFT" spacing="15">
+                <padding>
+                    <Insets top="20" right="20" bottom="20" left="20"/>
+                </padding>
+                <Label fx:id="headerLabel" text="Valider les résultats - Tournoi" styleClass="header-title">
+                    <font>
+                        <Font name="System Bold" size="28"/>
+                    </font>
+                </Label>
+            </HBox>
+        </VBox>
+    </top>
+
+    <!-- Center - Results Table -->
+    <center>
+        <VBox spacing="20">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Results TableView -->
+            <TableView fx:id="resultsTableView" VBox.vgrow="ALWAYS" styleClass="results-table">
+                <columns>
+                    <TableColumn fx:id="roundColumn" text="Round" prefWidth="80"/>
+                    <TableColumn fx:id="team1Column" text="Équipe 1" prefWidth="150"/>
+                    <TableColumn fx:id="score1Column" text="Score 1" prefWidth="80"/>
+                    <TableColumn fx:id="team2Column" text="Équipe 2" prefWidth="150"/>
+                    <TableColumn fx:id="score2Column" text="Score 2" prefWidth="80"/>
+                    <TableColumn fx:id="dateColumn" text="Date" prefWidth="100"/>
+                    <TableColumn fx:id="timeColumn" text="Heure" prefWidth="80"/>
+                    <TableColumn fx:id="statusColumn" text="Statut" prefWidth="100"/>
+                    <TableColumn fx:id="actionsColumn" text="Actions" prefWidth="120"/>
+                </columns>
+                <placeholder>
+                    <Label text="Aucun résultat à valider" styleClass="placeholder-text">
+                        <font>
+                            <Font size="16"/>
+                        </font>
+                    </Label>
+                </placeholder>
+            </TableView>
+
+            <!-- Action Buttons -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Button text="Rafraîchir" onAction="#handleRefresh" styleClass="secondary-button"/>
+                <Button text="Valider tous les résultats" onAction="#handleValidateAll" 
+                        styleClass="primary-button"/>
+            </HBox>
+
+            <!-- Navigation Links -->
+            <HBox spacing="15" alignment="CENTER" styleClass="navigation-links">
+                <padding>
+                    <Insets top="10"/>
+                </padding>
+                <Label text="Retour à la liste" styleClass="link-label" onMouseClicked="#handleBackToList"/>
+                <Label text="Gérer les inscriptions" styleClass="link-label" onMouseClicked="#handleManageRegistrations"/>
+                <Label text="Voir le bracket" styleClass="link-label" onMouseClicked="#handleViewBracket"/>
+            </HBox>
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -57,6 +57,8 @@ public class MainLayoutController {
     }
 
     @FXML
+    private void handleTournamentsClick() {
+        showTournamentList();
     private void handleShopClick() {
         loadShopView();
     }
@@ -75,6 +77,7 @@ public class MainLayoutController {
     private void handleOpenInvitations() {
         loadView("/ry/ms/view/team/fxml/InvitationsModal.fxml");
     }
+
 
     @FXML
     private void handleLogout() {
@@ -113,6 +116,8 @@ public class MainLayoutController {
     public void showGameCatalog() {
         loadView("/ry/ms/view/game/fxml/gameCatalogLayout.fxml");
     }
+
+    public void showTournamentList() { loadView("/ry/ms/view/tournament/fxml/TournamentList.fxml");}
 
     
 

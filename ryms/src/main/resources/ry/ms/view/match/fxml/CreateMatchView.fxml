@@ -18,6 +18,7 @@
         <HBox spacing="10" alignment="CENTER_LEFT">
             <TextField fx:id="team1SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
         </HBox>
+        <ComboBox fx:id="team1ComboBox" promptText="Sélectionner une équipe inscrite" prefWidth="300" visible="false" managed="false"/>
         <ListView fx:id="team1ListView" prefHeight="100" visible="false" managed="false"/>
         <Label fx:id="team1SelectedLabel" styleClass="selected-label"/>
     </VBox>
@@ -27,6 +28,7 @@
         <HBox spacing="10" alignment="CENTER_LEFT">
             <TextField fx:id="team2SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
         </HBox>
+        <ComboBox fx:id="team2ComboBox" promptText="Sélectionner une équipe inscrite" prefWidth="300" visible="false" managed="false"/>
         <ListView fx:id="team2ListView" prefHeight="100" visible="false" managed="false"/>
         <Label fx:id="team2SelectedLabel" styleClass="selected-label"/>
     </VBox>
@@ -50,7 +52,8 @@
     <VBox spacing="10" styleClass="form-section">
         <Label text="Arbitre(s)" styleClass="section-label"/>
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="refereeSearchField" promptText="Rechercher un arbitre par email..." prefWidth="300"/>
+            <TextField fx:id="refereeSearchField" promptText="Email de l'arbitre (ex: admin@ryms.com)" prefWidth="250"/>
+            <Button text="Ajouter" onAction="#handleAddRefereeManually" styleClass="secondary-button"/>
         </HBox>
         <ListView fx:id="refereeListView" prefHeight="100" visible="false" managed="false"/>
         <VBox fx:id="selectedRefereesContainer" spacing="5"/>

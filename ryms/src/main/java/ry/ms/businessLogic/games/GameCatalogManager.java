@@ -20,7 +20,6 @@ public class GameCatalogManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public void addGame(Game game) {
@@ -34,8 +33,7 @@ public class GameCatalogManager {
     public void deleteGame(Game game) {
         try {
             this.gameDAO.deleteGame(game);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             throw new RuntimeException("Erreur lors de la suppression du jeu", e);
         }
     }
@@ -45,6 +43,14 @@ public class GameCatalogManager {
             this.gameDAO.updateGame(game);
         } catch (SQLException e) {
             throw new RuntimeException("Erreur lors de l'edition du jeu", e);
+        }
+    }
+
+    public Game getGameByName(String name) {
+        try {
+            return this.gameDAO.getGameByName(name);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
