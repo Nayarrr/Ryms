@@ -7,37 +7,22 @@ import ry.ms.persistLogic.games.dao.GameDAO;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class GameDAOPostgres extends GameDAO {
+public class GameDAOPostgres implements GameDAO {
 
     public GameDAOPostgres() {
-        super(initConnection());
-    }
-
-    private static Connection initConnection() {
-        try {
-            return DBConfig.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException("Can't connect to database", e);
-        }
     }
 
     @Override
     public ArrayList<Game> loadGameCatalog() throws SQLException {
-        System.out.println("Connexion à : " + this.conn.getMetaData().getURL());
-        System.out.println("Utilisateur : " + this.conn.getMetaData().getUserName());
         String sql = "SELECT * FROM games";
         ArrayList<Game> res = new ArrayList<>();
-
-        try (PreparedStatement stmt = this.conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                res.add(new Game(
-                        rs.getInt("game_id"),
-                        rs.getString("name"),
-                        rs.getString("editor"),
-                        rs.getDate("releaseDate"),
-                        rs.getBytes("logo")
-                ));
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            try (ResultSet rs = stmt.executeQuery()) {
+                // Remplacez 'if' par 'while' pour parcourir toute la table
+                while (rs.next()) {
+                    res.add(new Game(rs.getString("name"), rs.getString("editor"), rs.getDate("releaseDate"), rs.getBytes("logo")));
+                }
             }
         }
         return res;

@@ -59,6 +59,8 @@ public class MainLayoutController {
     @FXML
     private void handleTournamentsClick() {
         showTournamentList();
+    private void handleShopClick() {
+        loadShopView();
     }
 
     private void loadView(String fxmlPath) {
@@ -103,6 +105,11 @@ public class MainLayoutController {
     @FXML
     private void handleOpenProducts() {
         loadView("/ry/ms/view/product/fxml/ProductDashboard.fxml");
+    }
+
+
+    private void loadShopView() {
+        loadView("/ry/ms/view/product/fxml/ShopView.fxml");
     }
 
 

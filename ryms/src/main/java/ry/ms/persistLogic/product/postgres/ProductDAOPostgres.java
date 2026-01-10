@@ -10,24 +10,14 @@ import java.util.List;
 
 public class ProductDAOPostgres implements ProductDAO {
 
-    private final Connection conn;
-
     public ProductDAOPostgres() {
-        this.conn = initConnection();
-    }
-
-    private static Connection initConnection() {
-        try {
-            return DBConfig.getConnection();
-        } catch (SQLException e) {
-            throw new RuntimeException("Unable to obtain database connection", e);
-        }
     }
 
     @Override
     public Product saveProduct(Product product) throws SQLException {
         String sql = "INSERT INTO products (name, description, price, stock, category) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, product.getName());
             stmt.setString(2, product.getDescription());
             stmt.setDouble(3, product.getPrice());
@@ -52,7 +42,8 @@ public class ProductDAOPostgres implements ProductDAO {
             throw new IllegalArgumentException("Product ID is required for update");
         }
         String sql = "UPDATE products SET name = ?, description = ?, price = ?, stock = ?, category = ? WHERE product_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, product.getName());
             stmt.setString(2, product.getDescription());
             stmt.setDouble(3, product.getPrice());
@@ -69,7 +60,8 @@ public class ProductDAOPostgres implements ProductDAO {
     @Override
     public void deleteProduct(Long id) throws SQLException {
         String sql = "DELETE FROM products WHERE product_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
             stmt.executeUpdate();
         }
@@ -78,7 +70,8 @@ public class ProductDAOPostgres implements ProductDAO {
     @Override
     public Product getProductById(Long id) throws SQLException {
         String sql = "SELECT product_id, name, description, price, stock, category FROM products WHERE product_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setLong(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -93,7 +86,8 @@ public class ProductDAOPostgres implements ProductDAO {
     public List<Product> getAllProducts() throws SQLException {
         String sql = "SELECT product_id, name, description, price, stock, category FROM products";
         List<Product> products = new ArrayList<>();
-        try (PreparedStatement stmt = conn.prepareStatement(sql);
+        try (Connection conn = DBConfig.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 products.add(mapRow(rs));
