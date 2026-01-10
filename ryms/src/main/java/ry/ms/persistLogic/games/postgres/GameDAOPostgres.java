@@ -1,14 +1,14 @@
 package ry.ms.persistLogic.games.postgres;
 
-import ry.ms.businessLogic.games.models.Game;
-import ry.ms.persistLogic.DBConfig;
-import ry.ms.persistLogic.games.dao.GameDAO;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import ry.ms.businessLogic.games.models.Game;
+import ry.ms.persistLogic.DBConfig;
+import ry.ms.persistLogic.games.dao.GameDAO;
 
 public class GameDAOPostgres implements GameDAO {
 
@@ -43,6 +43,7 @@ public class GameDAOPostgres implements GameDAO {
         }
     }
 
+    @Override
     public void deleteGame(Game game) throws SQLException {
         String sql = "DELETE FROM games WHERE name = ? AND editor = ?";
         try (Connection conn = DBConfig.getConnection();

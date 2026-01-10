@@ -82,7 +82,7 @@ public class MatchDetailsController {
         }
 
         // UTILISER LE CACHE pour obtenir l'instance partagée
-        this.currentMatch = ry.ms.view.match.MatchCache.getInstance().getOrPut(match);
+        this.currentMatch = MatchCache.getInstance().getOrPut(match);
 
         // Charger les équipes
         team1 = matchController.getTeamForMatch(currentMatch, 1);
