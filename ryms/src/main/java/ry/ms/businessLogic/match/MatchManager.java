@@ -116,15 +116,7 @@ public class MatchManager {
             throws SQLException, UserDoesntExistException, MatchDoesntExistException {
         User referee = getUserById(email);
         Match match = getMatchById(matchid);
-
-        System.out.println("🔍 Match: " + match.getMatchId());
-        System.out.println("🔍 Arbitre: " + referee.getEmail());
-
-        boolean result = matchDAO.addReferee(match, referee);
-
-        System.out.println("🔍 Résultat addReferee: " + result);
-
-        return result;
+        return matchDAO.addReferee(match, referee);
     }
 
     public boolean addDate(Long matchid, Date date) throws SQLException, MatchDoesntExistException {

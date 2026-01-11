@@ -90,8 +90,6 @@ public class MatchDAOPostgres implements MatchDAO {
 
             try (var rs = checkStmt.executeQuery()) {
                 if (rs.next() && rs.getInt(1) > 0) {
-                    System.out.println(
-                            "⚠️ L'arbitre " + referee.getEmail() + " est déjà assigné au match " + match.getMatchId());
                     return false;
                 }
             }
@@ -104,13 +102,7 @@ public class MatchDAOPostgres implements MatchDAO {
             stmt.setString(2, referee.getEmail());
 
             int affectedRows = stmt.executeUpdate();
-            boolean success = affectedRows > 0;
-
-            if (success) {
-                System.out.println("✅ Arbitre " + referee.getEmail() + " ajouté au match " + match.getMatchId());
-            }
-
-            return success;
+            return affectedRows > 0;
         }
     }
 
@@ -321,7 +313,7 @@ public class MatchDAOPostgres implements MatchDAO {
 
     public List<User> getRefereesForMatch(Long matchId) throws SQLException {
         List<User> referees = new ArrayList<>();
-        String sql = "SELECT u.email, u.username, u.password, u.avatar " +
+        String sql = "SELECT u.email, u.username, u.password, u.avatar, u.role " +
                 "FROM users u " +
                 "INNER JOIN match_referees mr ON u.email = mr.referee_email " +
                 "WHERE mr.match_id = ?";
@@ -381,14 +373,7 @@ public class MatchDAOPostgres implements MatchDAO {
 
             stmt.setLong(1, matchId);
             int rowsAffected = stmt.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("✅ Match " + matchId + " supprimé avec succès");
-                return true;
-            } else {
-                System.out.println("⚠️  Aucun match trouvé avec l'ID " + matchId);
-                return false;
-            }
+            return rowsAffected > 0;
         }
     }
 
@@ -416,8 +401,6 @@ public class MatchDAOPostgres implements MatchDAO {
                     matchId = rs.getLong("match_id");
                 }
             }
-
-            System.out.println("✅ Match créé avec ID: " + matchId);
 
             // Ajouter équipes
             String sqlTeam = "INSERT INTO match_teams (match_id, team_id) VALUES (?, ?)";
@@ -472,13 +455,7 @@ public class MatchDAOPostgres implements MatchDAO {
             stmt.setLong(2, matchId);
 
             int rowsAffected = stmt.executeUpdate();
-
-            if (rowsAffected > 0) {
-                System.out.println("✅ Statut du match #" + matchId + " mis à jour : " + status.name());
-                return true;
-            }
-
-            return false;
+            return rowsAffected > 0;
         }
     }
 
