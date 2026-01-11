@@ -84,7 +84,7 @@ public class UserDAOPostgres implements UserDAO {
         String sql = "UPDATE users SET username = ?, password = ?, role = ?, avatar = ? WHERE email = ?";
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, user.getName());
+            pstmt.setString(1, user.getUsername());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getRole());
             pstmt.setBytes(4, user.getAvatar());

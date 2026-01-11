@@ -76,7 +76,7 @@ public class MainLayoutController {
     }
 
     @FXML
-    private void handleOpenInvitations() {
+    public void handleOpenInvitations() {
         loadView("/ry/ms/view/team/fxml/InvitationsModal.fxml");
     }
 

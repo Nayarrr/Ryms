@@ -110,6 +110,7 @@ public class MainViewController {
             navbarController.setOnTournamentsClick(layoutController::showTournamentList);
             navbarController.setOnProductsClick(layoutController::handleOpenProducts);
             navbarController.setOnShopClick(layoutController::loadShopView);
+            navbarController.setOnInvitationsClick(layoutController::handleOpenInvitations);
             // navbarController.setOnInvitationsClick(...) // If needed, expose
             // handleOpenInvitations in MainLayoutController
 
