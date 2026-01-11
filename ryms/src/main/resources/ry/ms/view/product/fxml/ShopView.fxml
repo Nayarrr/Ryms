@@ -39,6 +39,7 @@
                 <Label fx:id="totalLabel" text="0.00 €" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #27ae60;" />
             </HBox>
             <Button text="Vider le panier" onAction="#handleClearBasket" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
+            <Button text="Payer (Stripe)" onAction="#handleCheckout" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;" maxWidth="Infinity"/>
             <Label fx:id="statusLabel" wrapText="true" style="-fx-text-fill: #c0392b;" />
         </VBox>
     </right>

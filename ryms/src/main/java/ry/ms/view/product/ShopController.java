@@ -28,14 +28,22 @@ import ry.ms.view.user.UserSession;
 
 public class ShopController implements Initializable {
 
-    @FXML private FlowPane productsGrid;
-    @FXML private TableView<BasketDisplayItem> basketTable;
-    @FXML private TableColumn<BasketDisplayItem, String> productCol;
-    @FXML private TableColumn<BasketDisplayItem, Integer> qtyCol;
-    @FXML private TableColumn<BasketDisplayItem, Double> priceCol;
-    @FXML private TableColumn<BasketDisplayItem, Double> subtotalCol;
-    @FXML private Label totalLabel;
-    @FXML private Label statusLabel;
+    @FXML
+    private FlowPane productsGrid;
+    @FXML
+    private TableView<BasketDisplayItem> basketTable;
+    @FXML
+    private TableColumn<BasketDisplayItem, String> productCol;
+    @FXML
+    private TableColumn<BasketDisplayItem, Integer> qtyCol;
+    @FXML
+    private TableColumn<BasketDisplayItem, Double> priceCol;
+    @FXML
+    private TableColumn<BasketDisplayItem, Double> subtotalCol;
+    @FXML
+    private Label totalLabel;
+    @FXML
+    private Label statusLabel;
 
     private final ProductController productController = new ProductController();
     private final SessionFacade basketFacade = SessionFacade.getInstance();
@@ -73,7 +81,8 @@ public class ShopController implements Initializable {
     private VBox createProductCard(Product product) {
         VBox card = new VBox(10);
         card.setPrefWidth(240);
-        card.setStyle("-fx-background-color: white; -fx-padding: 14; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #dfe6e9;");
+        card.setStyle(
+                "-fx-background-color: white; -fx-padding: 14; -fx-border-radius: 10; -fx-background-radius: 10; -fx-border-color: #dfe6e9;");
 
         Label name = new Label(product.getName());
         name.setStyle("-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;");
@@ -137,6 +146,58 @@ public class ShopController implements Initializable {
         }
     }
 
+    @FXML
+    private void handleCheckout() {
+        clearStatus();
+        if (basketTable.getItems().isEmpty()) {
+            setError("Votre panier est vide.");
+            return;
+        }
+
+        try {
+            // Calculate total
+            double total = basketTable.getItems().stream()
+                    .mapToDouble(BasketDisplayItem::getSubtotal)
+                    .sum();
+
+            // Open Payment Window
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                    getClass().getResource("/ry/ms/view/payment/fxml/Payment.fxml"));
+            javafx.scene.Parent root = loader.load();
+
+            ry.ms.view.payment.PaymentController controller = loader.getController();
+            controller.setAmount(total);
+
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.setTitle("Paiement Sécurisé");
+            stage.setScene(new javafx.scene.Scene(root));
+
+            controller.setOnSuccess(() -> {
+                // Handle success: clear basket, close window, show message
+                try {
+                    String email = UserSession.getInstance().getUserEmail();
+                    basketFacade.emptyBasket(email);
+                    refreshBasket();
+                    setInfo("Paiement effectué avec succès ! Merci de votre commande.");
+                } catch (SQLException e) {
+                    setError("Paiement réussi mais erreur lors du vidage du panier: " + e.getMessage());
+                }
+                stage.close();
+            });
+
+            controller.setOnCancel(() -> {
+                stage.close();
+            });
+
+            stage.showAndWait();
+
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+            setError("Impossible d'ouvrir la fenêtre de paiement: " + e.getMessage());
+        }
+    }
+
     private void refreshBasket() {
         String email = UserSession.getInstance().getUserEmail();
         if (email == null || email.isBlank()) {
@@ -147,12 +208,12 @@ public class ShopController implements Initializable {
         try {
             List<BasketItem> items = basketFacade.getBasketByUser(email);
             Map<Long, Product> productIndex = productController.getAllProducts()
-                .stream().collect(Collectors.toMap(Product::getProductId, p -> p, (a, b) -> a, HashMap::new));
+                    .stream().collect(Collectors.toMap(Product::getProductId, p -> p, (a, b) -> a, HashMap::new));
 
             List<BasketDisplayItem> displayItems = items.stream()
-                .map(item -> toDisplayItem(item, productIndex.get(item.getProductId())))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+                    .map(item -> toDisplayItem(item, productIndex.get(item.getProductId())))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
 
             basketTable.getItems().setAll(displayItems);
             double total = displayItems.stream().mapToDouble(BasketDisplayItem::getSubtotal).sum();
@@ -198,9 +259,20 @@ public class ShopController implements Initializable {
             this.subtotal = subtotal;
         }
 
-        public String getProductName() { return productName; }
-        public int getQuantity() { return quantity; }
-        public double getPrice() { return price; }
-        public double getSubtotal() { return subtotal; }
+        public String getProductName() {
+            return productName;
+        }
+
+        public int getQuantity() {
+            return quantity;
+        }
+
+        public double getPrice() {
+            return price;
+        }
+
+        public double getSubtotal() {
+            return subtotal;
+        }
     }
 }
