@@ -43,4 +43,10 @@ public class LoginFrame {
             controller.setOnRegisterRequest(onRegisterRequest);
         }
     }
+
+    public void setOnForgotPasswordRequest(Runnable onForgotPasswordRequest) {
+        if (controller != null) {
+            controller.setOnForgotPasswordRequest(onForgotPasswordRequest);
+        }
+    }
 }

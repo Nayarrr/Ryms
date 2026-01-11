@@ -71,29 +71,121 @@ public class NavbarController {
             onAdminClick.run();
     }
 
+    @FXML
+    private javafx.scene.layout.HBox navLinks;
+
+    // Runnables for feature navigation
+    private Runnable onTeamsClick;
+    private Runnable onMatchesClick;
+    private Runnable onGamesClick;
+    private Runnable onTournamentsClick;
+    private Runnable onProductsClick;
+    private Runnable onShopClick;
+    private Runnable onInvitationsClick;
+
+    public void setOnTeamsClick(Runnable onTeamsClick) {
+        this.onTeamsClick = onTeamsClick;
+    }
+
+    public void setOnMatchesClick(Runnable onMatchesClick) {
+        this.onMatchesClick = onMatchesClick;
+    }
+
+    public void setOnGamesClick(Runnable onGamesClick) {
+        this.onGamesClick = onGamesClick;
+    }
+
+    public void setOnTournamentsClick(Runnable onTournamentsClick) {
+        this.onTournamentsClick = onTournamentsClick;
+    }
+
+    public void setOnProductsClick(Runnable onProductsClick) {
+        this.onProductsClick = onProductsClick;
+    }
+
+    public void setOnShopClick(Runnable onShopClick) {
+        this.onShopClick = onShopClick;
+    }
+
+    public void setOnInvitationsClick(Runnable onInvitationsClick) {
+        this.onInvitationsClick = onInvitationsClick;
+    }
+
+    @FXML
+    private void handleTeamsClick() {
+        if (onTeamsClick != null)
+            onTeamsClick.run();
+    }
+
+    @FXML
+    private void handleMatchesClick() {
+        if (onMatchesClick != null)
+            onMatchesClick.run();
+    }
+
+    @FXML
+    private void handleGamesClick() {
+        if (onGamesClick != null)
+            onGamesClick.run();
+    }
+
+    @FXML
+    private void handleTournamentsClick() {
+        if (onTournamentsClick != null)
+            onTournamentsClick.run();
+    }
+
+    @FXML
+    private void handleProductsClick() {
+        if (onProductsClick != null)
+            onProductsClick.run();
+    }
+
+    @FXML
+    private void handleShopClick() {
+        if (onShopClick != null)
+            onShopClick.run();
+    }
+
+    @FXML
+    private void handleInvitationsClick() {
+        if (onInvitationsClick != null)
+            onInvitationsClick.run();
+    }
+
     public void updateNavbarState(boolean isLoggedIn, String username) {
         if (authBox != null && userBox != null) {
             authBox.setVisible(!isLoggedIn);
             authBox.setManaged(!isLoggedIn);
             userBox.setVisible(isLoggedIn);
             userBox.setManaged(isLoggedIn);
+
+            // Check for Admin role.
+            ry.ms.businessLogic.user.models.User currentUser = ry.ms.businessLogic.user.login.SessionFacade
+                    .getSessionFactory().getCurrentUser();
+            boolean isAdmin = currentUser != null && "Admin".equalsIgnoreCase(currentUser.getRole());
+
+            // Show Nav Links only when logged in
+            if (navLinks != null) {
+                navLinks.setVisible(isLoggedIn);
+                navLinks.setManaged(isLoggedIn);
+
+                // Hide "Produits" (for Product Management) for non-admins
+                for (javafx.scene.Node node : navLinks.getChildren()) {
+                    if (node instanceof javafx.scene.control.Button) {
+                        javafx.scene.control.Button btn = (javafx.scene.control.Button) node;
+                        if ("Produits".equals(btn.getText()) || "Gestion des Produits".equals(btn.getText())) {
+                            btn.setVisible(isAdmin);
+                            btn.setManaged(isAdmin);
+                        }
+                    }
+                }
+            }
+
             if (isLoggedIn && userLabel != null) {
                 userLabel.setText("Hello, " + username);
             }
-            // Check for Admin role.
-            // We need to pass the role or get it from SessionFacade.
-            // Better to decouple and let MainViewController configure it, or just pull from
-            // Session here.
-            // Since this is a simple View Helper, let's pull from session for now or
-            // better, update signature.
-            // But changing signature affects callers.
-            // Let's use SessionFacade here for convenience as it is used elsewhere in View
-            // layer (e.g. ProfileController)
-
-            ry.ms.businessLogic.user.models.User currentUser = ry.ms.businessLogic.user.login.SessionFacade
-                    .getSessionFactory().getCurrentUser();
             if (adminButton != null) {
-                boolean isAdmin = currentUser != null && "Admin".equalsIgnoreCase(currentUser.getRole());
                 adminButton.setVisible(isAdmin);
                 adminButton.setManaged(isAdmin);
             }

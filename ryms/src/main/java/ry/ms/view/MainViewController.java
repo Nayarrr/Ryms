@@ -57,17 +57,19 @@ public class MainViewController {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/utils/fxml/Navbar.fxml"));
                 Parent navbar = loader.load();
                 navbarController = loader.getController();
-                // Re-wire because controller might be new
-                navbarController.setOnLoginClick(this::showLoginView);
-                navbarController.setOnRegisterClick(this::showRegisterView);
-                navbarController.setOnProfileClick(this::showProfileView);
-                navbarController.setOnAdminClick(this::showAdminView); // Added
-                navbarController.setOnLogoutClick(() -> {
-                    SessionFacade.getSessionFactory().logout();
-                    showLoginView();
-                });
                 mainPane.setTop(navbar);
             }
+
+            // Wire generic navbar actions (always available or re-wired)
+            navbarController.setOnLoginClick(this::showLoginView);
+            navbarController.setOnRegisterClick(this::showRegisterView);
+            navbarController.setOnProfileClick(this::showProfileView);
+            navbarController.setOnAdminClick(this::showAdminView);
+            navbarController.setOnLogoutClick(() -> {
+                SessionFacade.getSessionFactory().logout();
+                showLoginView();
+            });
+
             navbarController.updateNavbarState(false, null);
 
         } catch (IOException e) {
@@ -76,11 +78,23 @@ public class MainViewController {
         }
 
         LoginFrame loginFrame = new LoginFrame();
-        // When login is successful, show the dashboard
         loginFrame.setOnSuccess(this::showDashboardView);
-        // Switch to register view
         loginFrame.setOnRegisterRequest(this::showRegisterView);
+        loginFrame.setOnForgotPasswordRequest(this::showForgotPasswordView); // Wired Forgot Password
         setContent(loginFrame.getView());
+    }
+
+    private void showForgotPasswordView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/user/fxml/ForgotPassword.fxml"));
+            Parent view = loader.load();
+            ry.ms.view.user.login.ForgotPasswordController controller = loader.getController();
+            controller.setOnBackRequest(this::showLoginView);
+            setContent(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            setContent(new Label("Error loading Forgot Password view."));
+        }
     }
 
     private void showDashboardView() {
@@ -89,13 +103,15 @@ public class MainViewController {
             Parent dashboardView = loader.load();
             MainLayoutController layoutController = loader.getController();
 
-            // Set a callback for the logout button in the dashboard (if any?)
-            // layoutController.setOnLogout(this::showLoginView);
-            // Dashboard likely doesn't have logout button anymore if we use Navbar?
-            // But MainLayoutController might still expect it. I'll check
-            // MainLayoutController later if needed.
-
-            // mainPane.setTop(null); // DO NOT REMOVE NAVBAR
+            // Wire Navbar Navigation to MainLayoutController actions
+            navbarController.setOnTeamsClick(layoutController::loadTeamDashboard);
+            navbarController.setOnMatchesClick(layoutController::loadMatchList);
+            navbarController.setOnGamesClick(layoutController::showGameCatalog);
+            navbarController.setOnTournamentsClick(layoutController::showTournamentList);
+            navbarController.setOnProductsClick(layoutController::handleOpenProducts);
+            navbarController.setOnShopClick(layoutController::loadShopView);
+            // navbarController.setOnInvitationsClick(...) // If needed, expose
+            // handleOpenInvitations in MainLayoutController
 
             // Update Navbar State
             User currentUser = SessionFacade.getSessionFactory().getCurrentUser();
@@ -111,22 +127,12 @@ public class MainViewController {
 
     private void showRegisterView() {
         // Ensure navbar is in Auth mode
-        navbarController.updateNavbarState(false, null);
+        if (navbarController != null) {
+            navbarController.updateNavbarState(false, null);
+        }
 
         RegisterFrame registerFrame = new RegisterFrame();
-        // On successful registration, navigate back to the login view
-        registerFrame.setOnSuccess(this::showLoginView); // Or dashboard? Register usually -> Login or Auto-login ->
-                                                         // Dashboard
-        // My SessionFacade plan says register auto-logins.
-        // But the original RegisterFrame.onSuccess just went to Login.
-        // I will keep it as showLoginView for now, or change to showDashboardView if I
-        // auto-login.
-        // Let's stick to showing Login for consistency with previous flow, or Upgrade?
-        // UserManager register returns User, SessionFacade register sets currentUser.
-        // So we ARE logged in. We should go to Dashboard.
         registerFrame.setOnSuccess(this::showDashboardView);
-
-        // Switch back to login view if requested
         registerFrame.setOnLoginRequest(this::showLoginView);
         setContent(registerFrame.getView());
     }
@@ -136,8 +142,7 @@ public class MainViewController {
         profileFrame.setOnBackRequest(this::showDashboardView);
         profileFrame.setOnLogoutRequest(() -> {
             SessionFacade.getSessionFactory().logout();
-            showLoginView(); // Logic already handled in deleteUser? NO, logic in Controller calls
-                             // onLogoutRequest.
+            showLoginView();
         });
         setContent(profileFrame.getView());
     }
@@ -151,7 +156,7 @@ public class MainViewController {
             setContent(adminView);
         } catch (IOException e) {
             e.printStackTrace();
-            setContent(new Label("Error loading Admin Dashboard."));
+            setContent(new Label("Error loading Admin Dashboard: " + e.getMessage() + "\n" + e.getCause()));
         }
     }
 }

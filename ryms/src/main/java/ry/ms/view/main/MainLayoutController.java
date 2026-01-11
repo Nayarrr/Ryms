@@ -50,7 +50,7 @@ public class MainLayoutController {
     }
 
     @FXML
-    private void handleProductClick(){
+    private void handleProductClick() {
         handleOpenProducts();
     }
 
@@ -80,7 +80,6 @@ public class MainLayoutController {
         loadView("/ry/ms/view/team/fxml/InvitationsModal.fxml");
     }
 
-
     @FXML
     private void handleLogout() {
         UserSession.getInstance().clearSession();
@@ -89,11 +88,11 @@ public class MainLayoutController {
         }
     }
 
-    private void loadTeamDashboard() {
+    public void loadTeamDashboard() {
         loadView("/ry/ms/view/team/fxml/TeamDashboard.fxml");
     }
 
-    private void loadMatchList() {
+    public void loadMatchList() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/match/fxml/MatchListView.fxml"));
             Parent view = loader.load();
@@ -106,7 +105,7 @@ public class MainLayoutController {
         }
     }
 
-    private void loadMatchDetails(long matchId) {
+    public void loadMatchDetails(long matchId) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/match/fxml/MatchDetailsView.fxml"));
             Parent view = loader.load();
@@ -121,25 +120,22 @@ public class MainLayoutController {
     }
 
     @FXML
-    private void handleOpenProducts() {
+    public void handleOpenProducts() {
         loadView("/ry/ms/view/product/fxml/ProductDashboard.fxml");
     }
 
-
-    private void loadShopView() {
+    public void loadShopView() {
         loadView("/ry/ms/view/product/fxml/ShopView.fxml");
     }
-
 
     public void showGameCatalog() {
         loadView("/ry/ms/view/game/fxml/gameCatalogLayout.fxml");
     }
 
-    public void showTournamentList() { loadView("/ry/ms/view/tournament/fxml/TournamentList.fxml");}
+    public void showTournamentList() {
+        loadView("/ry/ms/view/tournament/fxml/TournamentList.fxml");
+    }
 
-    
-
-    
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur");

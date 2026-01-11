@@ -17,32 +17,45 @@ import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import ry.ms.businessLogic.games.GameCatalogFacade;
 import ry.ms.businessLogic.games.models.Game;
+import ry.ms.businessLogic.user.login.SessionFacade;
+import ry.ms.businessLogic.user.models.User;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
 public class GameCatalogController {
 
-    @FXML private FlowPane gameGrid;
+    @FXML
+    private FlowPane gameGrid;
+    @FXML
+    private Button addGameBtn; // Assumes fx:id="addGameBtn" is in FXML
     private final GameCatalogFacade facade = GameCatalogFacade.getGameCatalogFactory();
 
     @FXML
     public void initialize() {
-        renderAllCards();
+        User currentUser = SessionFacade.getSessionFactory().getCurrentUser();
+        boolean isAdmin = currentUser != null && "Admin".equalsIgnoreCase(currentUser.getRole());
+
+        if (addGameBtn != null) {
+            addGameBtn.setVisible(isAdmin);
+            addGameBtn.setManaged(isAdmin);
+        }
+
+        renderAllCards(isAdmin);
 
         facade.loadGameCatalog().addListener((ListChangeListener<Game>) change -> {
-            Platform.runLater(this::renderAllCards);
+            Platform.runLater(() -> renderAllCards(isAdmin));
         });
     }
 
-    private void renderAllCards() {
+    private void renderAllCards(boolean isAdmin) {
         gameGrid.getChildren().clear();
         for (Game game : facade.loadGameCatalog()) {
-            gameGrid.getChildren().add(createGameCard(game));
+            gameGrid.getChildren().add(createGameCard(game, isAdmin));
         }
     }
 
-    private VBox createGameCard(Game game) {
+    private VBox createGameCard(Game game, boolean isAdmin) {
         // 1. Conteneur principal
         VBox card = new VBox(15);
         card.setPrefSize(220, 320);
@@ -90,20 +103,26 @@ public class GameCatalogController {
         Region spacer = new Region();
         VBox.setVgrow(spacer, Priority.ALWAYS);
 
-        // 4. Boutons
-        HBox actions = new HBox(10);
-        actions.setAlignment(Pos.CENTER);
+        // 4. Boutons (Only show logic if Admin)
+        if (isAdmin) {
+            HBox actions = new HBox(10);
+            actions.setAlignment(Pos.CENTER);
 
-        Button editBtn = new Button("Edit");
-        editBtn.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: white;");
-        editBtn.setOnAction(e -> handleOpenEditGame(game));
+            Button editBtn = new Button("Edit");
+            editBtn.setStyle("-fx-background-color: #f1c40f; -fx-text-fill: white;");
+            editBtn.setOnAction(e -> handleOpenEditGame(game));
 
-        Button deleteBtn = new Button("Delete");
-        deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
-        deleteBtn.setOnAction(e -> handleDeleteGame(game));
+            Button deleteBtn = new Button("Delete");
+            deleteBtn.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white;");
+            deleteBtn.setOnAction(e -> handleDeleteGame(game));
 
-        actions.getChildren().addAll(editBtn, deleteBtn);
-        card.getChildren().addAll(imageView, nameLabel, spacer, actions);
+            actions.getChildren().addAll(editBtn, deleteBtn);
+            card.getChildren().addAll(imageView, nameLabel, spacer, actions);
+        } else {
+            // For non-admin, just show image and name (and maybe a "Details" button if
+            // needed later)
+            card.getChildren().addAll(imageView, nameLabel, spacer);
+        }
 
         return card;
     }
@@ -135,9 +154,11 @@ public class GameCatalogController {
     }
 
     private void handleDeleteGame(Game game) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer " + game.getName() + " ?", ButtonType.YES, ButtonType.NO);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Supprimer " + game.getName() + " ?", ButtonType.YES,
+                ButtonType.NO);
         alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) facade.deleteGame(game);
+            if (response == ButtonType.YES)
+                facade.deleteGame(game);
         });
     }
 }

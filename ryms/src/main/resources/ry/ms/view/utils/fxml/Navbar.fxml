@@ -11,13 +11,25 @@
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
-   <left>
-      <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <image>
-            <Image url="@/images/logo.png" />
-         </image>
-      </ImageView>
-   </left>
+    <left>
+        <HBox alignment="CENTER_LEFT" spacing="20.0">
+            <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
+                <image>
+                    <Image url="@/images/logo.png" />
+                </image>
+            </ImageView>
+            <!-- Navigation Links (Visible only when logged in) -->
+            <HBox fx:id="navLinks" alignment="CENTER_LEFT" spacing="15.0" visible="false" managed="false">
+                <Button text="Équipes" onAction="#handleTeamsClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="Matchs" onAction="#handleMatchesClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="Jeux" onAction="#handleGamesClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="Tournois" onAction="#handleTournamentsClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="Produits" onAction="#handleProductsClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="Boutique" onAction="#handleShopClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                <Button text="Invitations" onAction="#handleInvitationsClick" style="-fx-background-color: #e67e22; -fx-text-fill: white;"/>
+            </HBox>
+        </HBox>
+    </left>
    <right>
       <javafx.scene.layout.StackPane BorderPane.alignment="CENTER">
          <!-- Auth Box (Login/Register) -->

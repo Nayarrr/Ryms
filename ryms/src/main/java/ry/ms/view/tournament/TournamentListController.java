@@ -51,11 +51,21 @@ public class TournamentListController {
     public void initialize() {
         tournamentFacade = TournamentFacade.getInstance();
 
+        // Check Admin Status
+        ry.ms.businessLogic.user.models.User currentUser = ry.ms.businessLogic.user.login.SessionFacade
+                .getSessionFactory().getCurrentUser();
+        boolean isAdmin = currentUser != null && "Admin".equalsIgnoreCase(currentUser.getRole());
+
+        if (addTournamentBtn != null) {
+            addTournamentBtn.setVisible(isAdmin);
+            addTournamentBtn.setManaged(isAdmin);
+        }
+
         // Configuration du ComboBox pour les statuts
         statusFilterCombo.getItems().addAll(TournamentStatus.values());
 
         // Configuration des colonnes du TableView
-        setupTableColumns();
+        setupTableColumns(isAdmin);
 
         // Événement de double-clic sur une ligne
         tournamentTableView.setOnMouseClicked(event -> {
@@ -75,7 +85,7 @@ public class TournamentListController {
         loadTournaments();
     }
 
-    private void setupTableColumns() {
+    private void setupTableColumns(boolean isAdmin) {
         // Colonne Nom
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -139,28 +149,34 @@ public class TournamentListController {
             }
         });
 
-        // Colonne Actions
-        actionColumn.setCellFactory(param -> new TableCell<>() {
-            private final Button deleteButton = new Button("Supprimer");
+        // Colonne Actions (Only for Admin)
+        if (isAdmin) {
+            actionColumn.setCellFactory(param -> new TableCell<>() {
+                private final Button deleteButton = new Button("Supprimer");
 
-            {
-                deleteButton.setOnAction(event -> {
-                    Tournament tournament = getTableView().getItems().get(getIndex());
-                    handleDeleteTournament(tournament);
-                });
-                deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;");
-            }
-
-            @Override
-            protected void updateItem(Void item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty) {
-                    setGraphic(null);
-                } else {
-                    setGraphic(deleteButton);
+                {
+                    deleteButton.setOnAction(event -> {
+                        Tournament tournament = getTableView().getItems().get(getIndex());
+                        handleDeleteTournament(tournament);
+                    });
+                    deleteButton.setStyle("-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-cursor: hand;");
                 }
-            }
-        });
+
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(deleteButton);
+                    }
+                }
+            });
+        } else {
+            // Hide or clear action column for non-admins?
+            // Hiding might be better, or just empty cells.
+            actionColumn.setVisible(false);
+        }
     }
 
     private void handleDeleteTournament(Tournament tournament) {
