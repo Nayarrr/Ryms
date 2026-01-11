@@ -61,6 +61,7 @@ public class MainViewController {
                 navbarController.setOnLoginClick(this::showLoginView);
                 navbarController.setOnRegisterClick(this::showRegisterView);
                 navbarController.setOnProfileClick(this::showProfileView);
+                navbarController.setOnAdminClick(this::showAdminView); // Added
                 navbarController.setOnLogoutClick(() -> {
                     SessionFacade.getSessionFactory().logout();
                     showLoginView();
@@ -139,5 +140,18 @@ public class MainViewController {
                              // onLogoutRequest.
         });
         setContent(profileFrame.getView());
+    }
+
+    private void showAdminView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/user/fxml/AdminDashboard.fxml"));
+            Parent adminView = loader.load();
+            ry.ms.view.user.admin.AdminDashboardController controller = loader.getController();
+            controller.setOnBackRequest(this::showDashboardView);
+            setContent(adminView);
+        } catch (IOException e) {
+            e.printStackTrace();
+            setContent(new Label("Error loading Admin Dashboard."));
+        }
     }
 }

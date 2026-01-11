@@ -13,8 +13,6 @@ public class RegisterController {
     @FXML
     private TextField usernameField;
     @FXML
-    private TextField surnameField;
-    @FXML
     private TextField emailField;
     @FXML
     private PasswordField passwordField;
@@ -38,17 +36,16 @@ public class RegisterController {
     @FXML
     private void handleRegisterButtonAction() {
         String username = usernameField.getText();
-        String surname = surnameField.getText();
         String email = emailField.getText();
         String password = passwordField.getText();
         String confirmPassword = confirmPasswordField.getText();
 
-        if (!validateInput(username, surname, email, password, confirmPassword)) {
+        if (!validateInput(username, email, password, confirmPassword)) {
             return;
         }
 
         try {
-            sessionFacade.registerUser(email, password, username, surname);
+            sessionFacade.registerUser(email, password, username);
             messageLabel.setText("Inscription réussie ! Vous pouvez maintenant vous connecter.");
             messageLabel.setTextFill(Color.GREEN);
             if (onSuccess != null) {
@@ -72,9 +69,9 @@ public class RegisterController {
         }
     }
 
-    private boolean validateInput(String username, String surname, String email, String password,
+    private boolean validateInput(String username, String email, String password,
             String confirmPassword) {
-        if (username.isEmpty() || surname.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             messageLabel.setText("Veuillez remplir tous les champs.");
             messageLabel.setTextFill(Color.RED);
             return false;

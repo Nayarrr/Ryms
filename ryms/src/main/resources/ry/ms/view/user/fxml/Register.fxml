@@ -21,8 +21,7 @@
          </image>
       </ImageView>
       <Label text="Créer un compte" textFill="#34495e"><font><Font name="System Bold" size="18.0" /></font></Label>
-      <TextField fx:id="nameField" maxWidth="250.0" promptText="Prénom" />
-      <TextField fx:id="surnameField" maxWidth="250.0" promptText="Nom" />
+      <TextField fx:id="usernameField" maxWidth="250.0" promptText="Username" />
       <TextField fx:id="emailField" maxWidth="250.0" promptText="Email" />
       <PasswordField fx:id="passwordField" maxWidth="250.0" promptText="Mot de passe" />
       <PasswordField fx:id="confirmPasswordField" maxWidth="250.0" promptText="Confirmer le mot de passe" />

@@ -56,6 +56,21 @@ public class NavbarController {
             onProfileClick.run();
     }
 
+    private Runnable onAdminClick; // Admin runnable
+
+    public void setOnAdminClick(Runnable onAdminClick) {
+        this.onAdminClick = onAdminClick;
+    }
+
+    @FXML
+    private javafx.scene.control.Button adminButton;
+
+    @FXML
+    private void handleAdmin() {
+        if (onAdminClick != null)
+            onAdminClick.run();
+    }
+
     public void updateNavbarState(boolean isLoggedIn, String username) {
         if (authBox != null && userBox != null) {
             authBox.setVisible(!isLoggedIn);
@@ -64,6 +79,23 @@ public class NavbarController {
             userBox.setManaged(isLoggedIn);
             if (isLoggedIn && userLabel != null) {
                 userLabel.setText("Hello, " + username);
+            }
+            // Check for Admin role.
+            // We need to pass the role or get it from SessionFacade.
+            // Better to decouple and let MainViewController configure it, or just pull from
+            // Session here.
+            // Since this is a simple View Helper, let's pull from session for now or
+            // better, update signature.
+            // But changing signature affects callers.
+            // Let's use SessionFacade here for convenience as it is used elsewhere in View
+            // layer (e.g. ProfileController)
+
+            ry.ms.businessLogic.user.models.User currentUser = ry.ms.businessLogic.user.login.SessionFacade
+                    .getSessionFactory().getCurrentUser();
+            if (adminButton != null) {
+                boolean isAdmin = currentUser != null && "Admin".equalsIgnoreCase(currentUser.getRole());
+                adminButton.setVisible(isAdmin);
+                adminButton.setManaged(isAdmin);
             }
         }
     }

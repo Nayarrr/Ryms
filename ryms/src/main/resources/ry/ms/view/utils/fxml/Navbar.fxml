@@ -31,6 +31,7 @@
          <HBox fx:id="userBox" alignment="CENTER_RIGHT" spacing="10.0" visible="false" managed="false">
              <children>
                  <javafx.scene.control.Label fx:id="userLabel" text="Hello, User" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                 <Button fx:id="adminButton" onAction="#handleAdmin" style="-fx-font-size: 14px; -fx-background-color: #ffd700;" text="Admin" visible="false" managed="false"/>
                  <Button onAction="#handleProfile" style="-fx-font-size: 14px;" text="Profile" />
                  <Button onAction="#handleLogout" style="-fx-font-size: 14px; -fx-background-color: #ffcccc;" text="Logout" />
              </children>

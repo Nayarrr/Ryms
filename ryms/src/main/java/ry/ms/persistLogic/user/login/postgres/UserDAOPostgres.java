@@ -13,17 +13,20 @@ public class UserDAOPostgres implements UserDAO {
 
     @Override
     public Optional<User> findByEmail(String email) throws SQLException {
-        String sql = "SELECT email, password, username, role, is_active FROM users WHERE email = ?";
+        String sql = "SELECT email, password, username, role, is_active, avatar FROM users WHERE email = ?";
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, email);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
+                    // Constructor: username, email, password, role, avatar, isActive
+                    // Adjust based on User.java check
                     User user = new User(
                             rs.getString("username"),
                             rs.getString("email"),
                             rs.getString("password"),
                             rs.getString("role"),
+                            rs.getBytes("avatar"), // Assuming avatar is byte[]
                             rs.getBoolean("is_active"));
                     return Optional.of(user);
                 }
@@ -39,14 +42,16 @@ public class UserDAOPostgres implements UserDAO {
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
             pstmt.setString(1, email);
-            pstmt.setString(2, password);
+            pstmt.setString(2, password); // Should be hashed
             pstmt.setString(3, username);
             pstmt.setBoolean(4, true); // Default active
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
                     String role = rs.getString("role");
-                    return new User(username, email, password, role, true);
+                    // Constructor for new user (no avatar yet)
+                    // username, email, password, role, avatar, isActive
+                    return new User(username, email, password, role, null, true);
                 } else {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
@@ -57,7 +62,7 @@ public class UserDAOPostgres implements UserDAO {
     @Override
     public List<User> getAllUsers() throws SQLException {
         List<User> users = new ArrayList<>();
-        String sql = "SELECT email, password, username, role, is_active FROM users";
+        String sql = "SELECT email, password, username, role, is_active, avatar FROM users ORDER BY username";
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql);
                 ResultSet rs = pstmt.executeQuery()) {
@@ -67,6 +72,7 @@ public class UserDAOPostgres implements UserDAO {
                         rs.getString("email"),
                         rs.getString("password"),
                         rs.getString("role"),
+                        rs.getBytes("avatar"),
                         rs.getBoolean("is_active")));
             }
         }
@@ -75,13 +81,14 @@ public class UserDAOPostgres implements UserDAO {
 
     @Override
     public void updateUser(User user) throws SQLException {
-        String sql = "UPDATE users SET username = ?, password = ?, role = ? WHERE email = ?";
+        String sql = "UPDATE users SET username = ?, password = ?, role = ?, avatar = ? WHERE email = ?";
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, user.getName());
             pstmt.setString(2, user.getPassword());
             pstmt.setString(3, user.getRole());
-            pstmt.setString(4, user.getEmail());
+            pstmt.setBytes(4, user.getAvatar());
+            pstmt.setString(5, user.getEmail());
             pstmt.executeUpdate();
         }
     }

@@ -52,7 +52,7 @@ public class UserManager {
         }
     }
 
-    public User register(String email, String password, String username, String surname)
+    public User register(String email, String password, String username)
             throws UserAlreadyExistsException, UserCreationException {
         try {
             // Check if user already exists
@@ -61,7 +61,7 @@ public class UserManager {
             }
 
             // Create the new user
-            return userDAO.createUser(email, password, username, surname);
+            return userDAO.createUser(email, password, username);
 
         } catch (SQLException e) {
             // Wrap the persistence error in a business-level exception
@@ -75,5 +75,37 @@ public class UserManager {
 
     public void deleteUser(String email) throws SQLException {
         userDAO.deleteUser(email);
+    }
+
+    public void changePassword(String email, String currentPassword, String newPassword)
+            throws UserDoesntExistException, IncorrectPasswordException, SQLException {
+        User user = userDAO.findByEmail(email)
+                .orElseThrow(() -> new UserDoesntExistException("User not found"));
+
+        if (!user.getPassword().equals(currentPassword)) {
+            throw new IncorrectPasswordException("Incorrect current password.");
+        }
+
+        userDAO.updatePassword(email, newPassword);
+    }
+
+    public void resetPassword(String email, String newPassword)
+            throws UserDoesntExistException, SQLException {
+        if (!userDAO.findByEmail(email).isPresent()) {
+            throw new UserDoesntExistException("User with email " + email + " does not exist.");
+        }
+        userDAO.updatePassword(email, newPassword);
+    }
+
+    public void setAccountStatus(String email, boolean isActive)
+            throws UserDoesntExistException, SQLException {
+        if (!userDAO.findByEmail(email).isPresent()) {
+            throw new UserDoesntExistException("User not found");
+        }
+        userDAO.updateStatus(email, isActive);
+    }
+
+    public java.util.List<User> getAllUsers() throws SQLException {
+        return userDAO.getAllUsers();
     }
 }

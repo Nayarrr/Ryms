@@ -22,16 +22,17 @@
 
     <TextField fx:id="emailField" editable="false" promptText="Email" style="-fx-background-color: #f0f0f0;" />
     <TextField fx:id="usernameField" promptText="Username" />
-    <TextField fx:id="surnameField" promptText="Surname" />
     <PasswordField fx:id="passwordField" promptText="New Password (leave empty to keep current)" />
 
     <Label fx:id="messageLabel" text="" />
 
     <Button onAction="#handleUpdate" text="Update Profile" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" maxWidth="Infinity"/>
     
+    <Button onAction="#handleChangePassword" text="Change Password" maxWidth="Infinity" />
+
     <HBox spacing="10" alignment="CENTER">
         <Button onAction="#handleBack" text="Back to Dashboard" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-        <Button onAction="#handleDelete" text="Delete Account" style="-fx-background-color: #f44336; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleDelete" text="Deactivate Account" style="-fx-background-color: #f44336; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
     </HBox>
 
 </VBox>

@@ -36,10 +36,23 @@ public class LoginController {
         this.onRegisterRequest = onRegisterRequest;
     }
 
+    private Runnable onForgotPasswordRequest;
+
+    public void setOnForgotPasswordRequest(Runnable onForgotPasswordRequest) {
+        this.onForgotPasswordRequest = onForgotPasswordRequest;
+    }
+
     @FXML
     private void handleRegisterLinkAction() {
         if (onRegisterRequest != null) {
             onRegisterRequest.run();
+        }
+    }
+
+    @FXML
+    private void handleForgotPasswordLinkAction() {
+        if (onForgotPasswordRequest != null) {
+            onForgotPasswordRequest.run();
         }
     }
 
@@ -60,6 +73,25 @@ public class LoginController {
             User user = sessionFacade.loginUser(username, password);
 
             if (user != null) {
+                // Check if account is deactivated
+                if (!user.isActive()) {
+                    javafx.scene.control.Alert alert = new javafx.scene.control.Alert(
+                            javafx.scene.control.Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Account Deactivated");
+                    alert.setHeaderText("Your account is deactivated.");
+                    alert.setContentText("Do you want to reactivate it?");
+
+                    java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.OK) {
+                        sessionFacade.reactivateAccount();
+                    } else {
+                        sessionFacade.logout();
+                        messageLabel.setText("Account remains deactivated.");
+                        messageLabel.setTextFill(Color.RED);
+                        return;
+                    }
+                }
+
                 UserSession userSession = UserSession.getInstance();
                 userSession.setUser(user);
                 messageLabel.setText("Connexion réussie !");
