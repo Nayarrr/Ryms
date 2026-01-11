@@ -1,5 +1,5 @@
-ry/ms/businessLogic/games/models/Game.class
 ry/ms/businessLogic/user/login/UserManager.class
+ry/ms/businessLogic/games/models/Game.class
 ry/ms/businessLogic/match/MatchFacade.class
 ry/ms/view/team/InvitationsController$1.class
 ry/ms/view/tournament/ManageRegistrationsController$1.class
@@ -18,8 +18,8 @@ ry/ms/persistLogic/user/login/dao/UserDAO.class
 ry/ms/view/match/CreateMatchController$1.class
 ry/ms/businessLogic/tournament/TournamentManager.class
 ry/ms/view/tournament/TournamentBracketController.class
-ry/ms/view/tournament/AddTournamentController.class
 ry/ms/view/tournament/ValidateResultsController$1.class
+ry/ms/view/tournament/AddTournamentController.class
 ry/ms/view/match/CreateMatchController$4.class
 ry/ms/persistLogic/match/postgres/MatchResultDAOPostgres.class
 ry/ms/businessLogic/team/models/InvitationStatus.class
@@ -66,8 +66,8 @@ ry/ms/persistLogic/team/postgres/InvitationDAOPostgres.class
 ry/ms/view/team/TeamController.class
 ry/ms/view/match/matchDetail/ScoreManager.class
 ry/ms/view/match/MatchController$SupplierWithException.class
-ry/ms/PostgresFactory.class
 ry/ms/view/match/CreateMatchController$5.class
+ry/ms/PostgresFactory.class
 ry/ms/view/tournament/TournamentListController.class
 ry/ms/view/tournament/TournamentListController$3.class
 ry/ms/view/match/CreateMatchController$2.class
@@ -89,8 +89,8 @@ ry/ms/businessLogic/team/models/Team.class
 ry/ms/persistLogic/team/dao/InvitationDAO.class
 ry/ms/businessLogic/match/models/Match.class
 ry/ms/view/match/CreateMatchController$7.class
-ry/ms/persistLogic/DBConfig.class
 ry/ms/persistLogic/basket/dao/BasketDAO.class
+ry/ms/persistLogic/DBConfig.class
 ry/ms/App.class
 ry/ms/view/match/CreateMatchController$6.class
 ry/ms/businessLogic/tournament/models/TournamentStatus.class
@@ -106,8 +106,8 @@ ry/ms/businessLogic/team/models/Invitation.class
 ry/ms/persistLogic/games/postgres/GameDAOPostgres.class
 ry/ms/persistLogic/user/login/postgres/UserDAOPostgres.class
 ry/ms/view/games/GameCatalogController.class
-ry/ms/view/match/MatchCache.class
 ry/ms/view/match/matchDetail/MatchDetailsController.class
+ry/ms/view/match/MatchCache.class
 ry/ms/businessLogic/tournament/models/Tournament.class
 ry/ms/businessLogic/product/ProductManager.class
 ry/ms/businessLogic/basket/BasketManager.class
