@@ -35,11 +35,8 @@ public class MatchManager {
     }
 
     private User getUserById(String email) throws SQLException, UserDoesntExistException {
-        User user = userDAO.getUserById(email);
-        if (user == null) {
-            throw new UserDoesntExistException("User does not exist.");
-        }
-        return user;
+        // Use findByEmail as specified in my changes, replacing getUserById
+        return userDAO.findByEmail(email).orElseThrow(() -> new UserDoesntExistException("User does not exist."));
     }
 
     public Match getMatchById(Long matchid) throws SQLException, MatchDoesntExistException {
@@ -86,7 +83,7 @@ public class MatchManager {
         if (matchDate == null) {
             throw new IllegalArgumentException("Match date cannot be null");
         }
-
+        // Preserving dev's tournamentid parameter
         return matchDAO.createMatch(matchDate, tournamentid);
     }
 
@@ -109,6 +106,7 @@ public class MatchManager {
             throw new IllegalArgumentException("Un arbitre doit être spécifié");
         }
 
+        // Preserving tournamentId from dev's HEAD
         return matchDAO.createCompleteMatch(team1, team2, matchDate, gameId, tournamentId, referee);
     }
 
@@ -172,9 +170,6 @@ public class MatchManager {
         return matchDAO.delete(matchId);
     }
 
-    /**
-     * Démarre un match en changeant son statut à IN_PROGRESS
-     */
     public boolean startMatch(Long matchId) throws SQLException, MatchDoesntExistException {
         Match match = getMatchById(matchId);
 

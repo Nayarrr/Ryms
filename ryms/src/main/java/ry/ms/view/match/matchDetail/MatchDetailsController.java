@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -13,8 +12,6 @@ import ry.ms.businessLogic.match.models.Match;
 import ry.ms.businessLogic.match.models.MatchStatus;
 import ry.ms.businessLogic.team.models.Team;
 import ry.ms.businessLogic.user.models.User;
-import ry.ms.view.main.MainLayoutController;
-import ry.ms.view.match.MatchCache;
 import ry.ms.view.match.MatchController;
 import ry.ms.view.user.UserSession;
 
@@ -48,6 +45,7 @@ public class MatchDetailsController {
     private Team team1;
     private Team team2;
     private List<User> matchReferees;
+    private Runnable navigationController;
 
     // Managers dédiés
     private ScoreManager scoreManager;
@@ -67,6 +65,10 @@ public class MatchDetailsController {
         refereeManager = new RefereeManager(matchController);
         matchDateManager = new MatchDateManager(matchController);
         matchStatusManager = new MatchStatusManager(matchController);
+    }
+
+    public void setNavigationController(Runnable navigationController) {
+        this.navigationController = navigationController;
     }
 
     /**
@@ -162,16 +164,10 @@ public class MatchDetailsController {
 
     @FXML
     private void handleBackToList() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/match/fxml/MatchListView.fxml"));
-            VBox matchListView = loader.load();
-            
-            MainLayoutController mainController = MainLayoutController.getInstance();
-            if (mainController != null) {
-                mainController.loadContent(matchListView);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (navigationController != null) {
+            navigationController.run();
+        } else {
+            System.err.println("Navigation controller not set in MatchDetailsController.");
         }
     }
 

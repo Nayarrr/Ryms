@@ -1,0 +1,59 @@
+@startuml
+
+' ===========================
+' Controllers
+' ===========================
+class LoginController {
+    + login(username, password)
+}
+
+class RegisterController {
+    + register(username, password, otherData)
+}
+
+' ===========================
+' Facade Layer
+' ===========================
+class SessionFacade {
+    + login(username, password)
+    + register(username, password, otherData)
+}
+
+' ===========================
+' Business Layer
+' ===========================
+class UserManager {
+    + login(username, password)
+    + register(username, password, otherData)
+}
+
+' ===========================
+' Persistence Layer
+' ===========================
+interface UserRepository {
+    + getUserById(username)
+    + createUser(user)
+}
+
+class UserPostgres {
+    + getUserById(username)
+    + createUser(user)
+}
+
+UserRepository <|.. UserPostgres
+
+' ===========================
+' Relationships
+' ===========================
+LoginController --> SessionFacade
+RegisterController --> SessionFacade
+
+SessionFacade --> UserManager
+
+UserManager --> UserRepository
+
+UserPostgres --> Database
+
+class Database
+
+@enduml

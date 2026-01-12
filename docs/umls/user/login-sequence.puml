@@ -1,0 +1,36 @@
+@startuml
+
+LoginController -> SessionFacade : login(u,p)
+SessionFacade -> userManager : login(u,p)
+userManager -> userPostgres : getUserById()
+userPostgres -> Database : getUserById()
+
+alt user found
+
+userPostgres <-- Database : send result
+userManager <-- userPostgres : send User
+
+alt good password
+
+SessionFacade <-- userManager : send User
+LoginController <-- SessionFacade : send User
+
+else wrong password
+
+SessionFacade <-- userManager : Throw wrong password
+LoginController <-- SessionFacade : Throw wrong password
+
+end
+
+else user not found
+
+userPostgres <-- Database : send null
+userManager <-- userPostgres : Throw user not found 
+SessionFacade <-- userManager : Throw user not found
+LoginController <-- SessionFacade : Throw user not found
+
+note over LoginController : Gère les exceptions
+
+end
+
+@enduml

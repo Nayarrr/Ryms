@@ -46,7 +46,7 @@ public class TeamManager {
         Team team = loadTeamOrThrow(teamId);
         ensureCaptain(team, senderEmail);
 
-        if (userDAO.getUserById(targetEmail) == null) {
+        if (userDAO.findByEmail(targetEmail) == null) {
             throw new IllegalArgumentException("User does not exist.");
         }
 
@@ -59,7 +59,8 @@ public class TeamManager {
             throw new IllegalStateException("A pending invitation for this user and team already exists.");
         }
 
-        Invitation invitation = new Invitation(null, teamId, senderEmail, targetEmail, InvitationStatus.PENDING, new Date());
+        Invitation invitation = new Invitation(null, teamId, senderEmail, targetEmail, InvitationStatus.PENDING,
+                new Date());
         invitationDAO.save(invitation);
     }
 

@@ -1,0 +1,23 @@
+@startuml
+actor Admin
+participant DashboardController
+participant AdminDashboardController
+participant SessionFacade
+participant UserManager
+participant UserDAO
+
+Admin->Navbar: Click "Admin"
+Navbar->AdminDashboardController: Open View
+AdminDashboardController->SessionFacade: getAllUsers()
+SessionFacade->UserManager: getAllUsers()
+UserManager->UserDAO: getAllUsers()
+UserDAO-->>AdminDashboardController: List of Users
+AdminDashboardController->AdminDashboardController: Display Table
+
+Admin->AdminDashboardController: Edit Role (User -> Admin)
+AdminDashboardController->SessionFacade: updateUser(userWithNewRole)
+SessionFacade->UserManager: updateUser(user)
+UserManager->UserDAO: updateUser(user)
+UserDAO-->>AdminDashboardController: Success
+AdminDashboardController-->>Admin: "Role Updated"
+@enduml

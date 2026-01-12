@@ -1,0 +1,8 @@
+@startuml
+
+RegisterController -> SessionFacade : register(u,p,otherData)
+SessionFacade -> userManager : register(u,p,otherData)
+
+note over RegisterController : Handles exceptions
+
+@enduml

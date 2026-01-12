@@ -1,0 +1,39 @@
+@startuml
+actor User
+participant "Register View" as View
+participant "RegisterController" as Controller
+participant "SessionFacade" as Facade
+participant "UserManager" as Manager
+participant "UserDAO" as DAO
+database "Database" as DB
+
+User -> View : Enters Name, Surname, Email, Password, Confirm
+User -> View : Clicks Register
+View -> Controller : handleRegisterButtonAction()
+Controller -> Controller : Validate Input (Empty, Passwords Match)
+alt Invalid Input
+    Controller -> View : Show Error Message
+else Valid Input
+    Controller -> Facade : registerUser(email, pass, name, surname)
+    Facade -> Manager : register(email, pass, name, surname)
+    Manager -> DAO : findByEmail(email)
+    DAO -> DB : SELECT ...
+    DB --> DAO : Result
+    
+    alt User Already Exists
+        DAO --> Manager : Optional<User> (Present)
+        Manager --> Facade : Throw UserAlreadyExistsException
+        Facade --> Controller : Throw Exception
+        Controller -> View : Show "User exists" Error
+    else User New
+        DAO --> Manager : Optional<User> (Empty)
+        Manager -> DAO : createUser(email, pass, name, surname)
+        DAO -> DB : INSERT ...
+        DB --> DAO : New User Record
+        DAO --> Manager : User object
+        Manager --> Facade : User object
+        Facade --> Controller : User object
+        Controller -> View : Show Success & Redirect to Login
+    end
+end
+@enduml

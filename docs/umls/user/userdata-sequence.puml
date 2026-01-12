@@ -1,0 +1,26 @@
+@startuml
+title Retrieve User Data (View Profile)
+
+UserController -> SessionFacade : getUserData(userId)
+SessionFacade -> UserManager : getUserData(userId)
+UserManager -> UserPostgres : getUserById(userId)
+UserPostgres -> Database : SELECT * FROM users WHERE id = userId
+
+alt User found
+    Database --> UserPostgres : User data
+    UserPostgres --> UserManager : User data
+    UserManager --> SessionFacade : User data
+    SessionFacade --> UserController : User data
+
+else User not found
+    Database --> UserPostgres : null
+    UserPostgres --> UserManager : null
+    UserManager --> SessionFacade : throw UserNotFound
+    SessionFacade --> UserController : throw UserNotFound
+end
+
+note over UserController
+    Handles exceptions and formats response
+end note
+
+@enduml

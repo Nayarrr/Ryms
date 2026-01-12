@@ -6,28 +6,26 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import ry.ms.view.user.UserSession;
+import ry.ms.view.match.MatchListViewController;
+import ry.ms.view.match.matchDetail.MatchDetailsController;
 
 public class MainLayoutController {
-
-    private static MainLayoutController instance;
 
     @FXML
     private StackPane contentArea;
 
+    private Runnable onLogout;
+
     @FXML
     public void initialize() {
-        instance = this;
         loadTeamDashboard();
     }
 
-    public static MainLayoutController getInstance() {
-        return instance;
+    public void setOnLogout(Runnable onLogout) {
+        this.onLogout = onLogout;
     }
 
     // Méthode pour charger un contenu dans contentArea
@@ -52,7 +50,7 @@ public class MainLayoutController {
     }
 
     @FXML
-    private void handleProductClick(){
+    private void handleProductClick() {
         handleOpenProducts();
     }
 
@@ -73,58 +71,71 @@ public class MainLayoutController {
             loadContent(view);
         } catch (IOException e) {
             e.printStackTrace();
+            showError("Failed to load view: " + fxmlPath);
         }
     }
 
     @FXML
-    private void handleOpenInvitations() {
+    public void handleOpenInvitations() {
         loadView("/ry/ms/view/team/fxml/InvitationsModal.fxml");
     }
 
-
     @FXML
     private void handleLogout() {
-        try {
-            UserSession.getInstance().clearSession();
-
-            Stage stage = (Stage) contentArea.getScene().getWindow();
-            ry.ms.App app = new ry.ms.App();
-            app.start(stage);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            showError("Erreur lors de la déconnexion.");
+        UserSession.getInstance().clearSession();
+        if (onLogout != null) {
+            onLogout.run();
         }
     }
 
-    private void loadTeamDashboard() {
+    public void loadTeamDashboard() {
         loadView("/ry/ms/view/team/fxml/TeamDashboard.fxml");
     }
 
-    private void loadMatchList() {
-        loadView("/ry/ms/view/match/fxml/MatchListView.fxml");
+    public void loadMatchList() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/match/fxml/MatchListView.fxml"));
+            Parent view = loader.load();
+            MatchListViewController controller = loader.getController();
+            controller.setNavigationController(this::loadMatchDetails); // Pass navigation logic
+            loadContent(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Failed to load match list.");
+        }
+    }
+
+    public void loadMatchDetails(long matchId) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/match/fxml/MatchDetailsView.fxml"));
+            Parent view = loader.load();
+            MatchDetailsController controller = loader.getController();
+            controller.setNavigationController(this::loadMatchList); // Pass navigation logic
+            controller.loadMatchDetails(matchId);
+            loadContent(view);
+        } catch (IOException e) {
+            e.printStackTrace();
+            showError("Failed to load match details.");
+        }
     }
 
     @FXML
-    private void handleOpenProducts() {
+    public void handleOpenProducts() {
         loadView("/ry/ms/view/product/fxml/ProductDashboard.fxml");
     }
 
-
-    private void loadShopView() {
+    public void loadShopView() {
         loadView("/ry/ms/view/product/fxml/ShopView.fxml");
     }
-
 
     public void showGameCatalog() {
         loadView("/ry/ms/view/game/fxml/gameCatalogLayout.fxml");
     }
 
-    public void showTournamentList() { loadView("/ry/ms/view/tournament/fxml/TournamentList.fxml");}
+    public void showTournamentList() {
+        loadView("/ry/ms/view/tournament/fxml/TournamentList.fxml");
+    }
 
-    
-
-    
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur");

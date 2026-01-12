@@ -2,6 +2,7 @@ package ry.ms.view.match;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.function.Consumer;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,8 +20,6 @@ import ry.ms.businessLogic.match.models.Match;
 import ry.ms.businessLogic.match.models.MatchStatus;
 import ry.ms.businessLogic.match.models.TeamResult;
 import ry.ms.businessLogic.team.models.Team;
-import ry.ms.view.main.MainLayoutController;
-import ry.ms.view.match.matchDetail.MatchDetailsController;
 import ry.ms.view.user.UserSession;
 
 public class MatchListViewController {
@@ -30,6 +29,7 @@ public class MatchListViewController {
 
     private MatchController matchController;
     private String currentUserEmail;
+    private Consumer<Long> navigationController;
     
     // Logo par défaut
     private static final String DEFAULT_LOGO_URL = "https://i.imgur.com/BMRAx9w.png";
@@ -53,6 +53,10 @@ public class MatchListViewController {
         boolean isAdmin = currentUserEmail != null && currentUserEmail.equalsIgnoreCase("admin@ryms.com");
         createMatchButton.setVisible(isAdmin);
         createMatchButton.setManaged(isAdmin);
+    }
+
+    public void setNavigationController(Consumer<Long> navigationController) {
+        this.navigationController = navigationController;
     }
 
     /**
@@ -265,27 +269,10 @@ public class MatchListViewController {
      * Gère le clic sur une carte pour ouvrir les détails
      */
     private void handleCardClick(Match match) {
-        try {
-            FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/ry/ms/view/match/fxml/MatchDetailsView.fxml")
-            );
-            Parent detailsView = loader.load();
-            
-            MatchDetailsController controller = loader.getController();
-            controller.loadMatchDetails(match.getMatchId());
-            
-            MainLayoutController mainController = MainLayoutController.getInstance();
-            if (mainController != null) {
-                mainController.loadContent(detailsView);
-            }
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Erreur");
-            alert.setHeaderText("Impossible d'ouvrir les détails");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+        if (navigationController != null) {
+            navigationController.accept(match.getMatchId());
+        } else {
+            System.err.println("Navigation controller not set in MatchListViewController.");
         }
     }
 

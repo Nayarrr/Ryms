@@ -117,8 +117,7 @@ public class MatchDAOPostgres implements MatchDAO {
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setTimestamp(1, new Timestamp(date.getTime())); // Convertir java.util.Date en java.sql.Timestamp pour
-                                                                 // PostgreSQL
+            stmt.setTimestamp(1, new Timestamp(date.getTime()));
             stmt.setLong(2, match.getMatchId());
 
             int affectedRows = stmt.executeUpdate();
@@ -147,12 +146,11 @@ public class MatchDAOPostgres implements MatchDAO {
 
             int affectedRows = stmt.executeUpdate();
 
-            // Si l'insertion a réussi, ajouter l'équipe à l'objet Match en mémoire
             if (affectedRows > 0) {
                 match.getTeams().add(team);
                 return true;
             }
-            return false; // L'équipe était déjà associée au match
+            return false;
         }
     }
 
@@ -176,7 +174,7 @@ public class MatchDAOPostgres implements MatchDAO {
                     try (ResultSet rs = checkStmt.executeQuery()) {
                         if (!rs.next()) {
                             conn.rollback();
-                            return false; // L'utilisateur actuel n'est pas dans l'équipe
+                            return false;
                         }
                     }
                 }
@@ -212,7 +210,7 @@ public class MatchDAOPostgres implements MatchDAO {
     @Override
     public List<User> getTeamMembers(Long teamId) throws SQLException {
         List<User> members = new ArrayList<>();
-        String sql = "SELECT u.email, u.username, u.password, u.avatar " +
+        String sql = "SELECT u.email, u.username, u.password, u.avatar, u.role " +
                 "FROM users u " +
                 "INNER JOIN team_members tm ON u.email = tm.user_email " +
                 "WHERE tm.team_id = ?";
@@ -225,11 +223,11 @@ public class MatchDAOPostgres implements MatchDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     members.add(new User(
-                            rs.getString("email"),
                             rs.getString("username"),
+                            rs.getString("email"),
                             rs.getString("password"),
-                            rs.getBytes("avatar"),
-                            rs.getString("role")));
+                            rs.getString("role"),
+                            rs.getBytes("avatar")));
                 }
             }
         }
@@ -237,13 +235,13 @@ public class MatchDAOPostgres implements MatchDAO {
     }
 
     @Override
-    public Long createMatch(Date matchDate, int tournamentId) throws SQLException {
-        String sql = "INSERT INTO matchs (match_date, tournament_id) VALUES (?, ?) RETURNING match_id";
+    public Long createMatch(Date matchDate, int gameId) throws SQLException {
+        String sql = "INSERT INTO matchs (match_date, game_id) VALUES (?, ?) RETURNING match_id";
 
         try (Connection conn = DBConfig.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setTimestamp(1, new Timestamp(matchDate.getTime()));
-            stmt.setInt(2, tournamentId);
+            stmt.setInt(2, gameId);
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
@@ -326,11 +324,11 @@ public class MatchDAOPostgres implements MatchDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     User referee = new User(
-                            rs.getString("email"),
                             rs.getString("username"),
+                            rs.getString("email"),
                             rs.getString("password"),
-                            rs.getBytes("avatar"),
-                            rs.getString("role"));
+                            rs.getString("role"),
+                            rs.getBytes("avatar"));
                     referees.add(referee);
                 }
             }
@@ -352,11 +350,11 @@ public class MatchDAOPostgres implements MatchDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     users.add(new User(
-                            rs.getString("email"),
                             rs.getString("username"),
+                            rs.getString("email"),
                             rs.getString("password"),
-                            rs.getBytes("avatar"),
-                            rs.getString("role")));
+                            rs.getString("role"),
+                            rs.getBytes("avatar")));
                 }
             }
         }
@@ -378,7 +376,6 @@ public class MatchDAOPostgres implements MatchDAO {
     }
 
     @Override
-
     public Match createCompleteMatch(Team team1, Team team2, LocalDate matchDate, int gameId, int tournamentId,
             User referee)
             throws SQLException {
@@ -387,6 +384,7 @@ public class MatchDAOPostgres implements MatchDAO {
 
             Timestamp sqlTimestamp = Timestamp.valueOf(matchDate.atStartOfDay());
 
+            // Using tournamentId as requested by dev HEAD signatures
             String sqlMatch = "INSERT INTO matchs (match_date, game_id, tournament_id) VALUES (?, ?, ?) RETURNING match_id";
             long matchId;
             try (PreparedStatement stmtMatch = conn.prepareStatement(sqlMatch)) {
@@ -515,11 +513,11 @@ public class MatchDAOPostgres implements MatchDAO {
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
                     User referee = new User(
-                            rs.getString("email"),
                             rs.getString("username"),
+                            rs.getString("email"),
                             rs.getString("password"),
-                            rs.getBytes("avatar"),
-                            rs.getString("role"));
+                            rs.getString("role"),
+                            rs.getBytes("avatar"));
                     referees.add(referee);
                 }
             }
