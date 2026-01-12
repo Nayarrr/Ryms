@@ -341,7 +341,7 @@
 
 .table-view .column-header .label {
     -fx-font-weight: bold;
-    -fx-text-fill: -color-text-main;
+    -fx-text-fill: #2c3e50;
 }
 
 .table-row-cell {
