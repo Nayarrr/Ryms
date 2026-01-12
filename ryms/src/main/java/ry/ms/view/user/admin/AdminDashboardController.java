@@ -90,7 +90,7 @@ public class AdminDashboardController {
             ObservableList<User> observableUsers = FXCollections.observableArrayList(users);
             userTable.setItems(observableUsers);
         } catch (SQLException e) {
-            messageLabel.setText("Error loading users: " + e.getMessage());
+            showError("Error loading users: " + e.getMessage());
         }
     }
 
@@ -100,7 +100,7 @@ public class AdminDashboardController {
             ObservableList<Team> observableTeams = FXCollections.observableArrayList(teams);
             teamTable.setItems(observableTeams);
         } catch (Exception e) { // Catch generic exception if getAllTeams fails or throws specialized
-            messageLabel.setText("Error loading teams: " + e.getMessage());
+            showError("Error loading teams: " + e.getMessage());
         }
     }
 
@@ -113,7 +113,7 @@ public class AdminDashboardController {
                 userTable.refresh();
                 messageLabel.setText("User role updated to " + newRole);
             } catch (SQLException e) {
-                messageLabel.setText("Error updating role: " + e.getMessage());
+                showError("Error updating role: " + e.getMessage());
             }
         }
     }
@@ -129,7 +129,7 @@ public class AdminDashboardController {
                 messageLabel.setText("User status updated.");
 
             } catch (Exception e) {
-                messageLabel.setText("Error updating status: " + e.getMessage());
+                showError("Error updating status: " + e.getMessage());
             }
         }
     }
@@ -139,5 +139,10 @@ public class AdminDashboardController {
         if (onBackRequest != null) {
             onBackRequest.run();
         }
+    }
+
+    private void showError(String message) {
+        messageLabel.setText(message);
+        ry.ms.view.utils.AlertManager.showError("Erreur Admin", message);
     }
 }
