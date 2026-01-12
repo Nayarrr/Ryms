@@ -5,16 +5,15 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 
-<VBox spacing="20.0" prefWidth="450.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.tournament.AddTournamentController">
+<VBox spacing="20.0" prefWidth="450.0" 
+      stylesheets="@../../styles.css"
+      styleClass="card"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.tournament.AddTournamentController">
     <padding>
         <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
     </padding>
 
-    <Label text="Nouveau Tournoi">
-        <font>
-            <Font name="System Bold" size="20.0" />
-        </font>
-    </Label>
+    <Label text="Nouveau Tournoi" styleClass="header-title" />
 
     <GridPane vgap="15.0" hgap="10.0">
         <columnConstraints>
@@ -23,37 +22,33 @@
         </columnConstraints>
 
         <children>
-            <Label text="Nom du tournoi :" GridPane.rowIndex="0" />
-            <TextField fx:id="nameField" promptText="Ex: Summer Cup 2024" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+            <Label text="Nom du tournoi :" GridPane.rowIndex="0" styleClass="subtitle-label"/>
+            <TextField fx:id="nameField" promptText="Ex: Summer Cup 2024" GridPane.columnIndex="1" GridPane.rowIndex="0" styleClass="text-field"/>
 
-            <Label text="Jeu :" GridPane.rowIndex="1" />
-            <ComboBox fx:id="gameCombo" maxWidth="Infinity" promptText="Sélectionner un jeu" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Jeu :" GridPane.rowIndex="1" styleClass="subtitle-label"/>
+            <ComboBox fx:id="gameCombo" maxWidth="Infinity" promptText="Sélectionner un jeu" GridPane.columnIndex="1" GridPane.rowIndex="1" styleClass="combo-box"/>
 
-            <Label text="Date de début :" GridPane.rowIndex="2" />
-            <DatePicker fx:id="startDatePicker" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="Date de début :" GridPane.rowIndex="2" styleClass="subtitle-label"/>
+            <DatePicker fx:id="startDatePicker" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="date-picker"/>
 
-            <Label text="Date de fin :" GridPane.rowIndex="3" />
-            <DatePicker fx:id="endDatePicker" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Date de fin :" GridPane.rowIndex="3" styleClass="subtitle-label"/>
+            <DatePicker fx:id="endDatePicker" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="3" styleClass="date-picker"/>
 
-            <Label text="Lieu :" GridPane.rowIndex="4" />
-            <TextField fx:id="locationField" promptText="Ex: Paris ou Online" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Lieu :" GridPane.rowIndex="4" styleClass="subtitle-label"/>
+            <TextField fx:id="locationField" promptText="Ex: Paris ou Online" GridPane.columnIndex="1" GridPane.rowIndex="4" styleClass="text-field"/>
 
-            <Label text="Participants Max :" GridPane.rowIndex="5" />
-            <Spinner fx:id="maxParticipantsSpinner" editable="true" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="5">
-                <valueFactory>
-                    <SpinnerValueFactory.IntegerSpinnerValueFactory min="2" max="128" initialValue="16" />
-                </valueFactory>
-            </Spinner>
+            <Label text="Participants Max :" GridPane.rowIndex="5" styleClass="subtitle-label"/>
+            <Spinner fx:id="maxParticipantsSpinner" editable="true" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="5" styleClass="spinner"/>
 
-            <Label text="Statut :" GridPane.rowIndex="6" />
-            <ComboBox fx:id="statusCombo" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+            <Label text="Statut :" GridPane.rowIndex="6" styleClass="subtitle-label"/>
+            <ComboBox fx:id="statusCombo" maxWidth="Infinity" GridPane.columnIndex="1" GridPane.rowIndex="6" styleClass="combo-box"/>
         </children>
     </GridPane>
 
-    <Label fx:id="errorLabel" text="Message d'erreur" textFill="RED" visible="false" wrapText="true" />
+    <Label fx:id="errorLabel" text="Message d'erreur" styleClass="error-label" visible="false" wrapText="true" />
 
     <HBox spacing="10.0" alignment="CENTER_RIGHT">
-        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" prefWidth="100.0" />
-        <Button fx:id="saveButton" text="Sauvegarder" onAction="#handleSave" prefWidth="120.0" style="-fx-background-color: #2196F3; -fx-text-fill: white; -fx-font-weight: bold;" />
+        <Button fx:id="cancelButton" text="Annuler" onAction="#handleCancel" prefWidth="100.0" styleClass="button, secondary-button"/>
+        <Button fx:id="saveButton" text="Sauvegarder" onAction="#handleSave" prefWidth="120.0" styleClass="button, primary-button" />
     </HBox>
  </VBox>

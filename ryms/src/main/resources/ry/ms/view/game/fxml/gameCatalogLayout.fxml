@@ -4,23 +4,26 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane fx:controller="ry.ms.view.games.GameCatalogController" prefHeight="600.0" prefWidth="900.0" style="-fx-background-color: #f9f9f9;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:controller="ry.ms.view.games.GameCatalogController" 
+            prefHeight="600.0" prefWidth="900.0" 
+            stylesheets="@../../styles.css"
+            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <top>
-        <VBox spacing="5">
+        <VBox spacing="5" styleClass="header-section">
             <padding>
                 <Insets bottom="15" left="20" right="20" top="15" />
             </padding>
-            <Label text="Administrator View" style="-fx-text-fill: #7f8c8d;" />
+            <Label text="Administrator View" styleClass="subtitle-label" />
             <HBox alignment="CENTER_LEFT">
-                <Label text="Liste des jeux" style="-fx-font-size: 24; -fx-font-weight: bold;" />
+                <Label text="Liste des jeux" styleClass="header-title" />
                 <Region HBox.hgrow="ALWAYS" />
-                <Button text="Ajouter Un jeu" fx:id="addGameBtn" onAction="#handleOpenAddGame" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-padding: 10 20;" />
+                <Button text="Ajouter Un jeu" fx:id="addGameBtn" onAction="#handleOpenAddGame" styleClass="button, success-button" />
             </HBox>
         </VBox>
     </top>
 
     <center>
-        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent; -fx-background: transparent;">
+        <ScrollPane fitToWidth="true" styleClass="edge-to-edge-scroll-pane">
             <content>
                 <FlowPane fx:id="gameGrid" hgap="20" vgap="20">
                     <padding>

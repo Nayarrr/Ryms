@@ -10,9 +10,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.register.RegisterController">
+<VBox alignment="CENTER" spacing="15.0" 
+      stylesheets="@../../styles.css"
+      styleClass="card"
+      style="-fx-max-width: 400; -fx-max-height: 550;"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.register.RegisterController">
    <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
    </padding>
    <children>
       <ImageView fitHeight="60.0" pickOnBounds="true" preserveRatio="true">
@@ -20,12 +24,16 @@
             <Image url="@/images/logo.png" />
          </image>
       </ImageView>
-      <Label text="Créer un compte" textFill="#34495e"><font><Font name="System Bold" size="18.0" /></font></Label>
-      <TextField fx:id="usernameField" maxWidth="250.0" promptText="Username" />
-      <TextField fx:id="emailField" maxWidth="250.0" promptText="Email" />
-      <PasswordField fx:id="passwordField" maxWidth="250.0" promptText="Mot de passe" />
-      <PasswordField fx:id="confirmPasswordField" maxWidth="250.0" promptText="Confirmer le mot de passe" />
-      <Button onAction="#handleRegisterButtonAction" text="S'inscrire" />
-      <Label fx:id="messageLabel" textFill="RED" />
+      
+      <Label text="Créer un compte" styleClass="header-title"/>
+      
+      <TextField fx:id="usernameField" maxWidth="250.0" promptText="Username" styleClass="text-field"/>
+      <TextField fx:id="emailField" maxWidth="250.0" promptText="Email" styleClass="text-field"/>
+      <PasswordField fx:id="passwordField" maxWidth="250.0" promptText="Mot de passe" styleClass="text-field"/>
+      <PasswordField fx:id="confirmPasswordField" maxWidth="250.0" promptText="Confirmer le mot de passe" styleClass="text-field"/>
+      
+      <Button onAction="#handleRegisterButtonAction" text="S'inscrire" styleClass="button, primary-button" maxWidth="250.0"/>
+      
+      <Label fx:id="messageLabel" styleClass="error-label"/>
    </children>
 </VBox>
