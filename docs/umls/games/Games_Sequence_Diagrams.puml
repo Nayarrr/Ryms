@@ -1,0 +1,92 @@
+@startuml Games Use Case Sequence Diagram
+
+title Games Management Use Case
+
+actor "User/Test" as User
+participant "GameCatalogFacade" as Facade
+participant "GameCatalogManager" as Manager
+participant "GameDAO" as DAO
+database "PostgreSQL" as DB
+
+== Create Game ==
+User -> Facade: addGame(game)
+activate Facade
+Facade -> Manager: addGame(game)
+activate Manager
+Manager -> DAO: saveGame(game)
+activate DAO
+DAO -> DB: INSERT INTO games
+activate DB
+DB --> DAO: game_id
+deactivate DB
+DAO --> Manager: void
+deactivate DAO
+Manager --> Facade: void
+deactivate Manager
+Facade -> Facade: gameList.add(game)
+Facade --> User: void
+deactivate Facade
+
+== Retrieve Game Catalog ==
+User -> Facade: loadGameCatalog()
+activate Facade
+Facade --> User: ObservableList<Game>
+deactivate Facade
+
+== Retrieve Game by Name ==
+User -> Facade: getGameByName(name)
+activate Facade
+Facade -> Manager: getGameByName(name)
+activate Manager
+Manager -> DAO: getGameByName(name)
+activate DAO
+DAO -> DB: SELECT * FROM games WHERE name = ?
+activate DB
+DB --> DAO: ResultSet
+deactivate DB
+DAO --> Manager: Game
+deactivate DAO
+Manager --> Facade: Game
+deactivate Manager
+Facade --> User: Game
+deactivate Facade
+
+== Update Game ==
+User -> Facade: updateGame(game)
+activate Facade
+Facade -> Manager: updateGame(game)
+activate Manager
+Manager -> DAO: updateGame(game)
+activate DAO
+DAO -> DB: UPDATE games SET ... WHERE game_id = ?
+activate DB
+DB --> DAO: rows affected
+deactivate DB
+DAO --> Manager: void
+deactivate DAO
+Manager --> Facade: void
+deactivate Manager
+Facade -> Facade: gameList.set(index, game)
+Facade --> User: void
+deactivate Facade
+
+== Delete Game ==
+User -> Facade: deleteGame(game)
+activate Facade
+Facade -> Manager: deleteGame(game)
+activate Manager
+Manager -> DAO: deleteGame(game)
+activate DAO
+DAO -> DB: DELETE FROM games WHERE game_id = ?
+activate DB
+DB --> DAO: rows affected
+deactivate DB
+DAO --> Manager: void
+deactivate DAO
+Manager --> Facade: void
+deactivate Manager
+Facade -> Facade: gameList.remove(game)
+Facade --> User: void
+deactivate Facade
+
+@enduml

@@ -1,0 +1,94 @@
+@startuml Games Class Diagram
+
+title Games Module - Class Diagram
+
+package "businessLogic.games" {
+    package "models" {
+        class Game {
+            - gameId: int
+            - name: String
+            - editor: String
+            - releaseDate: Date
+            - logo: byte[]
+            + Game(name, editor, date, logo)
+            + Game(gameId, name, editor, date, logo)
+            + getGameId(): int
+            + setGameId(gameId: int): void
+            + getName(): String
+            + setName(name: String): void
+            + getEditor(): String
+            + setEditor(editor: String): void
+            + getReleaseDate(): Date
+            + setReleaseDate(releaseDate: Date): void
+            + getLogo(): byte[]
+            + setLogo(logo: byte[]): void
+        }
+    }
+
+    class GameCatalogFacade {
+        - {static} gameCatalogFacade: GameCatalogFacade
+        - gameCatalogManager: GameCatalogManager
+        - gameList: ObservableList<Game>
+        - GameCatalogFacade()
+        + {static} getGameCatalogFactory(): GameCatalogFacade
+        + loadGameCatalog(): ObservableList<Game>
+        + addGame(game: Game): void
+        + deleteGame(game: Game): void
+        + updateGame(game: Game): void
+        + getGameByName(name: String): Game
+    }
+
+    class GameCatalogManager {
+        - gameDAO: GameDAO
+        + GameCatalogManager(gameDAO: GameDAO)
+        + getGameCatalog(): List<Game>
+        + addGame(game: Game): void
+        + deleteGame(game: Game): void
+        + updateGame(game: Game): void
+        + getGameByName(name: String): Game
+    }
+}
+
+package "persistLogic.games" {
+    package "dao" {
+        interface GameDAO {
+            + loadGameCatalog(): ArrayList<Game>
+            + saveGame(game: Game): void
+            + deleteGame(game: Game): void
+            + updateGame(game: Game): void
+            + getGameByName(name: String): Game
+        }
+    }
+
+    package "postgres" {
+        class GameDAOPostgres {
+            + loadGameCatalog(): ArrayList<Game>
+            + saveGame(game: Game): void
+            + deleteGame(game: Game): void
+            + updateGame(game: Game): void
+            + getGameByName(name: String): Game
+        }
+    }
+}
+
+' Relationships
+GameCatalogFacade "1" *-- "1" GameCatalogManager : contains
+GameCatalogFacade "1" o-- "*" Game : manages
+GameCatalogManager "1" --> "1" GameDAO : uses
+GameDAOPostgres ..|> GameDAO : implements
+GameDAO ..> Game : manipulates
+GameCatalogManager ..> Game : manipulates
+
+note right of GameCatalogFacade
+  **Singleton Pattern**
+  Provides observable list
+  for UI binding
+end note
+
+note right of GameDAO
+  **DAO Pattern**
+  Abstracts database
+  operations
+end note
+
+@enduml
