@@ -1,8 +1,7 @@
 /* Global Styles */
-.root {
+* {
     -fx-font-family: "Segoe UI", "Arial", sans-serif;
-    -fx-background-color: #f5f5f5;
-    /* CSS Variables simulation */
+    /* CSS Variables definitions */
     -color-primary: #3498db;
     -color-primary-hover: #2980b9;
     -color-primary-pressed: #1f6391;
@@ -17,6 +16,10 @@
     -color-success: #2ecc71;
     -color-warning: #f1c40f;
     -color-focus-ring: #3498db;
+}
+
+.root {
+    -fx-background-color: -color-bg-gray;
 }
 
 /* Typography */
