@@ -21,7 +21,6 @@ public class GamesUseCaseTest extends TestCase {
     private static final String GAME_EDITOR = "JUnit_Editor";
     private static final String UPDATED_EDITOR = "JUnit_Updated_Editor";
 
-
     private GameCatalogFacade gameCatalogFacade;
 
     @Override

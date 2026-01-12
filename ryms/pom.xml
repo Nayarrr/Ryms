@@ -25,6 +25,13 @@
       <version>5.10.1</version>
       <scope>test</scope>
     </dependency>
+    <!-- JUnit Vintage Engine to run JUnit 3 and JUnit 4 tests -->
+    <dependency>
+      <groupId>org.junit.vintage</groupId>
+      <artifactId>junit-vintage-engine</artifactId>
+      <version>5.10.1</version>
+      <scope>test</scope>
+    </dependency>
         <!-- PostgreSQL JDBC Driver -->
     <dependency>
       <groupId>org.postgresql</groupId>
