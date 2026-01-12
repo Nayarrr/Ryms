@@ -5,24 +5,27 @@
 
 <BorderPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
             fx:controller="ry.ms.view.team.TeamDashboardController"
-            prefHeight="600.0" prefWidth="900.0">
+            prefHeight="600.0" prefWidth="900.0"
+            stylesheets="@../../styles.css">
 
     <top>
-        <VBox spacing="10" style="-fx-background-color: white; -fx-padding: 20;">
+        <VBox spacing="6" styleClass="header-section">
+            <padding>
+                <Insets top="18" right="20" bottom="12" left="20"/>
+            </padding>
             <HBox spacing="15" alignment="CENTER_LEFT">
-                <Label text="Mon Équipe" style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
-                <Label fx:id="teamNameLabel" style="-fx-font-size: 20px; -fx-text-fill: #2196F3;"/>
-                <Label fx:id="teamTagLabel" style="-fx-font-size: 16px; -fx-text-fill: #666;"/>
+                <Label text="Mon Équipe" styleClass="header-title"/>
+                <Label fx:id="teamNameLabel" styleClass="subtitle-label" style="-fx-text-fill: #3498db;"/>
+                <Label fx:id="teamTagLabel" styleClass="subtitle-label"/>
                 
                 <Region HBox.hgrow="ALWAYS"/>
                 
                 <!-- Bouton créer une équipe (affiché seulement si pas d'équipe) -->
                 <Button fx:id="createTeamButton"
                         text="+ Créer une Équipe"
-                        style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;"
+                        styleClass="button, primary-button"
                         onAction="#handleCreateTeam"/>
             </HBox>
-            <Separator/>
         </VBox>
     </top>
 
@@ -30,24 +33,25 @@
         <VBox spacing="20" style="-fx-padding: 20;">
             
             <!-- Section Membres -->
-            <VBox spacing="10">
-                <Label text="Membres de l'équipe" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <ListView fx:id="membersList" prefHeight="200">
+            <VBox spacing="10" styleClass="card">
+                <Label text="Membres de l'équipe" styleClass="title-label"/>
+                <ListView fx:id="membersList" prefHeight="200" styleClass="list-view">
                     <placeholder>
-                        <Label text="Aucun membre. Créez une équipe pour commencer."/>
+                        <Label text="Aucun membre. Créez une équipe pour commencer." styleClass="placeholder-text"/>
                     </placeholder>
                 </ListView>
             </VBox>
 
             <!-- Section Invitation -->
-            <VBox spacing="10">
-                <Label text="Inviter un membre" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
-                <HBox spacing="10">
+            <VBox spacing="10" styleClass="card">
+                <Label text="Inviter un membre" styleClass="title-label"/>
+                <HBox spacing="10" alignment="CENTER_LEFT">
                     <TextField fx:id="inviteEmailField"
                                promptText="Email du joueur à inviter"
-                               prefWidth="300"/>
+                               prefWidth="300"
+                               styleClass="text-field"/>
                     <Button text="Envoyer l'invitation"
-                            style="-fx-background-color: #2196F3; -fx-text-fill: white;"
+                            styleClass="button, primary-button"
                             onAction="#handleInvite"/>
                 </HBox>
             </VBox>
@@ -55,15 +59,15 @@
             <!-- Actions sur l'équipe -->
             <HBox spacing="10">
                 <Button text="Quitter l'équipe"
-                        style="-fx-background-color: #FF9800; -fx-text-fill: white;"
+                        styleClass="button, warning-button"
                         onAction="#handleLeave"/>
                 <Button text="Dissoudre l'équipe"
-                        style="-fx-background-color: #f44336; -fx-text-fill: white;"
+                        styleClass="button, danger-button"
                         onAction="#handleDissolve"/>
             </HBox>
 
             <!-- Message -->
-            <Label fx:id="msgLabel" wrapText="true" style="-fx-text-fill: #666;"/>
+            <Label fx:id="msgLabel" wrapText="true" styleClass="subtitle-label"/>
         </VBox>
     </center>
 </BorderPane>

@@ -1,68 +1,60 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="ry.ms.view.match.CreateMatchController"
-      spacing="20" styleClass="create-match-container">
+<VBox xmlns="http://javafx.com/javafx" 
+      xmlns:fx="http://javafx.com/fxml" 
+      fx:controller="ry.ms.view.match.CreateMatchController"
+      spacing="20" styleClass="card" stylesheets="@../../styles.css" maxWidth="600">
     
-    <padding>
-        <Insets top="20" right="20" bottom="20" left="20"/>
-    </padding>
+    <Label text="Créer un nouveau match" styleClass="header-title"/>
 
-    <Label text="Créer un nouveau match" styleClass="title"/>
-
-    <VBox spacing="10" styleClass="form-section">
-        <Label text="Équipe 1" styleClass="section-label"/>
+    <VBox spacing="10">
+        <Label text="Équipe 1" styleClass="subtitle-label"/>
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="team1SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
+            <TextField fx:id="team1SearchField" promptText="Rechercher une équipe..." prefWidth="300" styleClass="text-field"/>
         </HBox>
         <ComboBox fx:id="team1ComboBox" promptText="Sélectionner une équipe inscrite" prefWidth="300" visible="false" managed="false"/>
-        <ListView fx:id="team1ListView" prefHeight="100" visible="false" managed="false"/>
-        <Label fx:id="team1SelectedLabel" styleClass="selected-label"/>
+        <ListView fx:id="team1ListView" prefHeight="100" visible="false" managed="false" styleClass="list-view"/>
+        <Label fx:id="team1SelectedLabel" styleClass="success-text"/>
     </VBox>
 
-    <VBox spacing="10" styleClass="form-section">
-        <Label text="Équipe 2" styleClass="section-label"/>
+    <VBox spacing="10">
+        <Label text="Équipe 2" styleClass="subtitle-label"/>
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="team2SearchField" promptText="Rechercher une équipe..." prefWidth="300"/>
+            <TextField fx:id="team2SearchField" promptText="Rechercher une équipe..." prefWidth="300" styleClass="text-field"/>
         </HBox>
         <ComboBox fx:id="team2ComboBox" promptText="Sélectionner une équipe inscrite" prefWidth="300" visible="false" managed="false"/>
-        <ListView fx:id="team2ListView" prefHeight="100" visible="false" managed="false"/>
-        <Label fx:id="team2SelectedLabel" styleClass="selected-label"/>
+        <ListView fx:id="team2ListView" prefHeight="100" visible="false" managed="false" styleClass="list-view"/>
+        <Label fx:id="team2SelectedLabel" styleClass="success-text"/>
     </VBox>
  
-    <VBox spacing="10" styleClass="form-section">
-        <Label text="Date et heure du match" styleClass="section-label"/>
+    <VBox spacing="10">
+        <Label text="Date et heure du match" styleClass="subtitle-label"/>
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <DatePicker fx:id="matchDatePicker" promptText="Sélectionner la date" prefWidth="200"/>
-            <TextField fx:id="matchHourField" promptText="HH" prefWidth="60" maxWidth="60"/>
+            <DatePicker fx:id="matchDatePicker" promptText="Sélectionner la date" prefWidth="200" styleClass="date-picker"/>
+            <TextField fx:id="matchHourField" promptText="HH" prefWidth="60" maxWidth="60" styleClass="text-field"/>
             <Label text=":"/>
-            <TextField fx:id="matchMinuteField" promptText="MM" prefWidth="60" maxWidth="60"/>
-            <Label text="(format 24h)" styleClass="hint-label"/>
+            <TextField fx:id="matchMinuteField" promptText="MM" prefWidth="60" maxWidth="60" styleClass="text-field"/>
+            <Label text="(format 24h)" styleClass="placeholder-text"/>
         </HBox>
     </VBox>
 
-    <VBox spacing="10" styleClass="form-section">
-        <Label text="Jeu" styleClass="section-label"/>
-        <ComboBox fx:id="gameComboBox" promptText="Sélectionner un jeu" prefWidth="300"/>
+    <VBox spacing="10">
+        <Label text="Jeu" styleClass="subtitle-label"/>
+        <ComboBox fx:id="gameComboBox" promptText="Sélectionner un jeu" prefWidth="300" styleClass="combo-box"/>
     </VBox>
 
-    <VBox spacing="10" styleClass="form-section">
-        <Label text="Arbitre(s)" styleClass="section-label"/>
+    <VBox spacing="10">
+        <Label text="Arbitre(s)" styleClass="subtitle-label"/>
         <HBox spacing="10" alignment="CENTER_LEFT">
-            <TextField fx:id="refereeSearchField" promptText="Email de l'arbitre (ex: admin@ryms.com)" prefWidth="250"/>
-            <Button text="Ajouter" onAction="#handleAddRefereeManually" styleClass="secondary-button"/>
+            <TextField fx:id="refereeSearchField" promptText="Email de l'arbitre (ex: admin@ryms.com)" prefWidth="250" styleClass="text-field"/>
+            <Button text="Ajouter" onAction="#handleAddRefereeManually" styleClass="button, secondary-button"/>
         </HBox>
-        <ListView fx:id="refereeListView" prefHeight="100" visible="false" managed="false"/>
+        <ListView fx:id="refereeListView" prefHeight="100" visible="false" managed="false" styleClass="list-view"/>
         <VBox fx:id="selectedRefereesContainer" spacing="5"/>
     </VBox>
 
     <HBox spacing="15" alignment="CENTER">
-        <Button fx:id="createButton" text="Créer le match" styleClass="primary-button" onAction="#handleCreateMatch"/>
-        <Button text="Annuler" styleClass="secondary-button" onAction="#handleCancel"/>
+        <Button fx:id="createButton" text="Créer le match" styleClass="button, primary-button" onAction="#handleCreateMatch"/>
+        <Button text="Annuler" styleClass="button, secondary-button" onAction="#handleCancel"/>
     </HBox>
 
-    <Label fx:id="messageLabel" styleClass="message-label"/>
+    <Label fx:id="messageLabel" styleClass="error-label"/>
 </VBox>
