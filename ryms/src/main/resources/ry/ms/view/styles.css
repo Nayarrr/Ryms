@@ -1,0 +1,335 @@
+/* Global Styles */
+.root {
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-background-color: #f5f5f5;
+    /* CSS Variables simulation */
+    -color-primary: #3498db;
+    -color-primary-hover: #2980b9;
+    -color-primary-pressed: #1f6391;
+    -color-secondary: #95a5a6;
+    -color-secondary-hover: #7f8c8d;
+    -color-text-main: #2c3e50;
+    -color-text-secondary: #7f8c8d;
+    -color-bg-light: #ffffff;
+    -color-bg-gray: #f5f5f5;
+    -color-border: #e0e0e0;
+    -color-error: #e74c3c;
+    -color-success: #2ecc71;
+    -color-warning: #f1c40f;
+    -color-focus-ring: #3498db;
+}
+
+/* Typography */
+.label,
+.text,
+.button,
+.text-field,
+.text-area {
+    -fx-text-fill: -color-text-main;
+}
+
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-main;
+}
+
+.subtitle-label {
+    -fx-font-size: 14px;
+    -fx-text-fill: -color-text-secondary;
+}
+
+.success-text {
+    -fx-text-fill: -color-success;
+}
+
+.read-only-field {
+    -fx-background-color: -color-bg-gray;
+    -fx-text-fill: -color-text-secondary;
+}
+
+/* Buttons */
+.button {
+    -fx-background-radius: 5;
+    -fx-padding: 8 16;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+    -fx-transition: -fx-background-color 0.2s;
+}
+
+.button:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 3, 0, 0, 1);
+}
+
+.button:focused {
+    -fx-border-color: -color-focus-ring;
+    -fx-border-width: 2px;
+    -fx-border-insets: -2px;
+    -fx-border-radius: 7px;
+    /* slightly larger than button radius */
+}
+
+.primary-button {
+    -fx-background-color: -color-primary;
+    -fx-text-fill: white;
+}
+
+.primary-button:hover {
+    -fx-background-color: -color-primary-hover;
+}
+
+.primary-button:pressed {
+    -fx-background-color: -color-primary-pressed;
+}
+
+.secondary-button {
+    -fx-background-color: -color-secondary;
+    -fx-text-fill: white;
+}
+
+.secondary-button:hover {
+    -fx-background-color: -color-secondary-hover;
+}
+
+.success-button {
+    -fx-background-color: -color-success;
+    -fx-text-fill: white;
+}
+
+.success-button:hover {
+    -fx-background-color: derive(-color-success, -20%);
+}
+
+.warning-button {
+    -fx-background-color: -color-warning;
+    -fx-text-fill: white;
+    /* or dark depending on contrast */
+}
+
+.warning-button:hover {
+    -fx-background-color: derive(-color-warning, -20%);
+}
+
+.danger-button {
+    -fx-background-color: -color-error;
+    -fx-text-fill: white;
+}
+
+.danger-button:hover {
+    -fx-background-color: derive(-color-error, -20%);
+}
+
+.transparent-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: white;
+    /* Default for navbar */
+    -fx-font-weight: bold;
+}
+
+.transparent-button:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Inputs */
+.text-field,
+.password-field,
+.date-picker,
+.combo-box {
+    -fx-background-radius: 5;
+    -fx-border-color: #ced4da;
+    -fx-border-radius: 5;
+    -fx-padding: 8;
+    -fx-background-color: white;
+}
+
+.text-field:focused,
+.password-field:focused,
+.date-picker:focused,
+.combo-box:focused {
+    -fx-border-color: -color-focus-ring;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(52, 152, 219, 0.3), 5, 0, 0, 0);
+}
+
+/* Navbar */
+.navbar {
+    -fx-background-color: -color-bg-gray;
+}
+
+.nav-link {
+    -fx-background-color: transparent;
+    -fx-text-fill: -color-text-main;
+    /* Usually dark on light bg, or user can override for dark navbar */
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.nav-link:hover {
+    -fx-background-color: rgba(52, 152, 219, 0.1);
+    /* Subtle blue tint */
+    -fx-text-fill: -color-primary;
+}
+
+/* Cards / Containers */
+.card {
+    -fx-background-color: white;
+    -fx-background-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 10, 0, 0, 2);
+    -fx-padding: 20;
+}
+
+/* Lists and Tables */
+.list-cell {
+    -fx-padding: 5;
+}
+
+.list-cell:filled:selected,
+.list-cell:filled:selected:hover {
+    -fx-background-color: #e3f2fd;
+    -fx-text-fill: -color-text-main;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: #f8f9fa;
+}
+
+/* Authentication Forms */
+.auth-container {
+    -fx-background-color: white;
+    -fx-border-color: -color-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 30;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 20, 0, 0, 5);
+}
+
+/* Headers */
+.header-section {
+    -fx-background-color: white;
+    -fx-border-color: -color-border;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 0;
+}
+
+.search-field {
+    -fx-background-radius: 5;
+    -fx-border-radius: 5;
+    -fx-padding: 8;
+    -fx-font-size: 13px;
+}
+
+.placeholder-text {
+    -fx-text-fill: -color-text-secondary;
+    -fx-font-size: 16px;
+}
+
+.navigation-links {
+    -fx-padding: 10 0;
+}
+
+.link-label {
+    -fx-text-fill: -color-primary;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+
+.link-label:hover {
+    -fx-text-fill: -color-primary-hover;
+    -fx-underline: true;
+}
+
+.header-title {
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-main;
+}
+
+/* Status Badges */
+.status-badge {
+    -fx-padding: 5 15;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-font-weight: bold;
+}
+
+.status-planning {
+    -fx-background-color: #fff3cd;
+    -fx-text-fill: #856404;
+}
+
+.status-in_progress {
+    -fx-background-color: #d1ecf1;
+    -fx-text-fill: #0c5460;
+}
+
+.status-completed {
+    -fx-background-color: #d4edda;
+    -fx-text-fill: #155724;
+}
+
+.status-cancelled {
+    -fx-background-color: #f8d7da;
+    -fx-text-fill: #721c24;
+}
+
+/* Tables */
+.table-view {
+    -fx-background-color: white;
+    -fx-border-color: -color-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+}
+
+.table-view .column-header-background {
+    -fx-background-color: -color-bg-gray;
+    -fx-border-color: -color-border;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .column-header {
+    -fx-background-color: transparent;
+    -fx-size: 40px;
+}
+
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-text-main;
+}
+
+.table-row-cell {
+    -fx-background-color: white;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1 0;
+    -fx-padding: 5;
+}
+
+/* Forms */
+.registration-form {
+    -fx-background-color: white;
+    -fx-border-color: -color-border;
+    -fx-border-width: 1;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+}
+
+.info-message {
+    -fx-text-fill: -color-text-secondary;
+    -fx-background-color: #e3f2fd;
+    -fx-padding: 10 15;
+    -fx-background-radius: 5;
+}
+
+.table-row-cell:odd {
+    -fx-background-color: #f9f9f9;
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #f0f8ff;
+    /* AliceBlue generally safe */
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #e3f2fd;
+    -fx-text-fill: -color-text-main;
+}

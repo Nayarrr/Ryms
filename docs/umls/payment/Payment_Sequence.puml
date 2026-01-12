@@ -1,0 +1,41 @@
+@startuml
+actor User
+participant "PaymentController" as PC
+participant "PaymentService" as PS
+participant "Stripe API" as Stripe
+
+User -> PC : click Pay Button
+activate PC
+PC -> PC : set status "Processing payment..."
+PC -> PC : disable Pay Button
+
+create actor Thread
+PC -> Thread : start new Thread
+activate Thread
+
+Thread -> PS : createPaymentIntent(amount, currency)
+activate PS
+PS -> Stripe : PaymentIntent.create(params)
+activate Stripe
+Stripe --> PS : PaymentIntent (created)
+deactivate Stripe
+PS --> Thread : PaymentIntent
+deactivate PS
+
+alt Success
+    Thread -> PC : Platform.runLater(Success)
+    deactivate Thread
+    activate PC #DarkSalmon
+    PC -> PC : set status "Payment Successful!"
+    PC -> PC : onSucess.run()
+    deactivate PC
+else Exception
+    Thread -> PC : Platform.runLater(Failure)
+    activate PC #DarkSalmon
+    PC -> PC : set status "Payment Failed: error"
+    PC -> PC : enable Pay Button
+    deactivate PC
+end
+
+deactivate PC
+@enduml

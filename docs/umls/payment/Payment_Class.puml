@@ -1,0 +1,42 @@
+@startuml
+package "ry.ms.view.payment" {
+    class PaymentController {
+        - Label amountLabel
+        - TextField cardNumberField
+        - TextField expiryField
+        - TextField cvcField
+        - Label statusLabel
+        - Button payButton
+        - PaymentService paymentService
+        - long amountInCents
+        - Runnable onSuccess
+        - Runnable onCancel
+        + PaymentController()
+        + void setAmount(double amount)
+        + void setOnSuccess(Runnable onSuccess)
+        + void setOnCancel(Runnable onCancel)
+        - void handlePayment()
+        - void handleCancel()
+    }
+}
+
+package "ry.ms.businessLogic.payment" {
+    class PaymentService {
+        + PaymentService()
+        + PaymentIntent createPaymentIntent(long amount, String currency)
+    }
+
+    class PaymentConfig {
+        - {static} String STRIPE_SECRET_KEY
+        + {static} String getSecretKey()
+    }
+}
+
+package "com.stripe.model" {
+    class PaymentIntent
+}
+
+PaymentController --> PaymentService : uses
+PaymentService ..> PaymentConfig : uses
+PaymentService ..> PaymentIntent : creates
+@enduml

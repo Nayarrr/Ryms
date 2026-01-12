@@ -9,30 +9,30 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.HBox?>
 
-<VBox alignment="CENTER" spacing="15.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.profile.ProfileController">
+<VBox alignment="CENTER" spacing="15.0" styleClass="auth-container" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.profile.ProfileController" stylesheets="@../../styles.css">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label text="User Profile">
+    <Label text="User Profile" styleClass="title-label">
         <font>
             <Font size="24.0" />
         </font>
     </Label>
 
-    <TextField fx:id="emailField" editable="false" promptText="Email" style="-fx-background-color: #f0f0f0;" />
+    <TextField fx:id="emailField" editable="false" promptText="Email" styleClass="text-field, read-only-field" />
     <TextField fx:id="usernameField" promptText="Username" />
     <PasswordField fx:id="passwordField" promptText="New Password (leave empty to keep current)" />
 
     <Label fx:id="messageLabel" text="" />
 
-    <Button onAction="#handleUpdate" text="Update Profile" style="-fx-background-color: #4CAF50; -fx-text-fill: white;" maxWidth="Infinity"/>
+    <Button onAction="#handleUpdate" text="Update Profile" styleClass="button, success-button" maxWidth="Infinity"/>
     
-    <Button onAction="#handleChangePassword" text="Change Password" maxWidth="Infinity" />
+    <Button onAction="#handleChangePassword" text="Change Password" styleClass="button, secondary-button" maxWidth="Infinity" />
 
     <HBox spacing="10" alignment="CENTER">
-        <Button onAction="#handleBack" text="Back to Dashboard" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-        <Button onAction="#handleDelete" text="Deactivate Account" style="-fx-background-color: #f44336; -fx-text-fill: white;" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleBack" text="Back to Dashboard" styleClass="button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        <Button onAction="#handleDelete" text="Deactivate Account" styleClass="button, danger-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
     </HBox>
 
 </VBox>

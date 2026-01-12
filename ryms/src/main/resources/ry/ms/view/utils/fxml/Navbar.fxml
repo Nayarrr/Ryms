@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 
-<BorderPane style="-fx-background-color: #f5f5f5;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.utils.NavbarController">
+<BorderPane styleClass="navbar" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.utils.NavbarController">
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
@@ -20,13 +20,13 @@
             </ImageView>
             <!-- Navigation Links (Visible only when logged in) -->
             <HBox fx:id="navLinks" alignment="CENTER_LEFT" spacing="15.0" visible="false" managed="false">
-                <Button text="Équipes" onAction="#handleTeamsClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button text="Matchs" onAction="#handleMatchesClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button text="Jeux" onAction="#handleGamesClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button text="Tournois" onAction="#handleTournamentsClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button text="Produits" onAction="#handleProductsClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button text="Boutique" onAction="#handleShopClick" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-font-weight: bold;"/>
-                <Button text="Invitations" onAction="#handleInvitationsClick" style="-fx-background-color: #e67e22; -fx-text-fill: white;"/>
+                <Button text="Équipes" onAction="#handleTeamsClick" styleClass="text-button, nav-link"/>
+                <Button text="Matchs" onAction="#handleMatchesClick" styleClass="text-button, nav-link"/>
+                <Button text="Jeux" onAction="#handleGamesClick" styleClass="text-button, nav-link"/>
+                <Button text="Tournois" onAction="#handleTournamentsClick" styleClass="text-button, nav-link"/>
+                <Button text="Produits" onAction="#handleProductsClick" styleClass="text-button, nav-link"/>
+                <Button text="Boutique" onAction="#handleShopClick" styleClass="text-button, nav-link"/>
+                <Button text="Invitations" onAction="#handleInvitationsClick" styleClass="button, secondary-button"/>
             </HBox>
         </HBox>
     </left>
@@ -35,17 +35,17 @@
          <!-- Auth Box (Login/Register) -->
          <HBox fx:id="authBox" alignment="CENTER_RIGHT" spacing="10.0">
              <children>
-                 <Button onAction="#handleLogin" style="-fx-font-size: 14px;" text="Login" />
-                 <Button onAction="#handleRegister" style="-fx-font-size: 14px;" text="Register" />
+                 <Button onAction="#handleLogin" styleClass="button" text="Login" />
+                 <Button onAction="#handleRegister" styleClass="button, primary-button" text="Register" />
              </children>
          </HBox>
          <!-- User Box (Profile/Logout) - Initially Hidden -->
          <HBox fx:id="userBox" alignment="CENTER_RIGHT" spacing="10.0" visible="false" managed="false">
              <children>
-                 <javafx.scene.control.Label fx:id="userLabel" text="Hello, User" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
-                 <Button fx:id="adminButton" onAction="#handleAdmin" style="-fx-font-size: 14px; -fx-background-color: #ffd700;" text="Admin" visible="false" managed="false"/>
-                 <Button onAction="#handleProfile" style="-fx-font-size: 14px;" text="Profile" />
-                 <Button onAction="#handleLogout" style="-fx-font-size: 14px; -fx-background-color: #ffcccc;" text="Logout" />
+                 <javafx.scene.control.Label fx:id="userLabel" text="Hello, User" styleClass="label, bold-label"/>
+                 <Button fx:id="adminButton" onAction="#handleAdmin" styleClass="button, warning-button" text="Admin" visible="false" managed="false"/>
+                 <Button onAction="#handleProfile" styleClass="button" text="Profile" />
+                 <Button onAction="#handleLogout" styleClass="button, danger-button" text="Logout" />
              </children>
          </HBox>
       </javafx.scene.layout.StackPane>
