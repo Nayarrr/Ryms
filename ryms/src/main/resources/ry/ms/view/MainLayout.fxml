@@ -8,13 +8,14 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ry.ms.view.main.MainLayoutController"
             prefHeight="600.0" prefWidth="800.0">
-
-
+    
+    <stylesheets>
+        <java.net.URL value="@styles.css" />
+    </stylesheets>
 
     <!-- Zone de contenu centrale -->
     <center>
-        <StackPane fx:id="contentArea" 
-                   style="-fx-background-color: #ecf0f1;">
+        <StackPane fx:id="contentArea" styleClass="content-area">
             <padding>
                 <Insets top="0" right="0" bottom="0" left="0"/>
             </padding>

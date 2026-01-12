@@ -9,6 +9,6 @@
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
    </padding>
    <children>
-      <Label text="© 2024 Ryms. All rights reserved." textFill="#7f8c8d" />
+      <Label text="© 2025 Ryms. All rights reserved." textFill="#7f8c8d" />
    </children>
 </HBox>

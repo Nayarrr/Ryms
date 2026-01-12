@@ -9,7 +9,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ry.ms.view.tournament.TournamentListController"
             prefHeight="600.0" prefWidth="800.0"
-            stylesheets="@tournament-styles.css">
+            stylesheets="@../../styles.css">
 
     <!-- Header -->
     <top>
@@ -51,7 +51,7 @@
             </HBox>
 
             <!-- Tournament TableView -->
-            <TableView fx:id="tournamentTableView" VBox.vgrow="ALWAYS" styleClass="tournament-table">
+            <TableView fx:id="tournamentTableView" VBox.vgrow="ALWAYS" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="nameColumn" text="Nom du tournoi" prefWidth="200"/>
                     <TableColumn fx:id="gameColumn" text="Jeu" prefWidth="150"/>

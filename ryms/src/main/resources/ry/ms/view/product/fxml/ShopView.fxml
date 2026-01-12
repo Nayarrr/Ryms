@@ -7,11 +7,14 @@
 <BorderPane xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="ry.ms.view.product.ShopController"
             prefHeight="800.0" prefWidth="1200.0"
-            style="-fx-background-color: #ecf0f1;">
+            stylesheets="@../../styles.css">
     <top>
-        <VBox spacing="6" style="-fx-padding: 18 20 12 20;">
-            <Label text="Boutique" style="-fx-font-size: 26; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-            <Label text="Ajoutez des produits à votre panier" style="-fx-text-fill: #7f8c8d;"/>
+        <VBox spacing="6" styleClass="header-section">
+            <padding>
+                <Insets top="18" right="20" bottom="12" left="20"/>
+            </padding>
+            <Label text="Boutique" styleClass="header-title"/>
+            <Label text="Ajoutez des produits à votre panier" styleClass="subtitle-label"/>
         </VBox>
     </top>
 
@@ -24,9 +27,12 @@
     </center>
 
     <right>
-        <VBox spacing="12" prefWidth="360" style="-fx-padding: 16; -fx-background-color: white; -fx-border-color: #dfe6e9; -fx-border-width: 0 0 0 1;">
+        <VBox spacing="12" prefWidth="360" styleClass="details-panel">
+            <padding>
+                <Insets top="16" right="16" bottom="16" left="16"/>
+            </padding>
             <Label text="Mon panier" style="-fx-font-size: 20; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
-            <TableView fx:id="basketTable" prefHeight="400" VBox.vgrow="ALWAYS">
+            <TableView fx:id="basketTable" prefHeight="400" VBox.vgrow="ALWAYS" styleClass="table-view">
                 <columns>
                     <TableColumn fx:id="productCol" text="Produit" prefWidth="140" />
                     <TableColumn fx:id="qtyCol" text="Qté" prefWidth="60" />
@@ -36,11 +42,11 @@
             </TableView>
             <HBox spacing="8" alignment="CENTER_RIGHT">
                 <Label text="Total:" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
-                <Label fx:id="totalLabel" text="0.00 €" style="-fx-font-size: 16; -fx-font-weight: bold; -fx-text-fill: #27ae60;" />
+                <Label fx:id="totalLabel" text="0.00 €" styleClass="title-label, success-text" style="-fx-font-size: 20px;" />
             </HBox>
-            <Button text="Vider le panier" onAction="#handleClearBasket" style="-fx-background-color: #e74c3c; -fx-text-fill: white;" />
-            <Button text="Payer (Stripe)" onAction="#handleCheckout" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;" maxWidth="Infinity"/>
-            <Label fx:id="statusLabel" wrapText="true" style="-fx-text-fill: #c0392b;" />
+            <Button text="Vider le panier" onAction="#handleClearBasket" styleClass="button, danger-button" />
+            <Button text="Payer (Stripe)" onAction="#handleCheckout" styleClass="button, success-button" maxWidth="Infinity"/>
+            <Label fx:id="statusLabel" wrapText="true" styleClass="error-label" />
         </VBox>
     </right>
 </BorderPane>

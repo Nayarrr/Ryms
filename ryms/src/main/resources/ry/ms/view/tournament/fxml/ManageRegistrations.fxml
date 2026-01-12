@@ -9,7 +9,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ry.ms.view.tournament.ManageRegistrationsController"
             prefHeight="600.0" prefWidth="800.0"
-            stylesheets="@tournament-styles.css">
+            stylesheets="@../../styles.css">
 
     <!-- Header -->
     <top>

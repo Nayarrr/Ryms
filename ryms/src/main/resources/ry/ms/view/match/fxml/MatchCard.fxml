@@ -6,99 +6,55 @@
 <?import javafx.scene.layout.*?>
 
 <!-- Carte de match cliquable -->
-<VBox xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
       fx:id="matchCard"
       spacing="12"
-      style="-fx-background-color: linear-gradient(to bottom right, #1a1f3a, #0f1429); 
-             -fx-background-radius: 12; 
-             -fx-border-color: #2a3f5f; 
-             -fx-border-width: 1; 
-             -fx-border-radius: 12; 
-             -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.4), 10, 0, 0, 4); 
-             -fx-cursor: hand; 
-             -fx-pref-width: 700; 
-             -fx-max-width: 800;">
+      styleClass="card"
+      stylesheets="@../../styles.css"
+      maxWidth="800" prefWidth="700">
     
-    <padding>
-        <Insets top="20" right="25" bottom="20" left="25"/>
-    </padding>
-
     <!-- ========== HEADER : Heure + Date + Statut + Bouton Supprimer ========== -->
     <HBox spacing="12" alignment="CENTER_LEFT">
         <Label fx:id="matchTimeLabel" 
                text="20:00" 
-               style="-fx-font-size: 20px; 
-                      -fx-font-weight: bold; 
-                      -fx-text-fill: #5bc0eb; 
-                      -fx-effect: dropshadow(gaussian, rgba(91,192,235,0.6), 5, 0, 0, 0);"/>
+               styleClass="title-label"
+               style="-fx-font-size: 20px;"/>
         
         <Label fx:id="matchDateLabel" 
                text="Samedi 04 Jan" 
-               style="-fx-font-size: 14px; 
-                      -fx-text-fill: #8b95a5; 
-                      -fx-font-style: italic;"/>
+               styleClass="subtitle-label"/>
         
         <Region HBox.hgrow="ALWAYS"/>
         
-        <!-- Badge SCHEDULED (Jaune - À VENIR) -->
+        <!-- Badge SCHEDULED -->
         <Label fx:id="statusScheduled" 
                text="À VENIR"
-               visible="true"
-               managed="true"
-               style="-fx-font-size: 12px; 
-                      -fx-font-weight: bold; 
-                      -fx-text-fill: #ffc857; 
-                      -fx-background-color: rgba(255,200,87,0.15); 
-                      -fx-background-radius: 8; 
-                      -fx-padding: 5 15 5 15; 
-                      -fx-border-color: #ffc857; 
-                      -fx-border-width: 1; 
-                      -fx-border-radius: 8;"/>
+               styleClass="status-badge, status-planning"/>
         
-        <!-- Badge IN_PROGRESS (Rouge - EN COURS) -->
+        <!-- Badge IN_PROGRESS -->
         <Label fx:id="statusInProgress" 
-               text="🔴 EN COURS"
+               text="En COURS"
                visible="false"
                managed="false"
-               style="-fx-font-size: 12px; 
-                      -fx-font-weight: bold; 
-                      -fx-text-fill: #ff6b6b; 
-                      -fx-background-color: rgba(255,107,107,0.15); 
-                      -fx-background-radius: 8; 
-                      -fx-padding: 5 15 5 15; 
-                      -fx-border-color: #ff6b6b; 
-                      -fx-border-width: 1; 
-                      -fx-border-radius: 8;"/>
+               styleClass="status-badge, status-in_progress"/>
         
-        <!-- Badge FINISHED (Vert - TERMINÉ) -->
+        <!-- Badge FINISHED -->
         <Label fx:id="statusFinished" 
-               text="✅ TERMINÉ"
+               text="TERMINÉ"
                visible="false"
                managed="false"
-               style="-fx-font-size: 12px; 
-                      -fx-font-weight: bold; 
-                      -fx-text-fill: #4ecca3; 
-                      -fx-background-color: rgba(78,204,163,0.15); 
-                      -fx-background-radius: 8; 
-                      -fx-padding: 5 15 5 15; 
-                      -fx-border-color: #4ecca3; 
-                      -fx-border-width: 1; 
-                      -fx-border-radius: 8;"/>
+               styleClass="status-badge, status-completed"/>
         
         <Button fx:id="deleteButton" 
                 text="🗑️"
                 visible="false"
                 managed="false"
-                style="-fx-background-color: transparent; 
-                       -fx-text-fill: #ff6b6b; 
-                       -fx-font-size: 18px; 
-                       -fx-cursor: hand; 
-                       -fx-padding: 5 10 5 10; 
-                       -fx-background-radius: 8;"/>
+                styleClass="button, transparent-button"
+                style="-fx-text-fill: #e74c3c;"/>
     </HBox>
 
-    <!-- Séparateur -->
-    <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 1; -fx-opacity: 0.5;"/>
+    <Separator/>
 
     <!-- ========== CORPS : Team1 VS Team2 ========== -->
     <HBox spacing="40" alignment="CENTER">
@@ -108,37 +64,27 @@
             <ImageView fx:id="team1Logo" 
                        fitWidth="70" 
                        fitHeight="70" 
-                       preserveRatio="true"
-                       style="-fx-effect: dropshadow(gaussian, rgba(255,255,255,0.2), 8, 0, 0, 2);"/>
+                       preserveRatio="true"/>
             
             <Label fx:id="team1NameLabel" 
                    text="GentleMates" 
-                   style="-fx-font-size: 18px; 
-                          -fx-font-weight: bold; 
-                          -fx-text-fill: white; 
-                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1);"/>
+                   styleClass="title-label"
+                   style="-fx-font-size: 18px;"/>
             
             <Label fx:id="team1TagLabel" 
                    text="[M16]" 
-                   style="-fx-font-size: 13px; 
-                          -fx-text-fill: #8b95a5; 
-                          -fx-font-style: italic;"/>
+                   styleClass="subtitle-label"/>
         </VBox>
 
         <!-- ===== VS / SCORE ===== -->
         <VBox alignment="CENTER" spacing="8">
             <Label text="VS" 
-                   style="-fx-font-size: 28px; 
-                          -fx-font-weight: bold; 
-                          -fx-text-fill: #ffc857; 
-                          -fx-effect: dropshadow(gaussian, rgba(255,200,87,0.8), 10, 0, 0, 0);"/>
+                   style="-fx-font-size: 28px; -fx-font-weight: bold; -fx-text-fill: #f1c40f;"/>
             
             <Label fx:id="scoreLabel" 
                    text="0 - 0" 
                    visible="false"
-                   style="-fx-font-size: 18px; 
-                          -fx-font-weight: bold; 
-                          -fx-text-fill: #5bc0eb;"/>
+                   style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #3498db;"/>
         </VBox>
 
         <!-- ===== TEAM 2 ===== -->
@@ -146,47 +92,32 @@
             <ImageView fx:id="team2Logo" 
                        fitWidth="70" 
                        fitHeight="70" 
-                       preserveRatio="true"
-                       style="-fx-effect: dropshadow(gaussian, rgba(255,255,255,0.2), 8, 0, 0, 2);"/>
+                       preserveRatio="true"/>
             
             <Label fx:id="team2NameLabel" 
                    text="Karmine Corp" 
-                   style="-fx-font-size: 18px; 
-                          -fx-font-weight: bold; 
-                          -fx-text-fill: white; 
-                          -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.8), 3, 0, 0, 1);"/>
+                   styleClass="title-label"
+                   style="-fx-font-size: 18px;"/>
             
             <Label fx:id="team2TagLabel" 
                    text="[KCB]" 
-                   style="-fx-font-size: 13px; 
-                          -fx-text-fill: #8b95a5; 
-                          -fx-font-style: italic;"/>
+                   styleClass="subtitle-label"/>
         </VBox>
     </HBox>
 
-    <!-- Séparateur -->
-    <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 1; -fx-opacity: 0.5;"/>
+    <Separator/>
 
     <!-- ========== FOOTER : Compétition + Format ========== -->
     <HBox spacing="15" alignment="CENTER_LEFT">
         <Label fx:id="competitionLabel" 
-               text="Nom du Tournoi (a faire quand on aura mis en place cela)" 
-               style="-fx-font-size: 12px; 
-                      -fx-font-weight: bold; 
-                      -fx-text-fill: #5bc0eb;"/>
+               text="Nom du Tournoi" 
+               styleClass="subtitle-label"
+               style="-fx-font-weight: bold;"/>
         
         <Region HBox.hgrow="ALWAYS"/>
         
-        <!-- Pour l'instant fix je n'ai pas cela en place, donc full BO1--> 
         <Label fx:id="formatLabel" 
                text="BO1"  
-               style="-fx-font-size: 11px; 
-                      -fx-text-fill: #8b95a5; 
-                      -fx-background-color: rgba(139,149,165,0.15); 
-                      -fx-background-radius: 6; 
-                      -fx-padding: 4 12 4 12; 
-                      -fx-border-color: #8b95a5; 
-                      -fx-border-width: 1; 
-                      -fx-border-radius: 6;"/>
+               style="-fx-background-color: #f8f9fa; -fx-padding: 4 12; -fx-background-radius: 6; -fx-text-fill: #7f8c8d;"/>
     </HBox>
 </VBox>

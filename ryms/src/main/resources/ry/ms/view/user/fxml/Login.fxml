@@ -12,9 +12,13 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.control.Hyperlink?>
 
-<VBox alignment="CENTER" spacing="10.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.login.LoginController">
+<VBox alignment="CENTER" spacing="10.0" 
+      stylesheets="@../../styles.css"
+      styleClass="card"
+      style="-fx-max-width: 400; -fx-max-height: 500;"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.login.LoginController">
    <padding>
-      <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+      <Insets bottom="30.0" left="30.0" right="30.0" top="30.0" />
    </padding>
    <children>
       <ImageView fitHeight="80.0" pickOnBounds="true" preserveRatio="true">
@@ -22,19 +26,20 @@
             <Image url="@/images/logo.png" />
          </image>
       </ImageView>
-      <Label text="Nom d'utilisateur :" />
-      <TextField fx:id="loginField" maxWidth="250.0" promptText="Enter your login" />
-      <Label text="Mot de passe :" />
-      <PasswordField fx:id="passField" maxWidth="250.0" promptText="Enter your password" />
-      <Button onAction="#handleLoginButtonAction" text="Se connecter" />
-      <Label fx:id="messageLabel" text="Veuillez entrer vos identifiants">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
+      
+      <Label text="Nom d'utilisateur :" styleClass="subtitle-label"/>
+      <TextField fx:id="loginField" maxWidth="250.0" promptText="Enter your login" styleClass="text-field" />
+      
+      <Label text="Mot de passe :" styleClass="subtitle-label"/>
+      <PasswordField fx:id="passField" maxWidth="250.0" promptText="Enter your password" styleClass="text-field" />
+      
+      <Button onAction="#handleLoginButtonAction" text="Se connecter" styleClass="button, primary-button" maxWidth="250.0"/>
+      
+      <Label fx:id="messageLabel" text="Veuillez entrer vos identifiants" styleClass="subtitle-label"/>
+
       <HBox alignment="CENTER" spacing="20">
-         <Hyperlink onAction="#handleRegisterLinkAction" text="S'inscrire" />
-         <Hyperlink onAction="#handleForgotPasswordLinkAction" text="Mot de passe oublié ?" />
+         <Hyperlink onAction="#handleRegisterLinkAction" text="S'inscrire" style="-fx-text-fill: -color-primary-500;"/>
+         <Hyperlink onAction="#handleForgotPasswordLinkAction" text="Mot de passe oublié ?" style="-fx-text-fill: -color-primary-500;"/>
       </HBox>
    </children>
 </VBox>

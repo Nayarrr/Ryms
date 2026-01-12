@@ -10,16 +10,14 @@
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="15.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.admin.AdminDashboardController">
+<VBox alignment="CENTER" spacing="15.0" 
+      stylesheets="@../../styles.css"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.user.admin.AdminDashboardController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label text="Admin Dashboard">
-        <font>
-            <Font size="24.0" />
-        </font>
-    </Label>
+    <Label text="Admin Dashboard" styleClass="header-title" />
 
     <TabPane VBox.vgrow="ALWAYS" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -29,8 +27,8 @@
                         <padding>
                             <Insets top="10" right="10" bottom="10" left="10"/>
                         </padding>
-                        <Label text="Right-click on a user to edit role or status." textFill="GRAY"/>
-                        <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
+                        <Label text="Right-click on a user to edit role or status." styleClass="subtitle-label"/>
+                        <TableView fx:id="userTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                             <columns>
                                 <TableColumn fx:id="usernameColumn" text="Username" prefWidth="150" />
                                 <TableColumn fx:id="emailColumn" text="Email" prefWidth="200" />
@@ -47,8 +45,8 @@
                         <padding>
                             <Insets top="10" right="10" bottom="10" left="10"/>
                         </padding>
-                        <Label text="Overview of all registered teams." textFill="GRAY"/>
-                        <TableView fx:id="teamTable" VBox.vgrow="ALWAYS">
+                        <Label text="Overview of all registered teams." styleClass="subtitle-label"/>
+                        <TableView fx:id="teamTable" VBox.vgrow="ALWAYS" styleClass="table-view">
                             <columns>
                                 <TableColumn fx:id="teamNameColumn" text="Team Name" prefWidth="150" />
                                 <TableColumn fx:id="teamTagColumn" text="Tag" prefWidth="80" />
@@ -61,8 +59,8 @@
         </tabs>
     </TabPane>
 
-    <Label fx:id="messageLabel" text="" textFill="RED"/>
+    <Label fx:id="messageLabel" text="" styleClass="error-label"/>
 
-    <Button onAction="#handleBack" text="Back to Dashboard" maxWidth="Infinity" />
+    <Button onAction="#handleBack" text="Back to Dashboard" maxWidth="Infinity" styleClass="button, secondary-button" />
 
 </VBox>

@@ -1,59 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="ry.ms.view.match.MatchListViewController"
-      spacing="20"
-      style="-fx-background-color: #0a0e27;">
-
-    <padding>
-        <Insets top="25" right="25" bottom="25" left="25"/>
-    </padding>
+      spacing="0"
+      stylesheets="@../../styles.css">
 
     <!-- ========== EN-TÊTE ========== -->
-    <HBox alignment="CENTER_LEFT" spacing="20">
-        <Label text="Prochains Matchs" 
-               style="-fx-font-size: 34px; 
-                      -fx-font-weight: bold; 
-                      -fx-text-fill: white; 
-                      -fx-effect: dropshadow(gaussian, rgba(91,192,235,0.5), 8, 0, 0, 2);"/>
-        
-        <Region HBox.hgrow="ALWAYS"/>
-        
-        <Button fx:id="createMatchButton" 
-                text="+ Créer un match"
-                onAction="#handleCreateMatch"
-                style="-fx-background-color: linear-gradient(to bottom right, #4ecca3, #3a9b7f); 
-                       -fx-text-fill: white; 
-                       -fx-font-size: 15px; 
-                       -fx-font-weight: bold;  
-                       -fx-padding: 14 28 14 28; 
-                       -fx-background-radius: 8; 
-                       -fx-cursor: hand; 
-                       -fx-effect: dropshadow(gaussian, rgba(78,204,163,0.5), 8, 0, 0, 3);"/>
-    </HBox>
-
-    <!-- Séparateur -->
-    <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2;"/>
+    <VBox spacing="6" styleClass="header-section">
+        <padding>
+            <Insets top="18" right="20" bottom="12" left="20"/>
+        </padding>
+        <HBox alignment="CENTER_LEFT" spacing="20">
+            <Label text="Prochains Matchs" styleClass="header-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button fx:id="createMatchButton" 
+                    text="+ Créer un match"
+                    onAction="#handleCreateMatch"
+                    styleClass="button, primary-button"/>
+        </HBox>
+    </VBox>
 
     <!-- ========== CONTAINER DES CARTES (avec ScrollPane) ========== -->
     <ScrollPane fitToWidth="true" 
                 VBox.vgrow="ALWAYS"
-                style="-fx-background-color: transparent; 
-                       -fx-background: transparent;">
+                styleClass="edge-to-edge-scroll-pane">
         
         <VBox fx:id="matchesContainer" 
               spacing="18" 
               alignment="TOP_CENTER"
-              style="-fx-background-color: #0a0e27;">
-            
-            <padding>
-                <Insets top="15" right="10" bottom="15" left="10"/>
-            </padding>
+              style="-fx-padding: 20;">
         </VBox>
     </ScrollPane>
 </VBox>

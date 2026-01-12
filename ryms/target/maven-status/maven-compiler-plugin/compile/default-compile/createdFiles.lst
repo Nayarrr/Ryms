@@ -35,6 +35,7 @@ ry\ms\businessLogic\payment\PaymentService.class
 ry\ms\view\utils\FooterController.class
 ry\ms\businessLogic\match\exceptions\MatchDoesntExistException.class
 ry\ms\businessLogic\product\ProductManager.class
+ry\ms\view\utils\AlertManager.class
 ry\ms\persistLogic\games\postgres\GameDAOPostgres.class
 ry\ms\view\team\InvitationsController.class
 ry\ms\view\utils\Footer.class

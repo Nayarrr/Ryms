@@ -1,122 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ry.ms.view.match.matchDetail.MatchDetailsController"
             fitToWidth="true"
-            style="-fx-background-color: #0a0e27; -fx-background: #0a0e27;">
+            stylesheets="@../../styles.css"
+            styleClass="edge-to-edge-scroll-pane">
     
     <VBox fx:id="rootContainer" 
           spacing="25"
           alignment="TOP_CENTER"
-          style="-fx-background-color: #0a0e27;">
-        
-        <padding>
-            <Insets top="30" right="40" bottom="40" left="40"/>
-        </padding>
+          style="-fx-padding: 30 40 40 40;">
 
         <!-- ========== BOUTON RETOUR + COMMENCER LE MATCH ========== -->
-    <HBox alignment="CENTER_LEFT" spacing="15">
-        <Button text="← Retour" 
-                onAction="#handleBackToList"
-                style="-fx-background-color: linear-gradient(to bottom right, #3498db, #2980b9); 
-                    -fx-text-fill: white; 
-                    -fx-font-size: 15px; 
-                    -fx-font-weight: bold;
-                    -fx-padding: 12 24; 
-                    -fx-background-radius: 8; 
-                    -fx-cursor: hand;
-                    -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.4), 8, 0, 0, 3);"/>
-        
-        <Region HBox.hgrow="ALWAYS"/>
+        <HBox alignment="CENTER_LEFT" spacing="15">
+            <Button text="← Retour" 
+                    onAction="#handleBackToList"
+                    styleClass="button, secondary-button"/>
+            
+            <Region HBox.hgrow="ALWAYS"/>
 
-        <Button fx:id="startMatchButton" 
-                text="Commencer le match"
-                onAction="#handleStartMatch"
-                visible="false"
-                managed="false"
-                style="-fx-background-color: linear-gradient(to bottom right, #4ecca3, #3a9b7f); 
-                    -fx-text-fill: white; 
-                    -fx-font-size: 15px; 
-                    -fx-font-weight: bold;
-                    -fx-padding: 12 24; 
-                    -fx-background-radius: 8; 
-                    -fx-cursor: hand;
-                    -fx-effect: dropshadow(gaussian, rgba(78,204,163,0.5), 8, 0, 0, 3);"/>
-    </HBox>
+            <Button fx:id="startMatchButton" 
+                    text="Commencer le match"
+                    onAction="#handleStartMatch"
+                    visible="false"
+                    managed="false"
+                    styleClass="button, primary-button"/>
+        </HBox>
 
         <!-- ========== CONTENEUR PRINCIPAL ========== -->
         <VBox spacing="30"
               alignment="TOP_CENTER"
-              style="-fx-background-color: linear-gradient(to bottom right, #1a1f3a, #0f1429); 
-                     -fx-border-color: #2a3f5f; 
-                     -fx-border-width: 2; 
-                     -fx-border-radius: 15; 
-                     -fx-background-radius: 15; 
-                     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.6), 15, 0, 0, 8); 
-                     -fx-padding: 40;
-                     -fx-max-width: 1200;">
+              styleClass="card"
+              style="-fx-max-width: 1200;">
 
             <!-- ========== HEADER : TITRE DU MATCH ========== -->
             <VBox spacing="12" alignment="CENTER">
                 <Label fx:id="matchTitleLabel" 
                        text="Chargement..."
-                       style="-fx-font-size: 38px; 
-                              -fx-font-weight: bold; 
-                              -fx-text-fill: white; 
-                              -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.9), 4, 0, 0, 2);"/>
+                       styleClass="header-title"/>
                 
                 <!-- Date et heure avec bouton modification -->
                 <HBox spacing="15" alignment="CENTER">
                     <Label fx:id="matchDateLabel" 
                            text="Date : ..."
-                           style="-fx-font-size: 17px; 
-                                  -fx-text-fill: #8b95a5; 
-                                  -fx-font-style: italic;"/>
+                           styleClass="subtitle-label"/>
                     
                     <Button fx:id="editDateButton" 
                             text="Modifier"
                             onAction="#handleEditDate"
                             visible="false"
                             managed="false"
-                            style="-fx-background-color: #f39c12; 
-                                   -fx-text-fill: white; 
-                                   -fx-font-size: 13px; 
-                                   -fx-font-weight: bold;
-                                   -fx-padding: 6 16; 
-                                   -fx-background-radius: 6; 
-                                   -fx-cursor: hand;"/>
+                            styleClass="button, warning-button"/>
                 </HBox>
             </VBox>
 
-            <!-- Séparateur global -->
-            <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2; -fx-opacity: 0.5;"/>
+            <Separator/>
 
             <!-- ========== SECTION ARBITRES ========== -->
             <VBox spacing="15" alignment="CENTER">
                 <HBox alignment="CENTER" spacing="20">
                     <Label text="Arbitres" 
-                           style="-fx-font-size: 22px; 
-                                  -fx-font-weight: bold; 
-                                  -fx-text-fill: #5bc0eb; 
-                                  -fx-effect: dropshadow(gaussian, rgba(91,192,235,0.6), 6, 0, 0, 0);"/>
+                           styleClass="title-label"/>
                     
                     <Button fx:id="addRefereeButton" 
                             text="+ Ajouter"
                             onAction="#handleAddReferee"
                             visible="false"
                             managed="false"
-                            style="-fx-background-color: linear-gradient(to bottom right, #4ecca3, #3a9b7f); 
-                                   -fx-text-fill: white; 
-                                   -fx-font-size: 13px; 
-                                   -fx-font-weight: bold;
-                                   -fx-padding: 6 16; 
-                                   -fx-background-radius: 6; 
-                                   -fx-cursor: hand;"/>
+                            styleClass="button, secondary-button"/>
                 </HBox>
 
                 <VBox fx:id="refereesListContainer" 
@@ -125,8 +85,7 @@
                       style="-fx-padding: 5 0 0 0;"/>
             </VBox>
 
-            <!-- Séparateur global -->
-            <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2; -fx-opacity: 0.5;"/>
+            <Separator/>
 
             <!-- ========== SECTION SCORES ========== -->
             <VBox fx:id="scoresContainer"
@@ -135,66 +94,47 @@
                   style="-fx-padding: 0;">
             </VBox>
 
-            <!-- Séparateur global -->
-            <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2; -fx-opacity: 0.5;"/>
+            <Separator/>
 
             <!-- ========== SECTION COMPOSITIONS DES ÉQUIPES ========== -->
             <VBox spacing="25" alignment="CENTER">
                 <Label text="Compositions des équipes" 
-                       style="-fx-font-size: 28px; 
-                              -fx-font-weight: bold; 
-                              -fx-text-fill: #5bc0eb; 
-                              -fx-effect: dropshadow(gaussian, rgba(91,192,235,0.6), 8, 0, 0, 0);"/>
+                       styleClass="header-title"/>
                 
                 <HBox spacing="30" alignment="CENTER">
                     
                     <!-- ===== ÉQUIPE 1 ===== -->
                     <VBox spacing="18" 
                           fx:id="team1Box"
-                          style="-fx-background-color: linear-gradient(to bottom right, #1a2a4a, #0f1429); 
-                                 -fx-border-color: #3498db; 
-                                 -fx-border-width: 2; 
-                                 -fx-border-radius: 12; 
-                                 -fx-background-radius: 12; 
-                                 -fx-effect: dropshadow(gaussian, rgba(52,152,219,0.5), 12, 0, 0, 5); 
-                                 -fx-padding: 25; 
-                                 -fx-pref-width: 420; 
-                                 -fx-min-height: 450;">
+                          styleClass="card"
+                          style="-fx-padding: 25; -fx-pref-width: 420; -fx-min-height: 450;">
                         
                         <!-- Nom de l'équipe -->
                         <Label fx:id="team1NameLabel" 
                                text="Équipe 1"
-                               style="-fx-font-size: 24px; 
-                                      -fx-font-weight: bold; 
-                                      -fx-text-fill: #5bc0eb; 
-                                      -fx-alignment: center; 
-                                      -fx-effect: dropshadow(gaussian, rgba(91,192,235,0.8), 5, 0, 0, 0);"/>
+                               styleClass="title-label"
+                               style="-fx-alignment: center;"/>
                         
-                        <!-- Séparateur -->
-                        <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2; -fx-opacity: 0.7;"/>
+                        <Separator/>
                         
                         <!-- Section Roster -->
                         <VBox spacing="12" VBox.vgrow="ALWAYS">
                             <Label text="Roster" 
-                                   style="-fx-font-size: 18px; 
-                                          -fx-font-weight: bold; 
-                                          -fx-text-fill: white;"/>
+                                   styleClass="subtitle-label"
+                                   style="-fx-font-weight: bold;"/>
                             
                             <VBox fx:id="team1RosterContainer" 
                                   spacing="10"
                                   style="-fx-padding: 8 0 0 15;"/>
                         </VBox>
                         
-                        <!-- Séparateur -->
-                        <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2; -fx-opacity: 0.7;"/>
+                        <Separator/>
                         
                         <!-- Footer : Coach + Bouton Update -->
                         <HBox spacing="18" alignment="CENTER_LEFT">
                             <Label fx:id="team1CoachLabel" 
                                    text="Coach : ..."
-                                   style="-fx-font-size: 14px; 
-                                          -fx-font-weight: bold; 
-                                          -fx-text-fill: #8b95a5;"
+                                   styleClass="subtitle-label"
                                    HBox.hgrow="ALWAYS"/>
                             
                             <Button fx:id="team1UpdateButton" 
@@ -202,63 +142,42 @@
                                     onAction="#handleUpdateRosterTeam1"
                                     visible="false"
                                     managed="false"
-                                    style="-fx-background-color: #e67e22; 
-                                           -fx-text-fill: white; 
-                                           -fx-font-size: 13px; 
-                                           -fx-font-weight: bold;
-                                           -fx-padding: 8 18; 
-                                           -fx-background-radius: 6; 
-                                           -fx-cursor: hand;"/>
+                                    styleClass="button, warning-button"/>
                         </HBox>
                     </VBox>
 
                     <!-- ===== ÉQUIPE 2 ===== -->
                     <VBox spacing="18" 
                           fx:id="team2Box"
-                          style="-fx-background-color: linear-gradient(to bottom right, #2a1a1f, #0f1429); 
-                                 -fx-border-color: #e74c3c; 
-                                 -fx-border-width: 2; 
-                                 -fx-border-radius: 12; 
-                                 -fx-background-radius: 12; 
-                                 -fx-effect: dropshadow(gaussian, rgba(231,76,60,0.5), 12, 0, 0, 5); 
-                                 -fx-padding: 25; 
-                                 -fx-pref-width: 420; 
-                                 -fx-min-height: 450;">
+                          styleClass="card"
+                          style="-fx-padding: 25; -fx-pref-width: 420; -fx-min-height: 450;">
                         
                         <!-- Nom de l'équipe -->
                         <Label fx:id="team2NameLabel" 
                                text="Équipe 2"
-                               style="-fx-font-size: 24px; 
-                                      -fx-font-weight: bold; 
-                                      -fx-text-fill: #ff6b6b; 
-                                      -fx-alignment: center; 
-                                      -fx-effect: dropshadow(gaussian, rgba(255,107,107,0.8), 5, 0, 0, 0);"/>
+                               styleClass="title-label"
+                               style="-fx-alignment: center;"/>
                         
-                        <!-- Séparateur -->
-                        <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2; -fx-opacity: 0.7;"/>
+                        <Separator/>
                         
                         <!-- Section Roster -->
                         <VBox spacing="12" VBox.vgrow="ALWAYS">
                             <Label text="Roster" 
-                                   style="-fx-font-size: 18px; 
-                                          -fx-font-weight: bold; 
-                                          -fx-text-fill: white;"/>
+                                   styleClass="subtitle-label"
+                                   style="-fx-font-weight: bold;"/>
                             
                             <VBox fx:id="team2RosterContainer" 
                                   spacing="10"
                                   style="-fx-padding: 8 0 0 15;"/>
                         </VBox>
                         
-                        <!-- Séparateur -->
-                        <Region style="-fx-background-color: #2a3f5f; -fx-pref-height: 2; -fx-opacity: 0.7;"/>
+                        <Separator/>
                         
                         <!-- Footer : Coach + Bouton Update -->
                         <HBox spacing="18" alignment="CENTER_LEFT">
                             <Label fx:id="team2CoachLabel" 
                                    text="Coach : ..."
-                                   style="-fx-font-size: 14px; 
-                                          -fx-font-weight: bold; 
-                                          -fx-text-fill: #8b95a5;"
+                                   styleClass="subtitle-label"
                                    HBox.hgrow="ALWAYS"/>
                             
                             <Button fx:id="team2UpdateButton" 
@@ -266,13 +185,7 @@
                                     onAction="#handleUpdateRosterTeam2"
                                     visible="false"
                                     managed="false"
-                                    style="-fx-background-color: #e67e22; 
-                                           -fx-text-fill: white; 
-                                           -fx-font-size: 13px; 
-                                           -fx-font-weight: bold;
-                                           -fx-padding: 8 18; 
-                                           -fx-background-radius: 6; 
-                                           -fx-cursor: hand;"/>
+                                    styleClass="button, warning-button"/>
                         </HBox>
                     </VBox>
                 </HBox>

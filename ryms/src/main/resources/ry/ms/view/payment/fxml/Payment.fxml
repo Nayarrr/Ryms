@@ -7,38 +7,34 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" spacing="20.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.payment.PaymentController">
+<VBox alignment="CENTER" spacing="20.0" 
+      stylesheets="@../../styles.css"
+      styleClass="card"
+      style="-fx-max-width: 500;"
+      xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ry.ms.view.payment.PaymentController">
     <padding>
         <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
     </padding>
 
-    <Label text="Secure Payment">
-        <font>
-            <Font size="24.0" />
-        </font>
-    </Label>
+    <Label text="Secure Payment" styleClass="header-title" />
 
     <VBox spacing="5" alignment="CENTER_LEFT" maxWidth="300">
-        <Label text="Amount to Pay" textFill="GRAY"/>
-        <Label fx:id="amountLabel" text="\$0.00">
-            <font>
-                <Font name="System Bold" size="18.0"/>
-            </font>
-        </Label>
+        <Label text="Amount to Pay" styleClass="subtitle-label"/>
+        <Label fx:id="amountLabel" text="\$0.00" styleClass="title-label"/>
     </VBox>
 
     <VBox spacing="10" maxWidth="300">
-        <Label text="Card Details (Test Mode)" textFill="GRAY"/>
-        <TextField fx:id="cardNumberField" promptText="Card Number (4242 4242 4242 4242)"/>
-        <TextField fx:id="expiryField" promptText="MM/YY"/>
-        <TextField fx:id="cvcField" promptText="CVC"/>
+        <Label text="Card Details (Test Mode)" styleClass="subtitle-label"/>
+        <TextField fx:id="cardNumberField" promptText="Card Number (4242 4242 4242 4242)" styleClass="text-field"/>
+        <TextField fx:id="expiryField" promptText="MM/YY" styleClass="text-field"/>
+        <TextField fx:id="cvcField" promptText="CVC" styleClass="text-field"/>
     </VBox>
 
-    <Label fx:id="statusLabel" text="" textFill="RED" wrapText="true" maxWidth="300"/>
+    <Label fx:id="statusLabel" text="" styleClass="error-label" wrapText="true" maxWidth="300"/>
 
     <Button fx:id="payButton" text="Pay Now" onAction="#handlePayment" 
-            style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 10 20;" maxWidth="300"/>
+            styleClass="button, success-button" maxWidth="300"/>
     
-    <Button text="Cancel" onAction="#handleCancel" maxWidth="300"/>
+    <Button text="Cancel" onAction="#handleCancel" maxWidth="300" styleClass="button, secondary-button"/>
 
 </VBox>

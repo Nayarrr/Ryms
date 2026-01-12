@@ -9,7 +9,7 @@
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="ry.ms.view.tournament.ValidateResultsController"
             prefHeight="700.0" prefWidth="1000.0"
-            stylesheets="@tournament-styles.css">
+            stylesheets="@../../styles.css">
 
     <!-- Header -->
     <top>
