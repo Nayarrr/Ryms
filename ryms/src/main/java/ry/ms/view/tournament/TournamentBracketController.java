@@ -23,6 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller for displaying and managing the tournament bracket.
+ * Visualization of matches and rounds.
+ */
 public class TournamentBracketController {
 
     @FXML
@@ -60,6 +64,11 @@ public class TournamentBracketController {
     private MatchFacade matchFacade = MatchFacade.getMatchFacade();
     private TournamentFacade tournamentFacade = TournamentFacade.getInstance();
 
+    /**
+     * Sets the tournament context and loads the bracket info.
+     * 
+     * @param tournament The tournament to display.
+     */
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
         loadTournamentInfo();

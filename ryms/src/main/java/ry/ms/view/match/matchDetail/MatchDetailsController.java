@@ -21,22 +21,38 @@ import ry.ms.view.user.UserSession;
  */
 public class MatchDetailsController {
 
-    @FXML private VBox rootContainer;
-    @FXML private Label matchTitleLabel;
-    @FXML private Label matchDateLabel;
-    @FXML private Button editDateButton;
-    @FXML private VBox refereesListContainer;
-    @FXML private Button addRefereeButton;
-    @FXML private Label team1NameLabel;
-    @FXML private Label team1CoachLabel;
-    @FXML private VBox team1RosterContainer;
-    @FXML private Button team1UpdateButton;
-    @FXML private Label team2NameLabel;
-    @FXML private Label team2CoachLabel;
-    @FXML private VBox team2RosterContainer;
-    @FXML private Button team2UpdateButton;
-    @FXML private VBox scoresContainer;
-    @FXML private Button startMatchButton;
+    @FXML
+    private VBox rootContainer;
+    @FXML
+    private Label matchTitleLabel;
+    @FXML
+    private Label matchDateLabel;
+    @FXML
+    private Button editDateButton;
+    @FXML
+    private VBox refereesListContainer;
+    @FXML
+    private Button addRefereeButton;
+    @FXML
+    private Label team1NameLabel;
+    @FXML
+    private Label team1CoachLabel;
+    @FXML
+    private VBox team1RosterContainer;
+    @FXML
+    private Button team1UpdateButton;
+    @FXML
+    private Label team2NameLabel;
+    @FXML
+    private Label team2CoachLabel;
+    @FXML
+    private VBox team2RosterContainer;
+    @FXML
+    private Button team2UpdateButton;
+    @FXML
+    private VBox scoresContainer;
+    @FXML
+    private Button startMatchButton;
 
     private MatchController matchController;
     private String currentUserEmail;
@@ -54,11 +70,16 @@ public class MatchDetailsController {
     private MatchDateManager matchDateManager;
     private MatchStatusManager matchStatusManager;
 
+    /**
+     * Initializes the controller.
+     * Sets up the managers (Score, TeamDetails, Referee, etc.) and instantiates the
+     * MatchController.
+     */
     @FXML
     public void initialize() {
         matchController = new MatchController();
         currentUserEmail = UserSession.getInstance().getUserEmail();
-        
+
         // Initialiser les managers
         scoreManager = new ScoreManager(matchController, this::isAdminOrReferee);
         teamDetailsManager = new TeamDetailsManager(matchController, currentUserEmail);
@@ -76,7 +97,7 @@ public class MatchDetailsController {
      */
     public void loadMatchDetails(Long matchId) {
         this.matchId = matchId;
-        
+
         Match match = matchController.getMatchById(matchId);
         if (match == null) {
             System.err.println("❌ Match introuvable");
@@ -99,8 +120,10 @@ public class MatchDetailsController {
 
         // Charger les différentes sections via les managers
         refereeManager.loadReferees(refereesListContainer, currentMatch.getReferees());
-        teamDetailsManager.loadTeamDetails(team1, team1NameLabel, team1CoachLabel, team1RosterContainer, team1UpdateButton);
-        teamDetailsManager.loadTeamDetails(team2, team2NameLabel, team2CoachLabel, team2RosterContainer, team2UpdateButton);
+        teamDetailsManager.loadTeamDetails(team1, team1NameLabel, team1CoachLabel, team1RosterContainer,
+                team1UpdateButton);
+        teamDetailsManager.loadTeamDetails(team2, team2NameLabel, team2CoachLabel, team2RosterContainer,
+                team2UpdateButton);
         scoreManager.loadScores(scoresContainer, matchId, team1, team2, this::loadMatchDetails);
 
         // Gérer la visibilité des boutons
@@ -130,8 +153,8 @@ public class MatchDetailsController {
      */
     private void configureButtonsVisibility(MatchStatus status) {
         boolean isAdmin = currentUserEmail != null && currentUserEmail.equalsIgnoreCase("admin@ryms.com");
-        boolean isReferee = matchReferees != null && currentUserEmail != null && 
-                           matchReferees.stream().anyMatch(ref -> ref.getEmail().equalsIgnoreCase(currentUserEmail));
+        boolean isReferee = matchReferees != null && currentUserEmail != null &&
+                matchReferees.stream().anyMatch(ref -> ref.getEmail().equalsIgnoreCase(currentUserEmail));
 
         // Bouton "Commencer le match"
         boolean canStartMatch = (isAdmin || isReferee) && status == MatchStatus.SCHEDULED;

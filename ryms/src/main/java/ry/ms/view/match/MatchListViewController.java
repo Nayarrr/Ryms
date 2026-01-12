@@ -22,6 +22,10 @@ import ry.ms.businessLogic.match.models.TeamResult;
 import ry.ms.businessLogic.team.models.Team;
 import ry.ms.view.user.UserSession;
 
+/**
+ * Controller for the Match List view.
+ * Displays a list of all matches with their status and details.
+ */
 public class MatchListViewController {
 
     @FXML
@@ -37,6 +41,11 @@ public class MatchListViewController {
     private static final String DEFAULT_LOGO_URL = "https://i.imgur.com/BMRAx9w.png";
     private Image defaultLogoImage;
 
+    /**
+     * Initializes the controller.
+     * Loads the default logo, loads matches, and configures the "Create Match"
+     * button visibility.
+     */
     @FXML
     public void initialize() {
         matchController = new MatchController();
@@ -57,6 +66,12 @@ public class MatchListViewController {
         createMatchButton.setManaged(isAdmin);
     }
 
+    /**
+     * Sets the navigation controller callback.
+     * 
+     * @param navigationController Access to the main navigation for switching
+     *                             views.
+     */
     public void setNavigationController(Consumer<Long> navigationController) {
         this.navigationController = navigationController;
     }

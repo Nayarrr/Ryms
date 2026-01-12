@@ -19,6 +19,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Controller for the Tournament List view.
+ * Displays a list of tournaments, allows filtering, searching, and navigation
+ * to details.
+ */
 public class TournamentListController {
 
     @FXML
@@ -47,6 +52,10 @@ public class TournamentListController {
     private TournamentFacade tournamentFacade;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
+    /**
+     * Initializes the controller.
+     * Sets up the facade, table columns, and loads the initial list of tournaments.
+     */
     @FXML
     public void initialize() {
         tournamentFacade = TournamentFacade.getInstance();

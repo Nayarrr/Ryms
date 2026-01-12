@@ -11,17 +11,35 @@ import ry.ms.businessLogic.product.models.Product;
 import ry.ms.persistLogic.basket.dao.BasketDAO;
 import ry.ms.persistLogic.product.dao.ProductDAO;
 
+/**
+ * Manager class for handling basket operations.
+ * Coordinates between the Presentation layer and the Data Access layer.
+ */
 public class BasketManager {
 
     private final BasketDAO basketDAO;
     private final ProductDAO productDAO;
 
+    /**
+     * Constructs a BasketManager with the given Abstract Factory.
+     * 
+     * @param factory The {@link AbsFactory} to create DAOs.
+     */
     public BasketManager(AbsFactory factory) {
         Objects.requireNonNull(factory, "Factory must not be null.");
         this.basketDAO = factory.createBasketDAO();
         this.productDAO = factory.createProductDAO();
     }
 
+    /**
+     * Adds an item to the user's basket.
+     * Check stock availability before adding.
+     * 
+     * @param userEmail The user's email.
+     * @param productId The ID of the product to add.
+     * @param quantity  The quantity to add.
+     * @throws SQLException If a database error occurs.
+     */
     public void addItem(String userEmail, Long productId, int quantity) throws SQLException {
         validateUser(userEmail);
         validateQuantity(quantity);
@@ -33,10 +51,19 @@ public class BasketManager {
 
         ensureStock(product, totalQuantity);
 
-        BasketItem item = new BasketItem(userEmail.trim(), productId, totalQuantity, new Timestamp(System.currentTimeMillis()));
+        BasketItem item = new BasketItem(userEmail.trim(), productId, totalQuantity,
+                new Timestamp(System.currentTimeMillis()));
         basketDAO.saveItem(item);
     }
 
+    /**
+     * Updates the quantity of an item in the basket.
+     * 
+     * @param userEmail The user's email.
+     * @param productId The product ID.
+     * @param quantity  The new quantity.
+     * @throws SQLException If a database error occurs.
+     */
     public void updateQuantity(String userEmail, Long productId, int quantity) throws SQLException {
         validateUser(userEmail);
         validateQuantity(quantity);
@@ -47,17 +74,37 @@ public class BasketManager {
         basketDAO.updateQuantity(userEmail.trim(), productId, quantity);
     }
 
+    /**
+     * Removes an item from the basket.
+     * 
+     * @param userEmail The user's email.
+     * @param productId The product ID to remove.
+     * @throws SQLException If a database error occurs.
+     */
     public void removeItem(String userEmail, Long productId) throws SQLException {
         validateUser(userEmail);
         requireProduct(productId);
         basketDAO.deleteItem(userEmail.trim(), productId);
     }
 
+    /**
+     * Empties the user's basket.
+     * 
+     * @param userEmail The user's email.
+     * @throws SQLException If a database error occurs.
+     */
     public void emptyBasket(String userEmail) throws SQLException {
         validateUser(userEmail);
         basketDAO.clearBasket(userEmail.trim());
     }
 
+    /**
+     * Retrieves the basket items for a user.
+     * 
+     * @param userEmail The user's email.
+     * @return A list of {@link BasketItem}s.
+     * @throws SQLException If a database error occurs.
+     */
     public List<BasketItem> getBasketByUser(String userEmail) throws SQLException {
         validateUser(userEmail);
         return basketDAO.getBasketByUser(userEmail.trim());

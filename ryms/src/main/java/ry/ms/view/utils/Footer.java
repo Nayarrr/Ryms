@@ -7,9 +7,16 @@ import javafx.scene.layout.Pane;
 
 import java.io.IOException;
 
+/**
+ * Helper class to load and display the application footer.
+ */
 public class Footer {
     private HBox view;
 
+    /**
+     * Default constructor.
+     * Loads the footer FXML.
+     */
     public Footer() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/utils/fxml/Footer.fxml"));
@@ -20,5 +27,12 @@ public class Footer {
         }
     }
 
-    public Pane getView() { return view; }
+    /**
+     * Gets the view representing the footer.
+     * 
+     * @return The Pane containing the footer.
+     */
+    public Pane getView() {
+        return view;
+    }
 }

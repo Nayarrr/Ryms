@@ -14,6 +14,10 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Controller for the Add Tournament view.
+ * Handles the creation of new tournaments.
+ */
 public class AddTournamentController {
 
     @FXML
@@ -41,6 +45,10 @@ public class AddTournamentController {
     private GameCatalogFacade gameFacade;
     private Runnable onTournamentSaved;
 
+    /**
+     * Initializes the controller class.
+     * Sets up the facade instances and loads necessary data for combo boxes.
+     */
     @FXML
     public void initialize() {
         tournamentFacade = TournamentFacade.getInstance();
@@ -61,6 +69,11 @@ public class AddTournamentController {
         // It's already defined in FXML, so we just use it.
     }
 
+    /**
+     * Sets the callback to be executed when a tournament is successfully saved.
+     * 
+     * @param onTournamentSaved The callback runnable.
+     */
     public void setOnTournamentSaved(Runnable onTournamentSaved) {
         this.onTournamentSaved = onTournamentSaved;
     }

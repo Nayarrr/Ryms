@@ -14,6 +14,10 @@ import ry.ms.businessLogic.user.models.User;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Controller for the Admin Dashboard.
+ * Manages user and team (simulated) administration views.
+ */
 public class AdminDashboardController {
 
     @FXML
@@ -42,11 +46,20 @@ public class AdminDashboardController {
     private Runnable onBackRequest;
     private final TeamManager teamManager;
 
+    /**
+     * Default constructor.
+     * Initializes the TeamManager using the factory.
+     */
     public AdminDashboardController() {
         AbsFactory factory = AbsFactory.getInstance();
         this.teamManager = new TeamManager(factory);
     }
 
+    /**
+     * Sets the callback to handle back requests.
+     * 
+     * @param onBackRequest The callback to run when back is requested.
+     */
     public void setOnBackRequest(Runnable onBackRequest) {
         this.onBackRequest = onBackRequest;
     }

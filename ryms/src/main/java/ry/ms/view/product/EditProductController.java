@@ -7,19 +7,34 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import ry.ms.businessLogic.product.models.Product;
 
+/**
+ * Controller for editing an existing product.
+ */
 public class EditProductController {
 
-    @FXML private TextField nameField;
-    @FXML private TextField descriptionField;
-    @FXML private TextField categoryField;
-    @FXML private TextField priceField;
-    @FXML private TextField stockField;
-    @FXML private Label errorLabel;
-    @FXML private Button cancelButton;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField descriptionField;
+    @FXML
+    private TextField categoryField;
+    @FXML
+    private TextField priceField;
+    @FXML
+    private TextField stockField;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private Button cancelButton;
 
     private final ProductController controller = new ProductController();
     private Product originalProduct;
 
+    /**
+     * Initializes the controller with the product data to edit.
+     * 
+     * @param product The product to edit.
+     */
     public void initData(Product product) {
         this.originalProduct = product;
         if (product != null) {

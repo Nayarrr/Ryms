@@ -15,7 +15,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Contrôleur pour valider les résultats des matchs d'un tournoi
+ * Controller for validating tournament match results.
+ * Allows admins or referees to confirm scores.
  */
 public class ValidateResultsController {
 
@@ -46,13 +47,19 @@ public class ValidateResultsController {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
     private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
+    /**
+     * Initializes the controller.
+     * Sets up table columns.
+     */
     @FXML
     public void initialize() {
         setupTableColumns();
     }
 
     /**
-     * Définir le tournoi pour lequel on valide les résultats
+     * Sets the tournament context.
+     * 
+     * @param tournament The tournament to validate results for.
      */
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;

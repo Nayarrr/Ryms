@@ -82,8 +82,7 @@ public class SessionFacade {
      * 
      * @param email    The user's email.
      * @param password The user's password.
-     * @param name     The user's first name.
-     * @param surname  The user's last name.
+     * @param username The user's username.
      * @return The newly created User object.
      * @throws UserAlreadyExistsException if a user with the given email already
      *                                    exists.

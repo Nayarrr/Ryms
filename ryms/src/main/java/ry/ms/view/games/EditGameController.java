@@ -13,6 +13,9 @@ import java.nio.file.Files;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * Controller for editing an existing game in the catalog.
+ */
 public class EditGameController {
     @FXML
     private TextField nameField;
@@ -26,7 +29,9 @@ public class EditGameController {
     private GameCatalogFacade facade = GameCatalogFacade.getGameCatalogFactory();
 
     /**
-     * * Méthode appelée par le catalogue AVANT d'afficher la fenêtre
+     * Initializes the controller with data from the game to be edited.
+     * 
+     * @param game The game object to edit.
      */
     public void initData(Game game) {
         this.gameToEdit = game;

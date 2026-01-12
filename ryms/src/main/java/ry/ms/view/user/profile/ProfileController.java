@@ -13,6 +13,11 @@ import ry.ms.businessLogic.user.models.User;
 import java.sql.SQLException;
 import java.util.Optional;
 
+/**
+ * Controller for the User Profile view.
+ * Allows users to update their profile, change password, or deactivate their
+ * account.
+ */
 public class ProfileController {
 
     @FXML
@@ -27,10 +32,20 @@ public class ProfileController {
     private Runnable onBackRequest;
     private Runnable onLogoutRequest;
 
+    /**
+     * Sets the callback for the back button.
+     * 
+     * @param onBackRequest The callback runnable.
+     */
     public void setOnBackRequest(Runnable onBackRequest) {
         this.onBackRequest = onBackRequest;
     }
 
+    /**
+     * Sets the callback for logout or account deactivation.
+     * 
+     * @param onLogoutRequest The callback runnable.
+     */
     public void setOnLogoutRequest(Runnable onLogoutRequest) {
         this.onLogoutRequest = onLogoutRequest;
     }

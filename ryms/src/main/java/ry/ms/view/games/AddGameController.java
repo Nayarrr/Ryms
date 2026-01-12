@@ -13,12 +13,19 @@ import java.nio.file.Files;
 import java.time.ZoneId;
 import java.util.Date;
 
+/**
+ * Controller for adding a new game to the system.
+ */
 public class AddGameController {
 
-    @FXML private TextField nameField;
-    @FXML private TextField editorField;
-    @FXML private DatePicker releaseDatePicker;
-    @FXML private Label fileNameLabel;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField editorField;
+    @FXML
+    private DatePicker releaseDatePicker;
+    @FXML
+    private Label fileNameLabel;
 
     private byte[] logoData = null;
     private GameCatalogFacade facade = GameCatalogFacade.getGameCatalogFactory();
@@ -28,8 +35,7 @@ public class AddGameController {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Choisir le logo du jeu");
         fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg")
-        );
+                new FileChooser.ExtensionFilter("Images", "*.png", "*.jpg", "*.jpeg"));
 
         File selectedFile = fileChooser.showOpenDialog(nameField.getScene().getWindow());
 

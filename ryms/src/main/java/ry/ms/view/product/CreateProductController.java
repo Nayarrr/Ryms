@@ -7,15 +7,25 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import ry.ms.businessLogic.product.models.Product;
 
+/**
+ * Controller for the Create Product view (Shop).
+ */
 public class CreateProductController {
 
-    @FXML private TextField nameField;
-    @FXML private TextField descriptionField;
-    @FXML private TextField categoryField;
-    @FXML private TextField priceField;
-    @FXML private TextField stockField;
-    @FXML private Label errorLabel;
-    @FXML private Button cancelButton;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField descriptionField;
+    @FXML
+    private TextField categoryField;
+    @FXML
+    private TextField priceField;
+    @FXML
+    private TextField stockField;
+    @FXML
+    private Label errorLabel;
+    @FXML
+    private Button cancelButton;
 
     private final ProductController controller = new ProductController();
 

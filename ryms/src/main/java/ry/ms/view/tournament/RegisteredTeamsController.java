@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Contrôleur pour afficher la liste des équipes inscrites à un tournoi
+ * Controller for displaying the list of teams registered for a tournament.
  */
 public class RegisteredTeamsController {
 
@@ -48,6 +48,10 @@ public class RegisteredTeamsController {
     private TournamentFacade tournamentFacade = TournamentFacade.getInstance();
     private ry.ms.businessLogic.team.TeamFacade teamFacade = ry.ms.businessLogic.team.TeamFacade.getInstance();
 
+    /**
+     * Initializes the controller.
+     * Configures the table columns and cell factories.
+     */
     @FXML
     public void initialize() {
         // Configuration des colonnes
@@ -68,6 +72,11 @@ public class RegisteredTeamsController {
         });
     }
 
+    /**
+     * Sets the tournament to display registrations for.
+     * 
+     * @param tournament The tournament instance.
+     */
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;
         if (tournament != null) {
