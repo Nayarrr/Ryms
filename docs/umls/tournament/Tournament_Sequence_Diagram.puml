@@ -1,0 +1,210 @@
+@startuml Tournament Use Case Sequence Diagram
+
+title Tournament Management Use Case
+
+actor "User/Test" as User
+participant "TournamentFacade" as Facade
+participant "TournamentManager" as Manager
+participant "TournamentDAO" as TournamentDAO
+participant "TournamentRegistrationDAO" as RegistrationDAO
+database "PostgreSQL" as DB
+
+== Create Tournament ==
+User -> Facade: createTournament(tournament)
+activate Facade
+Facade -> Manager: createTournament(tournament)
+activate Manager
+Manager -> TournamentDAO: saveTournament(tournament)
+activate TournamentDAO
+TournamentDAO -> DB: INSERT INTO tournaments
+activate DB
+DB --> TournamentDAO: tournament_id
+deactivate DB
+TournamentDAO --> Manager: void
+deactivate TournamentDAO
+Manager --> Facade: void
+deactivate Manager
+Facade --> User: void
+deactivate Facade
+
+== Retrieve All Tournaments ==
+User -> Facade: getAllTournaments()
+activate Facade
+Facade -> Manager: getAllTournaments()
+activate Manager
+Manager -> TournamentDAO: loadTournamentCatalog()
+activate TournamentDAO
+TournamentDAO -> DB: SELECT * FROM tournaments
+activate DB
+DB --> TournamentDAO: ResultSet
+deactivate DB
+TournamentDAO --> Manager: List<Tournament>
+deactivate TournamentDAO
+Manager --> Facade: List<Tournament>
+deactivate Manager
+Facade --> User: List<Tournament>
+deactivate Facade
+
+== Update Tournament ==
+User -> Facade: updateTournament(tournament)
+activate Facade
+Facade -> Manager: updateTournament(tournament)
+activate Manager
+Manager -> TournamentDAO: updateTournament(tournament)
+activate TournamentDAO
+TournamentDAO -> DB: UPDATE tournaments SET ... WHERE tournament_id = ?
+activate DB
+DB --> TournamentDAO: rows affected
+deactivate DB
+TournamentDAO --> Manager: void
+deactivate TournamentDAO
+Manager --> Facade: void
+deactivate Manager
+Facade --> User: void
+deactivate Facade
+
+== Delete Tournament ==
+User -> Facade: deleteTournament(tournament)
+activate Facade
+Facade -> Manager: deleteTournament(tournament)
+activate Manager
+Manager -> TournamentDAO: deleteTournament(tournament)
+activate TournamentDAO
+TournamentDAO -> DB: DELETE FROM tournaments WHERE tournament_id = ?
+activate DB
+DB --> TournamentDAO: rows affected
+deactivate DB
+TournamentDAO --> Manager: void
+deactivate TournamentDAO
+Manager --> Facade: void
+deactivate Manager
+Facade --> User: void
+deactivate Facade
+
+== Register Team to Tournament ==
+User -> Facade: registerTeam(registration)
+activate Facade
+Facade -> Manager: registerTeam(registration)
+activate Manager
+Manager -> RegistrationDAO: registerTeam(registration)
+activate RegistrationDAO
+RegistrationDAO -> DB: INSERT INTO tournament_registrations
+activate DB
+DB --> RegistrationDAO: registration_id
+deactivate DB
+RegistrationDAO --> Manager: Long (registration_id)
+deactivate RegistrationDAO
+Manager --> Facade: Long (registration_id)
+deactivate Manager
+Facade --> User: Long (registration_id)
+deactivate Facade
+
+== Get Registrations by Tournament ==
+User -> Facade: getRegistrationsByTournament(tournamentId)
+activate Facade
+Facade -> Manager: getRegistrationsByTournament(tournamentId)
+activate Manager
+Manager -> RegistrationDAO: getRegistrationsByTournament(tournamentId)
+activate RegistrationDAO
+RegistrationDAO -> DB: SELECT * FROM tournament_registrations\nWHERE tournament_id = ?
+activate DB
+DB --> RegistrationDAO: ResultSet
+deactivate DB
+RegistrationDAO --> Manager: List<TournamentRegistration>
+deactivate RegistrationDAO
+Manager --> Facade: List<TournamentRegistration>
+deactivate Manager
+Facade --> User: List<TournamentRegistration>
+deactivate Facade
+
+== Get Registrations by Team ==
+User -> Facade: getRegistrationsByTeam(teamId)
+activate Facade
+Facade -> Manager: getRegistrationsByTeam(teamId)
+activate Manager
+Manager -> RegistrationDAO: getRegistrationsByTeam(teamId)
+activate RegistrationDAO
+RegistrationDAO -> DB: SELECT * FROM tournament_registrations\nWHERE team_id = ?
+activate DB
+DB --> RegistrationDAO: ResultSet
+deactivate DB
+RegistrationDAO --> Manager: List<TournamentRegistration>
+deactivate RegistrationDAO
+Manager --> Facade: List<TournamentRegistration>
+deactivate Manager
+Facade --> User: List<TournamentRegistration>
+deactivate Facade
+
+== Cancel Registration ==
+User -> Facade: cancelRegistration(registrationId)
+activate Facade
+Facade -> Manager: cancelRegistration(registrationId)
+activate Manager
+Manager -> RegistrationDAO: cancelRegistration(registrationId)
+activate RegistrationDAO
+RegistrationDAO -> DB: DELETE FROM tournament_registrations\nWHERE registration_id = ?
+activate DB
+DB --> RegistrationDAO: rows affected
+deactivate DB
+RegistrationDAO --> Manager: boolean (success)
+deactivate RegistrationDAO
+Manager --> Facade: boolean (success)
+deactivate Manager
+Facade --> User: boolean (success)
+deactivate Facade
+
+== Confirm Registration ==
+User -> Facade: confirmRegistration(registrationId)
+activate Facade
+Facade -> Manager: confirmRegistration(registrationId)
+activate Manager
+Manager -> RegistrationDAO: confirmRegistration(registrationId)
+activate RegistrationDAO
+RegistrationDAO -> DB: UPDATE tournament_registrations\nSET confirmed = true\nWHERE registration_id = ?
+activate DB
+DB --> RegistrationDAO: rows affected
+deactivate DB
+RegistrationDAO --> Manager: boolean (success)
+deactivate RegistrationDAO
+Manager --> Facade: boolean (success)
+deactivate Manager
+Facade --> User: boolean (success)
+deactivate Facade
+
+== Check if Team is Registered ==
+User -> Facade: isTeamRegistered(tournamentId, teamId)
+activate Facade
+Facade -> Manager: isTeamRegistered(tournamentId, teamId)
+activate Manager
+Manager -> RegistrationDAO: isTeamRegistered(tournamentId, teamId)
+activate RegistrationDAO
+RegistrationDAO -> DB: SELECT COUNT(*) FROM tournament_registrations\nWHERE tournament_id = ? AND team_id = ?
+activate DB
+DB --> RegistrationDAO: count
+deactivate DB
+RegistrationDAO --> Manager: boolean (exists)
+deactivate RegistrationDAO
+Manager --> Facade: boolean (exists)
+deactivate Manager
+Facade --> User: boolean (exists)
+deactivate Facade
+
+== Get Registered Teams Count ==
+User -> Facade: getRegisteredTeamsCount(tournamentId)
+activate Facade
+Facade -> Manager: getRegisteredTeamsCount(tournamentId)
+activate Manager
+Manager -> RegistrationDAO: getRegisteredTeamsCount(tournamentId)
+activate RegistrationDAO
+RegistrationDAO -> DB: SELECT COUNT(*) FROM tournament_registrations\nWHERE tournament_id = ?
+activate DB
+DB --> RegistrationDAO: count
+deactivate DB
+RegistrationDAO --> Manager: int (count)
+deactivate RegistrationDAO
+Manager --> Facade: int (count)
+deactivate Manager
+Facade --> User: int (count)
+deactivate Facade
+
+@enduml

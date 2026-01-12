@@ -1,0 +1,179 @@
+@startuml Tournament Class Diagram
+
+title Tournament Module - Class Diagram
+
+package "businessLogic.tournament" {
+    package "models" {
+        class Tournament {
+            - tournamentId: int
+            - name: String
+            - game: Game
+            - startDate: Date
+            - endDate: Date
+            - maxParticipants: int
+            - status: TournamentStatus
+            - matches: List<Match>
+            - teams: List<Team>
+            - location: String
+            + Tournament(id, name, game, startDate, endDate, maxParticipants, location)
+            + getName(): String
+            + setName(name: String): void
+            + getGame(): Game
+            + setGame(game: Game): void
+            + getStartDate(): Date
+            + setStartDate(startDate: Date): void
+            + getEndDate(): Date
+            + setEndDate(endDate: Date): void
+            + getMaxParticipants(): int
+            + setMaxParticipants(maxParticipants: int): void
+            + getStatus(): TournamentStatus
+            + setStatus(status: TournamentStatus): void
+            + getMatches(): List<Match>
+            + setMatches(matches: List<Match>): void
+            + getTeams(): List<Team>
+            + setTeams(teams: List<Team>): void
+            + getLocation(): String
+            + setLocation(location: String): void
+            + getTournamentId(): int
+            + setTournamentId(tournamentId: int): void
+        }
+
+        enum TournamentStatus {
+            PLANNING
+            IN_PROGRESS
+            COMPLETED
+            CANCELLED
+        }
+
+        class TournamentRegistration {
+            - registrationId: Long
+            - tournamentId: Long
+            - teamId: Long
+            - registrationDate: Date
+            + TournamentRegistration()
+            + TournamentRegistration(registrationId, tournamentId, teamId, registrationDate)
+            + getRegistrationId(): Long
+            + setRegistrationId(registrationId: Long): void
+            + getTournamentId(): Long
+            + setTournamentId(tournamentId: Long): void
+            + getTeamId(): Long
+            + setTeamId(teamId: Long): void
+            + getRegistrationDate(): Date
+            + setRegistrationDate(registrationDate: Date): void
+            + toString(): String
+        }
+    }
+
+    class TournamentFacade {
+        - {static} instance: TournamentFacade
+        - tournamentManager: TournamentManager
+        - TournamentFacade()
+        + {static} getInstance(): TournamentFacade
+        + getAllTournaments(): List<Tournament>
+        + createTournament(tournament: Tournament): void
+        + updateTournament(tournament: Tournament): void
+        + deleteTournament(tournament: Tournament): void
+        + registerTeam(registration: TournamentRegistration): Long
+        + getRegistrationsByTournament(tournamentId: Long): List<TournamentRegistration>
+        + getRegistrationsByTeam(teamId: Long): List<TournamentRegistration>
+        + cancelRegistration(registrationId: Long): boolean
+        + confirmRegistration(registrationId: Long): boolean
+        + isTeamRegistered(tournamentId: Long, teamId: Long): boolean
+        + getRegisteredTeamsCount(tournamentId: Long): int
+    }
+
+    class TournamentManager {
+        - tournamentDAO: TournamentDAO
+        - registrationDAO: TournamentRegistrationDAO
+        + TournamentManager()
+        + getAllTournaments(): List<Tournament>
+        + createTournament(tournament: Tournament): void
+        + updateTournament(tournament: Tournament): void
+        + deleteTournament(tournament: Tournament): void
+        + registerTeam(registration: TournamentRegistration): Long
+        + getRegistrationsByTournament(tournamentId: Long): List<TournamentRegistration>
+        + getRegistrationsByTeam(teamId: Long): List<TournamentRegistration>
+        + cancelRegistration(registrationId: Long): boolean
+        + confirmRegistration(registrationId: Long): boolean
+        + isTeamRegistered(tournamentId: Long, teamId: Long): boolean
+        + getRegisteredTeamsCount(tournamentId: Long): int
+    }
+}
+
+package "persistLogic.tournament" {
+    package "dao" {
+        abstract class TournamentDAO {
+            # conn: Connection
+            + TournamentDAO(conn: Connection)
+            + {abstract} loadTournamentCatalog(): List<Tournament>
+            + {abstract} saveTournament(tournament: Tournament): void
+            + {abstract} deleteTournament(tournament: Tournament): void
+            + {abstract} updateTournament(tournament: Tournament): void
+        }
+
+        interface TournamentRegistrationDAO {
+            + registerTeam(registration: TournamentRegistration): Long
+            + getRegistrationsByTournament(tournamentId: Long): List<TournamentRegistration>
+            + getRegistrationsByTeam(teamId: Long): List<TournamentRegistration>
+            + cancelRegistration(registrationId: Long): boolean
+            + isTeamRegistered(tournamentId: Long, teamId: Long): boolean
+            + confirmRegistration(registrationId: Long): boolean
+            + getRegisteredTeamsCount(tournamentId: Long): int
+        }
+    }
+
+    package "postgres" {
+        class TournamentDAOPostgres {
+            + loadTournamentCatalog(): List<Tournament>
+            + saveTournament(tournament: Tournament): void
+            + deleteTournament(tournament: Tournament): void
+            + updateTournament(tournament: Tournament): void
+        }
+
+        class TournamentRegistrationDAOPostgres {
+            + registerTeam(registration: TournamentRegistration): Long
+            + getRegistrationsByTournament(tournamentId: Long): List<TournamentRegistration>
+            + getRegistrationsByTeam(teamId: Long): List<TournamentRegistration>
+            + cancelRegistration(registrationId: Long): boolean
+            + isTeamRegistered(tournamentId: Long, teamId: Long): boolean
+            + confirmRegistration(registrationId: Long): boolean
+            + getRegisteredTeamsCount(tournamentId: Long): int
+        }
+    }
+}
+
+' Relationships
+Tournament "1" *-- "1" TournamentStatus : has
+Tournament "1" o-- "*" "Match" : contains
+Tournament "1" o-- "*" "Team" : participates
+Tournament "*" --> "1" "Game" : uses
+
+TournamentFacade "1" *-- "1" TournamentManager : contains
+TournamentManager "1" --> "1" TournamentDAO : uses
+TournamentManager "1" --> "1" TournamentRegistrationDAO : uses
+
+TournamentDAOPostgres --|> TournamentDAO : extends
+TournamentRegistrationDAOPostgres ..|> TournamentRegistrationDAO : implements
+
+TournamentDAO ..> Tournament : manipulates
+TournamentRegistrationDAO ..> TournamentRegistration : manipulates
+
+note right of TournamentFacade
+  **Singleton Pattern**
+  Coordinates tournament
+  and registration operations
+end note
+
+note right of TournamentStatus
+  **Enum**
+  Defines tournament
+  lifecycle states
+end note
+
+note bottom of TournamentRegistrationDAO
+  **DAO Pattern**
+  Manages team registrations
+  for tournaments
+end note
+
+@enduml
