@@ -10,13 +10,13 @@ import java.util.stream.Collectors;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -235,6 +235,7 @@ public class ShopController implements Initializable {
     private void setError(String message) {
         statusLabel.setText(message);
         statusLabel.setStyle("-fx-text-fill: #c0392b;");
+        ry.ms.view.utils.AlertManager.showError("Erreur Boutique", message);
     }
 
     private void setInfo(String message) {

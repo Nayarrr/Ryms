@@ -85,16 +85,10 @@ public class MainViewController {
     }
 
     private void showForgotPasswordView() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/user/fxml/ForgotPassword.fxml"));
-            Parent view = loader.load();
-            ry.ms.view.user.login.ForgotPasswordController controller = loader.getController();
-            controller.setOnBackRequest(this::showLoginView);
-            setContent(view);
-        } catch (IOException e) {
-            e.printStackTrace();
-            setContent(new Label("Error loading Forgot Password view."));
-        }
+        loadView("/ry/ms/view/user/fxml/ForgotPassword.fxml",
+                (ry.ms.view.user.login.ForgotPasswordController controller) -> {
+                    controller.setOnBackRequest(this::showLoginView);
+                });
     }
 
     private void showDashboardView() {
@@ -149,15 +143,25 @@ public class MainViewController {
     }
 
     private void showAdminView() {
+        loadView("/ry/ms/view/user/fxml/AdminDashboard.fxml",
+                (ry.ms.view.user.admin.AdminDashboardController controller) -> {
+                    controller.setOnBackRequest(this::showDashboardView);
+                });
+    }
+
+    private <T> void loadView(String fxmlPath, java.util.function.Consumer<T> controllerSetup) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/ry/ms/view/user/fxml/AdminDashboard.fxml"));
-            Parent adminView = loader.load();
-            ry.ms.view.user.admin.AdminDashboardController controller = loader.getController();
-            controller.setOnBackRequest(this::showDashboardView);
-            setContent(adminView);
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(fxmlPath));
+            Parent view = loader.load();
+            T controller = loader.getController();
+            if (controllerSetup != null) {
+                controllerSetup.accept(controller);
+            }
+            setContent(view);
         } catch (IOException e) {
             e.printStackTrace();
-            setContent(new Label("Error loading Admin Dashboard: " + e.getMessage() + "\n" + e.getCause()));
+            ry.ms.view.utils.AlertManager.showError("Erreur de chargement",
+                    "Impossible de charger la vue : " + fxmlPath + "\n" + e.getMessage());
         }
     }
 }
