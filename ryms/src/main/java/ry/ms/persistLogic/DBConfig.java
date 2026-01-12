@@ -22,6 +22,14 @@ public final class DBConfig {
         // Utility class
     }
 
+    /**
+     * Establishes and returns a connection to the database.
+     * Uses environment variables for configuration, falling back to default values
+     * if not set.
+     * 
+     * @return A {@link Connection} to the configured database.
+     * @throws SQLException If a database access error occurs.
+     */
     public static Connection getConnection() throws SQLException {
         String url = getEnvOrDefault(URL_ENV, DEFAULT_URL);
         String user = getEnvOrDefault(USER_ENV, DEFAULT_USER);

@@ -9,6 +9,10 @@ import ry.ms.businessLogic.user.login.SessionFacade;
 import ry.ms.businessLogic.user.login.exceptions.UserAlreadyExistsException;
 import ry.ms.businessLogic.user.login.exceptions.UserCreationException;
 
+/**
+ * Controller for the User Registration view.
+ * Handles user sign-up logic.
+ */
 public class RegisterController {
     @FXML
     private TextField usernameField;
@@ -25,10 +29,20 @@ public class RegisterController {
     private Runnable onSuccess;
     private Runnable onLoginRequest;
 
+    /**
+     * Sets the callback to be executed after successful registration.
+     * 
+     * @param onSuccess The callback runnable.
+     */
     public void setOnSuccess(Runnable onSuccess) {
         this.onSuccess = onSuccess;
     }
 
+    /**
+     * Sets the callback to navigate to the login screen.
+     * 
+     * @param onLoginRequest The callback runnable.
+     */
     public void setOnLoginRequest(Runnable onLoginRequest) {
         this.onLoginRequest = onLoginRequest;
     }

@@ -18,8 +18,8 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Contrôleur pour la gestion des inscriptions aux tournois
- * Seuls les chefs d'équipe peuvent inscrire leur équipe
+ * Controller for managing tournament registrations.
+ * Only team captains can register their teams.
  */
 public class ManageRegistrationsController {
 
@@ -39,6 +39,10 @@ public class ManageRegistrationsController {
     private TournamentFacade tournamentFacade;
     private String currentUserEmail;
 
+    /**
+     * Initializes the controller.
+     * Sets up facades, loads current user, and configures UI components.
+     */
     @FXML
     public void initialize() {
         teamFacade = TeamFacade.getInstance();
@@ -73,7 +77,9 @@ public class ManageRegistrationsController {
     }
 
     /**
-     * Définir le tournoi pour lequel on gère les inscriptions
+     * Sets the tournament for which registrations are being managed.
+     * 
+     * @param tournament The tournament instance.
      */
     public void setTournament(Tournament tournament) {
         this.tournament = tournament;

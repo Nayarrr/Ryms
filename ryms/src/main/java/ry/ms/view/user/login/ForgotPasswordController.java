@@ -9,6 +9,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import ry.ms.businessLogic.user.login.SessionFacade;
 
+/**
+ * Controller for the Forgot Password view.
+ * Handles the flow of requesting a password reset code and resetting the
+ * password.
+ */
 public class ForgotPasswordController {
 
     @FXML
@@ -26,6 +31,11 @@ public class ForgotPasswordController {
 
     private Runnable onBackRequest;
 
+    /**
+     * Sets the callback to handle back requests.
+     * 
+     * @param onBackRequest The callback runnable.
+     */
     public void setOnBackRequest(Runnable onBackRequest) {
         this.onBackRequest = onBackRequest;
     }

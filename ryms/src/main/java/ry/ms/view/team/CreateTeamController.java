@@ -5,18 +5,27 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import ry.ms.view.user.UserSession;
 
+/**
+ * Controller for the Create Team view.
+ */
 public class CreateTeamController {
 
-    @FXML private TextField nameField;
-    @FXML private TextField tagField;
-    @FXML private TextField avatarField;
-    @FXML private Label errorLabel;
+    @FXML
+    private TextField nameField;
+    @FXML
+    private TextField tagField;
+    @FXML
+    private TextField avatarField;
+    @FXML
+    private Label errorLabel;
 
     private final TeamController teamController = new TeamController();
     private Runnable onTeamCreated;
 
     /**
-     * Callback à exécuter après création réussie
+     * Sets the callback to be executed after a successful team creation.
+     * 
+     * @param callback The callback runnable.
      */
     public void setOnTeamCreated(Runnable callback) {
         this.onTeamCreated = callback;

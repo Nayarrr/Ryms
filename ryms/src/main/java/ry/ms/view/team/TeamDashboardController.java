@@ -14,21 +14,36 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Controller for the Team Dashboard view.
+ * Displays team information, members, and allows team management (invite,
+ * leave, dissolve).
+ */
 public class TeamDashboardController {
 
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
-    @FXML private Label teamNameLabel;
-    @FXML private Label teamTagLabel;
-    @FXML private TextField inviteEmailField;
-    @FXML private ListView<String> membersList;
-    @FXML private Label msgLabel;
-    @FXML private Button createTeamButton;
+    @FXML
+    private Label teamNameLabel;
+    @FXML
+    private Label teamTagLabel;
+    @FXML
+    private TextField inviteEmailField;
+    @FXML
+    private ListView<String> membersList;
+    @FXML
+    private Label msgLabel;
+    @FXML
+    private Button createTeamButton;
 
     private Team currentTeam;
     private final TeamController controller = new TeamController();
     private final String myEmail = UserSession.getInstance().getUserEmail();
 
+    /**
+     * Initializes the dashboard.
+     * Loads team data for the specific user.
+     */
     public void initialize() {
         loadTeamData();
     }
@@ -36,37 +51,37 @@ public class TeamDashboardController {
     private void loadTeamData() {
         try {
             this.currentTeam = controller.getTeamByMemberEmail(myEmail);
-            
+
             if (currentTeam != null) {
                 // L'utilisateur a une équipe
                 teamNameLabel.setText(currentTeam.getName());
                 teamTagLabel.setText("[" + currentTeam.getTag() + "]");
-                
+
                 // Afficher les membres avec * pour le capitaine
                 List<String> members = new ArrayList<>(currentTeam.getMemberEmails());
                 String captain = currentTeam.getCaptainEmail();
                 List<String> displayMembers = members.stream()
-                    .map(email -> email.equalsIgnoreCase(captain) ? email + " ⭐" : email)
-                    .collect(java.util.stream.Collectors.toList());
+                        .map(email -> email.equalsIgnoreCase(captain) ? email + " ⭐" : email)
+                        .collect(java.util.stream.Collectors.toList());
                 membersList.getItems().setAll(displayMembers);
-                
+
                 // Cacher le bouton "Créer une équipe"
                 createTeamButton.setVisible(false);
                 createTeamButton.setManaged(false);
-                
+
             } else {
                 // L'utilisateur n'a pas d'équipe
                 teamNameLabel.setText("Aucune équipe");
                 teamTagLabel.setText("");
                 membersList.getItems().clear();
-                
+
                 // Afficher le bouton "Créer une équipe"
                 createTeamButton.setVisible(true);
                 createTeamButton.setManaged(true);
-                
+
                 msgLabel.setText("Vous n'appartenez à aucune équipe. Créez-en une ou attendez une invitation.");
             }
-            
+
         } catch (Exception e) {
             msgLabel.setText("Erreur chargement: " + e.getMessage());
             e.printStackTrace();
@@ -84,8 +99,7 @@ public class TeamDashboardController {
             modal.setTitle("Créer une équipe");
 
             FXMLLoader loader = new FXMLLoader(
-                getClass().getResource("/ry/ms/view/team/fxml/CreateTeam.fxml")
-            );
+                    getClass().getResource("/ry/ms/view/team/fxml/CreateTeam.fxml"));
             VBox root = loader.load();
 
             CreateTeamController createController = loader.getController();
@@ -116,13 +130,13 @@ public class TeamDashboardController {
             inviteEmailField.requestFocus();
             return;
         }
-        
+
         if (!isValidEmail(target.trim())) {
             msgLabel.setText("Veuillez saisir une adresse e-mail valide.");
             inviteEmailField.requestFocus();
             return;
         }
-        
+
         try {
             controller.inviteMember(currentTeam.getTeamId(), myEmail, target.trim());
             msgLabel.setText("✅ Invitation envoyée à " + target.trim());

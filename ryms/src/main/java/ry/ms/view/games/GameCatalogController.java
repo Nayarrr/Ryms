@@ -23,6 +23,10 @@ import ry.ms.businessLogic.user.models.User;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
+/**
+ * Controller for the Game Catalog view.
+ * Displays a grid of available games.
+ */
 public class GameCatalogController {
 
     @FXML
@@ -31,6 +35,11 @@ public class GameCatalogController {
     private Button addGameBtn; // Assumes fx:id="addGameBtn" is in FXML
     private final GameCatalogFacade facade = GameCatalogFacade.getGameCatalogFactory();
 
+    /**
+     * Initializes the controller.
+     * Checks user role (Admin) to toggle add button visibility, and renders the
+     * game cards.
+     */
     @FXML
     public void initialize() {
         User currentUser = SessionFacade.getSessionFactory().getCurrentUser();

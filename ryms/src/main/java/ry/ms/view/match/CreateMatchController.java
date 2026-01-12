@@ -21,6 +21,11 @@ import javafx.stage.Stage;
 import ry.ms.businessLogic.team.models.Team;
 import ry.ms.businessLogic.user.models.User;
 
+/**
+ * Controller for the Create Match view.
+ * Handles game selection, team selection, referee assignment, and match
+ * creation.
+ */
 public class CreateMatchController {
 
     @FXML
@@ -72,29 +77,47 @@ public class CreateMatchController {
     private Runnable onMatchCreated;
     private ry.ms.businessLogic.tournament.models.Tournament tournamentContext;
 
+    /**
+     * Default constructor.
+     * Initializes the MatchController.
+     */
     public CreateMatchController() {
         this.matchController = new MatchController();
     }
 
+    /**
+     * Sets the stage for this modal window.
+     * 
+     * @param stage The stage.
+     */
     public void setModalStage(Stage stage) {
         this.modalStage = stage;
     }
 
+    /**
+     * Sets the callback to be executed when a match is successfully created.
+     * 
+     * @param callback The callback runnable.
+     */
     public void setOnMatchCreated(Runnable callback) {
         this.onMatchCreated = callback;
     }
 
     /**
-     * Définir le contexte du tournoi pour pré-remplir le jeu
+     * Sets the tournament context for the match creation.
+     * If provided, pre-fills the game and limits team selection to registered
+     * teams.
+     * 
+     * @param tournament The tournament context.
      */
     public void setTournamentContext(ry.ms.businessLogic.tournament.models.Tournament tournament) {
         this.tournamentContext = tournament;
         if (tournament != null && tournament.getGame() != null) {
-            // Pré-remplir et désactiver la sélection du jeu
+            // Pre-fill and disable game selection
             gameComboBox.setValue(tournament.getGame().getName());
             gameComboBox.setDisable(true);
 
-            // Charger les équipes inscrites au tournoi
+            // Load teams registered for the tournament
             loadRegisteredTeams();
         }
     }
